@@ -5,7 +5,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
 import Image from 'next/image';
-import myImage from '../../images/1.png';
+import image1 from '../../images/1.jpg';
+import image2 from '../../images/2.jpg';
 
 export default function About() {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -15,7 +16,7 @@ export default function About() {
     const section3Ref = useRef<HTMLDivElement>(null);
 
     const color1 = "#0A000B";
-    const color2 = "#008000";
+    const color2 = "#41B3A2";
     const color3 = "#FFFF00";
 
     useEffect(() => {
@@ -91,7 +92,7 @@ export default function About() {
 
                             <div className="hidden w-full md:w-7/12 p-4 md:flex items-center">
                                 <Image
-                                    src={myImage}
+                                    src={image1}
                                     alt="Techie Arjun"
                                     className="w-full h-auto object-contain sm:w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] max-h-[400px] mx-auto"
                                     layout="responsive"
@@ -110,8 +111,30 @@ export default function About() {
                     style={{ backgroundColor: color1 }}
                     ref={section2Ref}
                 >
-                    <div className="max-w-3xl mx-0 md:mx-[10%]">
-                        Hello
+                    <div className="w-full h-full max-w-7xl mx-0 md:mx-[10%]">
+                        <div className="w-full h-full flex flex-col md:flex-row">
+                            <div className="w-full h-full md:w-5/12 text-white p-4 flex flex-col justify-center">
+                                <h2 className="text-sm font-light uppercase mb-2">The</h2>
+                                <h1 className="text-4xl font-bold mb-4 text-secondary">Naturalist</h1>
+                                <p className="text-base">
+                                    Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.
+                                </p>
+
+                            </div>
+
+                            <div className="hidden w-full md:w-7/12 p-4 md:flex items-center">
+                                <Image
+                                    src={image2}
+                                    alt="Naturalist Arjun"
+                                    className="w-full h-auto object-contain sm:w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] max-h-[400px] mx-auto"
+                                    layout="responsive"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                    priority
+                                
+                                />
+
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div
