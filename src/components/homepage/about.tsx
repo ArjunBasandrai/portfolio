@@ -21,14 +21,25 @@ export default function About() {
 
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
-
+        
+        var progress_counter: number = 0;
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: triggerRef.current,
                 start: "top top",
-                end: "1000 top",
+                end: "+=200% top",
                 scrub: true,
-                pin: true
+                pin: true,
+                snap: {
+                    snapTo: (progress_counter: number) => {
+                        if (progress_counter < 0.15) return 0.0;
+                        else if (progress_counter < 0.65) return 0.5;
+                        return 1.0;
+                    },
+                    duration: 0.2,
+                    delay: 0.2,
+                    ease: "power1.in"
+                },
             }
         });
 
@@ -44,16 +55,16 @@ export default function About() {
             trigger: triggerRef.current,
             start: "top top",
             end: "1000 top",
-            scrub: true,
+            scrub: true,          
             onUpdate: self => {
-                const progress = self.progress;
+                progress_counter = self.progress;
                 let color;
 
-                if (progress <= 0.5) {
-                    const p = progress / 0.5;
+                if (progress_counter <= 0.5) {
+                    const p = progress_counter / 0.5;
                     color = gsap.utils.interpolate(color1, color2, p);
                 } else {
-                    const p = (progress - 0.5) / 0.5;
+                    const p = (progress_counter - 0.5) / 0.5;
                     color = gsap.utils.interpolate(color2, color3, p);
                 }
 
@@ -95,7 +106,6 @@ export default function About() {
                                     src={image1}
                                     alt="Techie Arjun"
                                     className="w-full h-auto object-contain sm:w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] max-h-[400px] mx-auto"
-                                    layout="responsive"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     priority
                                 
@@ -127,7 +137,6 @@ export default function About() {
                                     src={image2}
                                     alt="Naturalist Arjun"
                                     className="w-full h-auto object-contain sm:w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] max-h-[400px] mx-auto"
-                                    layout="responsive"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     priority
                                 
