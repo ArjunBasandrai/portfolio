@@ -54,7 +54,7 @@ export default function About() {
         ScrollTrigger.create({
             trigger: triggerRef.current,
             start: "top top",
-            end: "1000 top",
+            end: "+=200% top",
             scrub: true,          
             onUpdate: self => {
                 progress_counter = self.progress;
@@ -93,8 +93,8 @@ export default function About() {
                     <div className="w-full h-full max-w-7xl mx-0 md:mx-[10%]">
                         <div className="w-full h-full flex flex-col md:flex-row">
                             <div className="w-full h-full md:w-5/12 text-white p-4 flex flex-col justify-center">
-                                <h2 className="text-sm font-light uppercase mb-2">The</h2>
-                                <h1 className="text-4xl font-bold mb-4 text-purple-500">Techie</h1>
+                                <h2 className="text-sm font-light uppercase mb-2 mb-0 pb-0">The</h2>
+                                <h1 className="text-4xl font-bold mb-4 text-purple-500 mt-0 pt-0">Techie</h1>
                                 <p className="text-base">
                                     Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.
                                 </p>
@@ -124,8 +124,8 @@ export default function About() {
                     <div className="w-full h-full max-w-7xl mx-0 md:mx-[10%]">
                         <div className="w-full h-full flex flex-col md:flex-row">
                             <div className="w-full h-full md:w-5/12 text-white p-4 flex flex-col justify-center">
-                                <h2 className="text-sm font-light uppercase mb-2">The</h2>
-                                <h1 className="text-4xl font-bold mb-4 text-secondary">Naturalist</h1>
+                                <h2 className="text-sm font-light uppercase mb-0 pb-0">The</h2>
+                                <h1 className="text-4xl font-bold mb-4 text-secondary mt-0 pt-0">Naturalist</h1>
                                 <p className="text-base">
                                     Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.
                                 </p>
