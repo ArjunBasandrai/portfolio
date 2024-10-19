@@ -4,9 +4,9 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
-import Image from 'next/image';
 import image1 from '../../images/1.jpg';
 import image2 from '../../images/2.jpg';
+import AboutSection from './aboutSection';
 
 export default function About() {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -32,12 +32,12 @@ export default function About() {
                 pin: true,
                 snap: {
                     snapTo: (progress_counter: number) => {
-                        if (progress_counter < 0.15) return 0.0;
-                        else if (progress_counter < 0.65) return 0.5;
+                        if (progress_counter < 0.05) return 0.0;
+                        else if (progress_counter < 0.5) return 0.5;
                         return 1.0;
                     },
-                    duration: 0.2,
-                    delay: 0.2,
+                    duration: 0.1,
+                    delay: 0.1,
                     ease: "power1.in"
                 },
             }
@@ -85,67 +85,24 @@ export default function About() {
             ref={triggerRef}
         >
             <div className="flex w-[300%]" ref={sectionRef}>
-                <div
-                    className="w-screen h-screen mx-0 flex items-center"
-                    style={{ backgroundColor: color1 }}
-                    ref={section1Ref}
-                >
-                    <div className="w-full h-full max-w-7xl mx-0 md:mx-[10%]">
-                        <div className="w-full h-full flex flex-col md:flex-row">
-                            <div className="w-full h-full md:w-5/12 text-white p-4 flex flex-col justify-center">
-                                <h2 className="text-sm font-light uppercase mb-2 mb-0 pb-0">The</h2>
-                                <h1 className="text-4xl font-bold mb-4 text-purple-500 mt-0 pt-0">Techie</h1>
-                                <p className="text-base">
-                                    Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.
-                                </p>
-
-                            </div>
-
-                            <div className="hidden w-full md:w-7/12 p-4 md:flex items-center">
-                                <Image
-                                    src={image1}
-                                    alt="Techie Arjun"
-                                    className="w-full h-auto object-contain sm:w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] max-h-[400px] mx-auto"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                    priority
-                                
-                                />
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div
-                    className="w-screen h-screen mx-0 flex items-center"
-                    style={{ backgroundColor: color1 }}
-                    ref={section2Ref}
-                >
-                    <div className="w-full h-full max-w-7xl mx-0 md:mx-[10%]">
-                        <div className="w-full h-full flex flex-col md:flex-row">
-                            <div className="w-full h-full md:w-5/12 text-white p-4 flex flex-col justify-center">
-                                <h2 className="text-sm font-light uppercase mb-0 pb-0">The</h2>
-                                <h1 className="text-4xl font-bold mb-4 text-secondary mt-0 pt-0">Naturalist</h1>
-                                <p className="text-base">
-                                    Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.
-                                </p>
-
-                            </div>
-
-                            <div className="hidden w-full md:w-7/12 p-4 md:flex items-center">
-                                <Image
-                                    src={image2}
-                                    alt="Naturalist Arjun"
-                                    className="w-full h-auto object-contain sm:w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] max-h-[400px] mx-auto"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                    priority
-                                
-                                />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <AboutSection params={{
+                    ref: section1Ref,
+                    color: color1,
+                    image: image1,
+                    headingColor: "text-purple-500",
+                    title: "Techie",
+                    text: "Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.",
+                    altText: "Techie Arjun"
+                }}/>
+                <AboutSection params={{
+                    ref: section2Ref,
+                    color: color1,
+                    image: image2,
+                    headingColor: "text-secondary",
+                    title: "Naturalist",
+                    text: "Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.",
+                    altText: "Naturalist Arjun"
+                }}/>
                 <div
                     className="w-screen h-screen mx-0 flex items-center"
                     style={{ backgroundColor: color1 }}
