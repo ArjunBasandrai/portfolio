@@ -9,7 +9,7 @@ export default function Hero() {
           </span>
         </p>
         <p className="mt-4 text-gray-400 text-base sm:text-lg">
-          Hi! I'm <span className="text-white">Arjun</span>, a machine learning enthusiast with a passion for creating intelligent solutions. When I'm not coding, you'll find me exploring the outdoors, capturing the beauty of wildlife through my lens.
+          Hi! I&aposm <span className="text-white">Arjun</span>, a machine learning enthusiast with a passion for creating intelligent solutions. When I&aposm not coding, you&aposll find me exploring the outdoors, capturing the beauty of wildlife through my lens.
         </p>
       </div>
     </div>
