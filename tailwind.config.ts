@@ -13,6 +13,8 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: "#511281",
+        secondary: "#C1F8CF",
       },
         fontFamily: {
           Bodoni: ['BodoniModa', 'serif'],
