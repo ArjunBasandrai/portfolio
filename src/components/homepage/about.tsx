@@ -22,7 +22,7 @@ export default function About() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
         
-        var progress_counter: number = 0;
+        let progress_counter: number = 0;
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: triggerRef.current,
