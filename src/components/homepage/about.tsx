@@ -5,11 +5,11 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
 export default function About() {
-    const sectionRef = useRef(null);
-    const triggerRef = useRef(null);
-    const section1Ref = useRef(null);
-    const section2Ref = useRef(null);
-    const section3Ref = useRef(null);
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
+    const section1Ref = useRef<HTMLDivElement>(null);
+    const section2Ref = useRef<HTMLDivElement>(null);
+    const section3Ref = useRef<HTMLDivElement>(null);
 
     const color1 = "#0A001B";
     const color2 = "#008000";
@@ -53,9 +53,9 @@ export default function About() {
                     color = gsap.utils.interpolate(color2, color3, p);
                 }
 
-                section1Ref.current.style.backgroundColor = color;
-                section2Ref.current.style.backgroundColor = color;
-                section3Ref.current.style.backgroundColor = color;
+                if (section1Ref.current) section1Ref.current.style.backgroundColor = color;
+                if (section2Ref.current) section2Ref.current.style.backgroundColor = color;
+                if (section3Ref.current) section3Ref.current.style.backgroundColor = color;
             }
         });
 
