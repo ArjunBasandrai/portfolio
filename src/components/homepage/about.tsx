@@ -8,6 +8,10 @@ import image1 from '../../images/1.jpg';
 import image2 from '../../images/2.jpg';
 import AboutSection from './aboutSection';
 
+function ease_p(p: number): number {
+    return gsap.parseEase("power2.inOut")(p);
+}
+
 export default function About() {
     const sectionRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
@@ -35,7 +39,7 @@ export default function About() {
                     const alpha = 0.5 + 0.5 * self.progress;
                     const rgba = gsap.utils.splitColor(color1);
                     const colorWithOpacity = `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${alpha})`;
-                    if (section1Ref.current) section1Ref.current.style.backgroundColor = colorWithOpacity;                 
+                    if (section1Ref.current) section1Ref.current.style.backgroundColor = colorWithOpacity;
                 }
             }
         });
@@ -79,10 +83,11 @@ export default function About() {
 
                 if (progress_counter <= 0.5) {
                     const p = progress_counter / 0.5;
-                    color = gsap.utils.interpolate(color1, color2, p);
+                    color = gsap.utils.interpolate(color1, color2, ease_p(p));
+
                 } else {
                     const p = (progress_counter - 0.5) / 0.5;
-                    color = gsap.utils.interpolate(color2, color3, p);
+                    color = gsap.utils.interpolate(color2, color3, ease_p(p));
                 }
 
                 if (section1Ref.current) section1Ref.current.style.backgroundColor = color;
