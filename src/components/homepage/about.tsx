@@ -15,14 +15,31 @@ export default function About() {
     const section2Ref = useRef<HTMLDivElement>(null);
     const section3Ref = useRef<HTMLDivElement>(null);
 
-    const color1 = "#0A000B";
-    const color2 = "#41B3A2";
-    const color3 = "#FFFF00";
+    const color1 = "rgb(10, 0, 11)";
+    const color2 = "rgb(65, 179, 162)";
+    const color3 = "rgb(255, 255, 0)";
 
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
-        
+
         let progress_counter: number = 0;
+
+        gsap.to({}, {
+            duration: 1,
+            scrollTrigger: {
+                trigger: triggerRef.current,
+                start: "top bottom",
+                end: "top top",
+                scrub: true,
+                onUpdate: self => {
+                    const alpha = 0.5 + 0.5 * self.progress;
+                    const rgba = gsap.utils.splitColor(color1);
+                    const colorWithOpacity = `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${alpha})`;
+                    if (section1Ref.current) section1Ref.current.style.backgroundColor = colorWithOpacity;                 
+                }
+            }
+        });
+
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: triggerRef.current,
@@ -32,8 +49,8 @@ export default function About() {
                 pin: true,
                 snap: {
                     snapTo: (progress_counter: number) => {
-                        if (progress_counter < 0.05) return 0.0;
-                        else if (progress_counter < 0.5) return 0.5;
+                        if (progress_counter < 0.15) return 0.0;
+                        else if (progress_counter < 0.65) return 0.5;
                         return 1.0;
                     },
                     duration: 0.1,
@@ -55,7 +72,7 @@ export default function About() {
             trigger: triggerRef.current,
             start: "top top",
             end: "+=200% top",
-            scrub: true,          
+            scrub: true,
             onUpdate: self => {
                 progress_counter = self.progress;
                 let color;
@@ -76,12 +93,13 @@ export default function About() {
 
         return () => {
             tl.kill();
+            ScrollTrigger.getAll().forEach(st => st.kill());
         };
     }, []);
 
     return (
         <div
-            className="mt-[100vh] w-full h-screen bg-blue-500 flex items-center overflow-hidden"
+            className="mt-[100vh] w-full h-screen flex items-center overflow-hidden"
             ref={triggerRef}
         >
             <div className="flex w-[300%]" ref={sectionRef}>
@@ -93,7 +111,7 @@ export default function About() {
                     title: "Techie",
                     text: "Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.",
                     altText: "Techie Arjun"
-                }}/>
+                }} />
                 <AboutSection params={{
                     ref: section2Ref,
                     color: color1,
@@ -102,7 +120,7 @@ export default function About() {
                     title: "Naturalist",
                     text: "Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.",
                     altText: "Naturalist Arjun"
-                }}/>
+                }} />
                 <div
                     className="w-screen h-screen mx-0 flex items-center"
                     style={{ backgroundColor: color1 }}
