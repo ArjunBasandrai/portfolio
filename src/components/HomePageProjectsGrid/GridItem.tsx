@@ -22,7 +22,7 @@ export default function GridItem({ name, description }: GridItemProps) {
               <div className="transform scale-0 group-hover:scale-100 transition-transform ease-in-out text-center">
                 <span className="text-white text-2xl sm:text-3xl font-Apparel">View Post</span>
               </div>
-              {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map((position, index) => (
+              {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map((position, _) => (
                 <span
                   key={position}
                   className={`${position.split('-')[1]}-plus-sign plus-${position} text-white text-2xl font-Bodoni`}

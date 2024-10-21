@@ -8,16 +8,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      margin: {
+        'projects-card': 'calc(100vh - 8rem)',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: "#511281",
         secondary: "#C1F8CF",
       },
-        fontFamily: {
-          Bodoni: ['BodoniModa'],
-          Apparel: ['Apparel'],
-        },
+      fontFamily: {
+        Bodoni: ['BodoniModa'],
+        Apparel: ['Apparel'],
+      },
     },
   },
   plugins: [],
