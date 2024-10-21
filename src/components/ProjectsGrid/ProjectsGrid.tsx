@@ -5,7 +5,6 @@ import GridItem from "./GridItem"
 export default function ProjectsHomeGrid() {
   return (
     <>
-      <div className="mt-projects-card bg-black relative z-10">
         <div className="w-full h-0 gradient-bg"></div>
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-wrap -mx-4">
@@ -27,7 +26,6 @@ export default function ProjectsHomeGrid() {
             />
           </div>
         </div>
-      </div>
       <style jsx>{`
           .gradient-bg {
             box-shadow: 0 0 75px 70px black;
