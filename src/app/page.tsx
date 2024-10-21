@@ -1,5 +1,5 @@
 import Hero from '@/components/hero';
-import ProjectsHomeGrid from '@/components/HomePageProjectsGrid/ProjectsHomeGrid';
+import ProjectsHomeGrid from '@/components/ProjectsGrid/ProjectsGrid';
 import '../styles/globals.css';
 
 export default function Home() {
