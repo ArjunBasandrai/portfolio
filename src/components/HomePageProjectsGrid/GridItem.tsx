@@ -16,7 +16,7 @@ export default function GridItem({ name, description }: GridItemProps) {
     <div className="w-full md:w-1/2 p-4">
       <Link href={`/projects/${name.replace(/\s+/g, '').toLowerCase()}`}>
         <div className="relative group cursor-pointer">
-          <div className="bg-gray-900 h-80 flex items-center justify-center text-white rounded-xl z-0">
+          <div className="bg-gray-900 h-80 flex items-center justify-center text-white rounded-xl z-0 border-[0.5px] border-gray-400">
             {/* Item */}
           </div>
           <div className="absolute inset-0 bg-black duration-300 bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
