@@ -2,9 +2,9 @@ export default function Hero() {
   return (
     <div className="fixed top-0 left-0 w-full h-screen bg-black flex items-center">
       <div className="container px-4 mx-auto">
-        <p className="text-6xl lg:text-7xl text-white font-Bodoni">
+        <p className="text-6xl lg:text-7xl text-white font-Apparel">
           Arjun{' '}
-          <span className="bg-gradient-to-r from-white to-purple-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-white to-purple-400 bg-clip-text text-transparent font-Bodoni">
             Basandrai
           </span>
         </p>
