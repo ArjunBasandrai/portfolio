@@ -9,6 +9,8 @@ interface GridItemProps {
 
 export default function GridItem({ name, description }: GridItemProps) {
   const delays = ['350ms', '300ms', '550ms', '500ms'];
+  const xoffset: string = '550';
+  const yoffset: string = '225';
 
   return (
     <div className="w-full md:w-1/2 p-4">
@@ -54,19 +56,19 @@ export default function GridItem({ name, description }: GridItemProps) {
           transition: transform ease-in-out;
         }
         .group:hover .plus-top-left {
-          transform: translate(-400%, -150%) scale(1);
+          transform: translate(-${xoffset}%, -${yoffset}%) scale(1);
           transition: ${delays[0]};
         }
         .group:hover .plus-top-right {
-          transform: translate(400%, -150%) scale(1);
+          transform: translate(${xoffset}%, -${yoffset}%) scale(1);
           transition: ${delays[1]};
         }
         .group:hover .plus-bottom-left {
-          transform: translate(-400%, 150%) scale(1);
+          transform: translate(-${xoffset}%, ${yoffset}%) scale(1);
           transition: ${delays[2]};
           }
           .group:hover .plus-bottom-right {
-            transform: translate(400%, 150%) scale(1);
+            transform: translate(${xoffset}%, ${yoffset}%) scale(1);
             transition: ${delays[3]};
         }
       `}</style>
