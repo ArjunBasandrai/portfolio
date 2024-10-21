@@ -38,7 +38,10 @@ export default function GridItem({ name, description }: GridItemProps) {
       </Link>
       <div className='text-white p-6'>
         <h1 className="font-Apparel text-4xl">{name}</h1>
-        <p className='text-gray-400 mr-0 mt-0 md:mr-10 md:mt-3'>{description}</p>
+        <p className='text-gray-400 mr-0 mt-0 mb-4 md:mr-10 md:mt-3'>{description}</p>
+        <Link className="relative inline-flex items-center before:content-[''] before:absolute before:-bottom-1 before:left-0 before:h-[2px] before:w-full before:scale-x-0 before:origin-right before:bg-gray-400 before:transition-transform before:duration-300 hover:before:scale-x-100 hover:before:origin-left" href={`/projects/${name.replace(/\s+/g, '').toLowerCase()}`}>Continue Reading
+          <svg className='inline ml-3' stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 15 15" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.64645 11.3536C3.45118 11.1583 3.45118 10.8417 3.64645 10.6465L10.2929 4L6 4C5.72386 4 5.5 3.77614 5.5 3.5C5.5 3.22386 5.72386 3 6 3L11.5 3C11.6326 3 11.7598 3.05268 11.8536 3.14645C11.9473 3.24022 12 3.36739 12 3.5L12 9.00001C12 9.27615 11.7761 9.50001 11.5 9.50001C11.2239 9.50001 11 9.27615 11 9.00001V4.70711L4.35355 11.3536C4.15829 11.5488 3.84171 11.5488 3.64645 11.3536Z" fill="currentColor"></path></svg>
+        </Link>
       </div>
       <style jsx>{`
         .left-plus-sign {
