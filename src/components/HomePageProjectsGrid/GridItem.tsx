@@ -36,7 +36,7 @@ export default function GridItem({ name, description }: GridItemProps) {
       </Link>
       <div className='text-white p-6'>
         <h1 className="font-Apparel text-4xl">{name}</h1>
-        <p className='text-gray-400'>{description}</p>
+        <p className='text-gray-400 mr-0 mt-0 md:mr-10 md:mt-3'>{description}</p>
       </div>
       <style jsx>{`
         .left-plus-sign {
