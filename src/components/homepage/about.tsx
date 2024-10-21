@@ -21,8 +21,7 @@ export default function About() {
 
     const color1 = "rgb(10, 0, 11)";
     const color2 = "rgb(65, 179, 162)";
-    const color3 = "rgb(255, 255, 0)";
-
+    const color3 = "rgb(240, 128, 128)";
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
 
@@ -126,15 +125,15 @@ export default function About() {
                     text: "Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.",
                     altText: "Naturalist Arjun"
                 }} />
-                <div
-                    className="w-screen h-screen mx-0 flex items-center"
-                    style={{ backgroundColor: color1 }}
-                    ref={section3Ref}
-                >
-                    <div className="max-w-3xl mx-0 md:mx-[10%]">
-                        Hello
-                    </div>
-                </div>
+                <AboutSection params={{
+                    ref: section3Ref,
+                    color: color1,
+                    image: image2,
+                    headingColor: "text-amber-300",
+                    title: "Musician",
+                    text: "Lorem ipsum dolor sit amet consectetur. Pulvinar curabitur tortor ac turpis adipiscing sed. Sed nisl enim sit volutpat laoreet morbi. Non posuere malesuada purus gravida quis vel sed malesuada venenatis. Morbi turpis imperdiet aliquet rhoncus arcu. Ullamcorper a id neque at nunc eu fermentum sit viverra. Suscipit sed non volutpat urna vitae odio bibendum. Fusce a laoreet diam mauris elit eu eu. At ac sapien urna donec in diam porta tortor. Mauris diam feugiat in massa eget vitae. Eu rhoncus a vitae amet. Gravida in at nisl duis vitae. Nulla vulputate sed egestas aliquam sed. Sit volutpat leo arcu donec quis.",
+                    altText: "Musician Arjun"
+                }} />
             </div>
         </div>
     );
