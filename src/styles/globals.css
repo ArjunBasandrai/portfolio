@@ -5,16 +5,23 @@
 @layer base {
     @font-face {
         font-family: 'Bodoni';        
-        src: url('/app/fonts/BodoniModa.ttf') format('truetype');
+        src: url('../app/fonts/BodoniModa.ttf') format('truetype');
         font-weight: 400;
         font-style: normal;
         font-display: swap;
     }
     @font-face {
-        font-family: 'Bodoni';        
-        src: url('/app/fonts/BodoniModa-Italic.ttf') format('truetype');
+        font-family: 'Apparel';        
+        src: url('../app/fonts/ApparelDisplay.otf') format('opentype');
         font-weight: 400;
-        font-style: italic;
+        font-style: normal;
+        font-display: swap;
+    }
+    @font-face {
+        font-family: 'Apparel';        
+        src: url('../app/fonts/ApparelDisplay-Bold.otf') format('opentype');
+        font-weight: 700;
+        font-style: normal;
         font-display: swap;
     }
 }

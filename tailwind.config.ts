@@ -15,7 +15,8 @@ const config: Config = {
         secondary: "#C1F8CF",
       },
         fontFamily: {
-          Bodoni: ['BodoniModa', 'serif'],
+          Bodoni: ['BodoniModa'],
+          Apparel: ['Apparel'],
         },
     },
   },
