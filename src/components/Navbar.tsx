@@ -16,14 +16,14 @@ export default function Navbar() {
     const [hoveredIndex, setHoveredIndex] = useState(activeIndex);
     const [menuOpen, setMenuOpen] = useState(false);
     const cornerBorderRadius = '50px';
-    const borderRadius = '10px';
+    const borderRadius = '20px';
 
     return (
         <nav className="fixed top-8 inset-x-0 z-50 mx-auto w-max">
-            <div className="hidden sm:block bg-gray-900 text-white rounded-[50px] px-2 py-1 border-[0.2px] border-gray-700">
-                <div className="relative flex items-center px-1 py-[7px] justify-between w-[350px]">
+            <div className="hidden shadow-lg sm:block bg-transparentDarkGray backdrop-blur-md text-white rounded-[50px] px-2 py-1 border-[0.1px] border-semiDarkGray">
+                <div className="relative flex items-center px-1 py-[2px] justify-between w-[300px]">
                     <div
-                        className="absolute inset-y-1 left-0 bg-gray-700 transition-all duration-300 ease-in-out"
+                        className="absolute inset-y-1 left-0 bg-semiDarkGray transition-all duration-300 ease-in-out"
                         style={{
                             width: `${100 / links.length}%`,
                             transform: `translateX(${hoveredIndex * 100}%)`,
@@ -47,7 +47,7 @@ export default function Navbar() {
                             <div key={index} className="flex-1 text-center relative z-10">
                                 <Link
                                     href={href}
-                                    className="block px-3 py-2 rounded-md"
+                                    className="block py-2 rounded-md text-sm"
                                     onMouseEnter={() => setHoveredIndex(index)}
                                     onMouseLeave={() => setHoveredIndex(activeIndex)}
                                 >
@@ -62,12 +62,12 @@ export default function Navbar() {
             <div className="flex flex-col sm:hidden items-center">
                 <button
                     onClick={() => setMenuOpen(!menuOpen)}
-                    className="bg-gray-900 text-white rounded-[50px] px-5 py-3 border-[0.5px] border-gray-700 text-lg"
+                    className="bg-darkGray shadow-lg text-white rounded-[50px] px-5 py-3 border-[0.5px] border-semiDarkGray text-lg"
                 >
                     Menu
                 </button>
                 <div
-                    className={`mt-2 bg-gray-900 text-white border-gray-700 rounded-[15px] w-[200px] transition-all duration-300 overflow-hidden ${menuOpen ? 'max-h-[1000px] border-[0.4px]' : 'max-h-0'}`}
+                    className={`mt-2 shadow-lg bg-transparentDarkGray text-white border-semiDarkGray rounded-[15px] w-[200px] transition-all duration-300 overflow-hidden ${menuOpen ? 'max-h-[1000px] border-[0.4px] backdrop-blur-md' : 'max-h-0'}`}
                 >
                     {links.map((link, index) => {
                         const href = `/${link === 'Home' ? '' : link.toLowerCase()}`;

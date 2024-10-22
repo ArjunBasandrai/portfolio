@@ -16,6 +16,9 @@ const config: Config = {
         foreground: "var(--foreground)",
         primary: "#511281",
         secondary: "#C1F8CF",
+        darkGray: "#101010",
+        transparentDarkGray: "rgba(18, 18, 18, 0.8)",
+        semiDarkGray: "#282828",
       },
       fontFamily: {
         Bodoni: ['BodoniModa', 'serif'],
