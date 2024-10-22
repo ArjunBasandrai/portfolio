@@ -25,7 +25,7 @@ export default function AboutSection({ params }: AboutSectionProps) {
         <div className="w-full h-full flex flex-col md:flex-row">
           <div className="w-full h-full md:w-5/12 text-white p-4 flex flex-col justify-center">
             <h2 className="text-sm font-light uppercase mb-0 pb-0">The</h2>
-              <h1 className={`text-4xl font-bold mb-4 ${params.headingColor} mt-0 pt-0`}>
+            <h1 className={`text-4xl font-bold mb-4 ${params.headingColor} mt-0 pt-0`}>
               {params.title}
             </h1>
             <p className="text-base">
