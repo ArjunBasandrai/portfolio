@@ -25,3 +25,7 @@
         font-display: swap;
     }
 }
+
+body, html {
+    background: #000;
+}
