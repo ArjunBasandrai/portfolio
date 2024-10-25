@@ -3,7 +3,7 @@ import "../styles/globals.css";
 export default function NotFound() {
     return (
         <div className="w-screen h-screen text-white flex flex-col items-center justify-center px-4">
-            <p className="text-5xl md:text-7xl font-bold font-Bodoni mb-2 mt-[50px]">4O4</p>
+            <p className="text-5xl md:text-7xl font-Bodoni mb-2 mt-[50px]">4O4</p>
             <p className="text-3xl md:text-5xl font-Apparel text-center mb-[75px]">How did you get way out here?</p>
 
             <Link

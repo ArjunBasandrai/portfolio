@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -13,10 +13,16 @@ export default function Navbar() {
         return pathname === href || (pathname === '/' && link === 'Home');
     });
 
-    const [hoveredIndex, setHoveredIndex] = useState(activeIndex);
+    const [hoveredIndex, setHoveredIndex] = useState<number>(activeIndex);
     const [menuOpen, setMenuOpen] = useState(false);
     const cornerBorderRadius = '50px';
     const borderRadius = '20px';
+
+    useEffect(() => {
+        if (hoveredIndex === null) {
+            setHoveredIndex(activeIndex);
+        }
+    }, [activeIndex, hoveredIndex]);
 
     return (
         <nav className="fixed top-8 inset-x-0 z-50 mx-auto w-max">
@@ -26,21 +32,22 @@ export default function Navbar() {
                         className="absolute inset-y-1 left-0 bg-semiDarkGray transition-all duration-300 ease-in-out"
                         style={{
                             width: `${100 / links.length}%`,
-                            transform: `translateX(${hoveredIndex * 100}%)`,
+                            transform: `translateX(${(hoveredIndex ?? activeIndex) * 100}%)`,
                             borderTopLeftRadius:
-                                hoveredIndex === 0 ? cornerBorderRadius : borderRadius,
+                                (hoveredIndex ?? activeIndex) === 0 ? cornerBorderRadius : borderRadius,
                             borderBottomLeftRadius:
-                                hoveredIndex === 0 ? cornerBorderRadius : borderRadius,
+                                (hoveredIndex ?? activeIndex) === 0 ? cornerBorderRadius : borderRadius,
                             borderTopRightRadius:
-                                hoveredIndex === links.length - 1
+                                (hoveredIndex ?? activeIndex) === links.length - 1
                                     ? cornerBorderRadius
                                     : borderRadius,
                             borderBottomRightRadius:
-                                hoveredIndex === links.length - 1
+                                (hoveredIndex ?? activeIndex) === links.length - 1
                                     ? cornerBorderRadius
                                     : borderRadius,
                         }}
                     ></div>
+
                     {links.map((link, index) => {
                         const href = `/${link === 'Home' ? '' : link.toLowerCase()}`;
                         return (
@@ -59,6 +66,7 @@ export default function Navbar() {
                 </div>
             </div>
 
+            {/* Mobile Navigation */}
             <div className="flex flex-col sm:hidden items-center">
                 <button
                     onClick={() => setMenuOpen(!menuOpen)}
@@ -72,7 +80,7 @@ export default function Navbar() {
                     {links.map((link, index) => {
                         const href = `/${link === 'Home' ? '' : link.toLowerCase()}`;
                         return (
-                            <div key={index} className={`px-6 ${index == 0 ? 'pt-4' : 'pt-2'} ${index == 2 ? 'pb-4' : 'pb-2'}`}>
+                            <div key={index} className={`px-6 ${index === 0 ? 'pt-4' : 'pt-2'} ${index === 2 ? 'pb-4' : 'pb-2'}`}>
                                 <Link href={href} onClick={() => setMenuOpen(false)}>
                                     {link}
                                 </Link>
@@ -81,7 +89,6 @@ export default function Navbar() {
                     })}
                 </div>
             </div>
-
         </nav>
     );
 }
