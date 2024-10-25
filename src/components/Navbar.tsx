@@ -13,7 +13,7 @@ export default function Navbar() {
         return pathname === href || (pathname === '/' && link === 'Home');
     });
 
-    const [hoveredIndex, setHoveredIndex] = useState<number>(activeIndex);
+    const [hoveredIndex, setHoveredIndex] = useState<number>(activeIndex === -1 ? 0 : activeIndex);
     const [menuOpen, setMenuOpen] = useState(false);
     const cornerBorderRadius = '50px';
     const borderRadius = '20px';
@@ -56,7 +56,7 @@ export default function Navbar() {
                                     href={href}
                                     className="block py-2 rounded-md text-sm"
                                     onMouseEnter={() => setHoveredIndex(index)}
-                                    onMouseLeave={() => setHoveredIndex(activeIndex)}
+                                    onMouseLeave={() => setHoveredIndex(activeIndex === -1 ? 0 : activeIndex)}
                                 >
                                     {link}
                                 </Link>
@@ -66,7 +66,6 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Navigation */}
             <div className="flex flex-col sm:hidden items-center">
                 <button
                     onClick={() => setMenuOpen(!menuOpen)}
