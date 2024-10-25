@@ -7,12 +7,7 @@ import ProjectsHomeGrid from "@/components/ProjectsGrid/ProjectsGrid";
 
 import { gql } from "@apollo/client";
 import client from "../lib/apollo-client";
-
-interface Project {
-    name: string;
-    description: string;
-    image: string;
-}
+import Project from "../lib/project-interface";
 
 export default function ProjectsPage() {
     const [projects, setProjects] = useState<Project[] | null>(null);
@@ -26,22 +21,18 @@ export default function ProjectsPage() {
 
                 const { data } = await client.query({
                     query: gql`
-                      query {
+                    query {
                         publication(id: "6717ca18fd2be89bc676fc81") {
-                            series(slug: "featured") {
-                                id
-                                name
-                                posts(first: 20) {
-                                    edges {
-                                        node {
-                                            id
-                                            title
-                                            seo {
-                                                description
-                                            }
-                                            content {
-                                                html
-                                            }
+                            posts(first: 20) {
+                                edges {
+                                    node {
+                                        title
+                                        slug
+                                        seo {
+                                            description
+                                        }
+                                        content {
+                                            markdown
                                         }
                                     }
                                 }
@@ -52,26 +43,26 @@ export default function ProjectsPage() {
                     fetchPolicy: "network-only",
                 });
 
-                const series = data.publication.series;
+                const posts = data.publication.posts;
 
-                console.log(series);
-
-                const projectsData: Project[] = series.posts.edges.map((edge: {
+                const projectsData: Project[] = posts.edges.map((edge: {
                     node: {
                         title: string;
+                        slug: string;
                         seo: {
                             description: string;
                         };
                     };
                 }) => ({
                     name: edge.node.title,
+                    slug: edge.node.slug,
                     description: edge.node.seo.description,
                     image: "https://images.unsplash.com/photo-1612830461340-3b1e8b7a1b1b",
                 }));
 
                 setProjects(projectsData);
                 setLoading(false);
-            } catch (err) {
+            } catch {
                 setError("Failed to load projects");
                 setLoading(false);
             }
