@@ -5,16 +5,17 @@ import Link from 'next/link';
 interface GridItemProps {
   name: string;
   description: string;
+  slug: string;
 }
 
-export default function GridItem({ name, description }: GridItemProps) {
+export default function GridItem({ name, description, slug }: GridItemProps) {
   const delays = ['350ms', '300ms', '550ms', '500ms'];
   const xoffset: string = '550';
   const yoffset: string = '225';
 
   return (
     <div className="w-full md:w-1/2 p-4">
-      <Link href={`/projects/${name.replace(/\s+/g, '').toLowerCase()}`}>
+      <Link href={`/projects/${slug}`}>
         <div className="relative group cursor-pointer">
           <div className="bg-darkGray h-80 flex items-center justify-center text-white rounded-xl z-0 border-[0.5px] border-gray-400">
             {/* Item */}
