@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import FadedSeparator from "@/components/FadedSeparator";
 import Footer from "@/components/Footer";
-import ProjectsHomeGrid from "@/components/ProjectsGrid/ProjectsGrid";
 
 import { gql } from "@apollo/client";
 import client from "../lib/apollo-client";
@@ -62,7 +61,7 @@ export default function ProjectPage({ projectSlug }: {
         };
 
         fetchProjects();
-    }, []);
+    }, [projectSlug]);
 
     if (loading) {
         return (
