@@ -5,6 +5,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -23,9 +24,20 @@ const config: Config = {
       fontFamily: {
         Bodoni: ['BodoniModa', 'serif'],
         Apparel: ['Apparel', 'serif'],
+        NotoSans: ['NotoSans', 'sans-serif'],
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addBase }: {
+      addBase: (arg0: { ul: { listStyleType: string; paddingLeft: string; }; ol: { listStyleType: string; paddingLeft: string; }; }) => void;
+    }) {
+      addBase({
+        ul: { listStyleType: 'disc', paddingLeft: '1.25rem' },
+        ol: { listStyleType: 'decimal', paddingLeft: '1.25rem' },
+      });
+    },
+
+  ],
 };
 export default config;

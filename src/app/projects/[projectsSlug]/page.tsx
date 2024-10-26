@@ -10,7 +10,6 @@ export default function Project({ params }: {
         <>
             return (
             <>
-                <h1 className="text-white">Project: {params.projectsSlug}</h1>
                 <ProjectPage projectSlug={params.projectsSlug} />
             </>
             );
