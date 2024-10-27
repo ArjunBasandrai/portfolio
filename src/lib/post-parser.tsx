@@ -107,15 +107,15 @@ function parseHeadings(content: string): string {
     return content
         .replace(/<h2([^>]*)>(.*?)<\/h2>/gi, (match, attrs, innerText) => {
             const processedText = wrapNonEnglishChars(innerText);
-            return `<h2${attrs} class="text-4xl font-Apparel underline decoration-gray-600 decoration-[1px] underline-offset-[5px] mb-6">${processedText}</h2>`;
+            return `<h2${attrs} class="text-4xl font-Apparel underline decoration-gray-500 decoration-[1px] underline-offset-[5px] mb-6">${processedText}</h2>`;
         })
         .replace(/<h3([^>]*)>(.*?)<\/h3>/gi, (match, attrs, innerText) => {
             const processedText = wrapNonEnglishChars(innerText);
-            return `<h3${attrs} class="text-2xl font-Apparel underline decoration-gray-600 decoration-[1px] underline-offset-[5px] mb-6">${processedText}</h3>`;
+            return `<h3${attrs} class="text-2xl font-Apparel underline decoration-gray-500 decoration-[1px] underline-offset-[5px] mb-6">${processedText}</h3>`;
         })
         .replace(/<h4([^>]*)>(.*?)<\/h4>/gi, (match, attrs, innerText) => {
             const processedText = wrapNonEnglishChars(innerText);
-            return `<h4${attrs} class="text-xl font-Apparel underline decoration-gray-600 decoration-[1px] underline-offset-[5px] mb-6 mt-4">${processedText}</h4>`;
+            return `<h4${attrs} class="text-xl font-Apparel underline decoration-gray-500 decoration-[1px] underline-offset-[5px] mb-6 mt-4">${processedText}</h4>`;
         });
 }
 
@@ -137,7 +137,7 @@ function textParser(content: string): string {
 
     content = content.replace(
         /<p([^>]*)>/gi,
-        `<p$1 class="text-lg text-gray-400 font-NotoSans mb-6">`
+        `<p$1 class="text-md md:text-lg text-gray-300/90 font-NotoSans mb-6">`
     );
 
     content = content.replace(
@@ -195,12 +195,12 @@ export default function Parser({ rawPostContent }: { rawPostContent: string }) {
 
     return (
         <div
-            className="text-white rounded-lg shadow-lg border border-semiDarkGray mt-10 px-[85px] py-[85px]"
+            className="text-white rounded-lg shadow-lg md:border md:border-semiDarkGray md:mt-10 px-4 md:px-[85px] py-[85px]"
         >
             {remainingSections.map((section, sectionIndex) => (
                 <div key={sectionIndex}>
                     {sectionIndex > 0 && 
-                    <div className="my-[50px]">
+                    <div className="my-[20px] md:my-[50px]">
                     <FadedSeparator />
                     </div>
                     }

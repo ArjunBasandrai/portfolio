@@ -80,9 +80,9 @@ export default function ProjectPage({ projectSlug }: {
     }
 
     return (
-        <div className="mt-[100px] text-white max-w-5xl mx-auto">
-            <h2 className="font-Apparel text-5xl">{post?.title}</h2>
-            <p>January, 2024</p>
+        <div className="mt-[100px] text-white max-w-5xl mx-auto md:px-0 px-2">
+            <h2 className="font-Apparel text-5xl px-4 md:px-0">{post?.title}</h2>
+            <p className="font-NotoSans mt-3 text-gray-500 px-4 md:px-0">January, 2024</p>
             <video
                 className="w-full rounded-lg shadow-lg border-[1px] border-semiDarkGray mt-10"
                 src={post?.cover ? post?.cover : ""}
