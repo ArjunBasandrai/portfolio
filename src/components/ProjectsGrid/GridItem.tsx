@@ -18,7 +18,7 @@ export default function GridItem({ name, description, slug, cover }: GridItemPro
     <div className="w-full md:w-1/2 p-4">
       <Link href={`/projects/${slug}`}>
         <div className="relative group cursor-pointer">
-          <div className="bg-darkGray h-80 flex items-center justify-center text-white rounded-xl z-0 border-[0.5px] border-gray-400 overflow-hidden">
+          <div className="bg-darkGray h-80 flex items-center justify-center text-white rounded-xl z-0 border-[1px] border-gray-500 overflow-hidden">
             {cover && (
               <video 
                 className="z-9 inset-0 w-full h-full object-cover object-center" 
@@ -30,7 +30,7 @@ export default function GridItem({ name, description, slug, cover }: GridItemPro
               />
             )}
           </div>
-          <div className="absolute inset-0 bg-black duration-300 bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black duration-600 bg-opacity-[95%] opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center rounded-xl m-[0.5px]">
             <div className="relative">
               <div className="transform scale-0 group-hover:scale-100 transition-transform ease-in-out text-center">
                 <span className="text-white text-2xl sm:text-3xl font-Apparel">View Post</span>
