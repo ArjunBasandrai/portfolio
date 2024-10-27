@@ -30,7 +30,7 @@ export default function GridItem({ name, description, slug, cover }: GridItemPro
               />
             )}
           </div>
-          <div className="absolute inset-0 bg-black duration-600 bg-opacity-[95%] opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center rounded-xl m-[0.5px]">
+          <div className="absolute inset-0 bg-black duration-600 bg-opacity-[75%] opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center rounded-xl m-[0.5px]">
             <div className="relative">
               <div className="transform scale-0 group-hover:scale-100 transition-transform ease-in-out text-center">
                 <span className="text-white text-2xl sm:text-3xl font-Apparel">View Post</span>
