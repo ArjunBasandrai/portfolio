@@ -20,7 +20,7 @@ export default function ProjectsHomeGrid( {params}: {
               name={project.name}
               description={project.description}
               slug={project.slug}
-              // image={project.image}
+              cover={project.cover}
             />
           ))}
         </div>

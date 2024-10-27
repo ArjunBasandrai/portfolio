@@ -7,16 +7,16 @@ import { usePathname } from 'next/navigation';
 export default function Navbar() {
     const links = ['Home', 'Projects', 'About'];
     const pathname = usePathname();
-
+    
     const activeIndex = links.findIndex((link) => {
         const href = `/${link === 'Home' ? '' : link.toLowerCase()}`;
-        return pathname === href || (pathname === '/' && link === 'Home');
+        return pathname === href || (pathname === '/' && link === 'Home') || (link === 'Projects' && pathname?.startsWith('/projects'));
     });
 
     const [hoveredIndex, setHoveredIndex] = useState<number>(activeIndex === -1 ? 0 : activeIndex);
     const [menuOpen, setMenuOpen] = useState(false);
-    const cornerBorderRadius = '50px';
-    const borderRadius = '20px';
+    const cornerBorderRadius = '20px';
+    const borderRadius = '5px';
 
     useEffect(() => {
         if (hoveredIndex === null) {
@@ -54,7 +54,7 @@ export default function Navbar() {
                             <div key={index} className="flex-1 text-center relative z-10">
                                 <Link
                                     href={href}
-                                    className="block py-2 rounded-md text-sm"
+                                    className="block py-2 text-sm"
                                     onMouseEnter={() => setHoveredIndex(index)}
                                     onMouseLeave={() => setHoveredIndex(activeIndex === -1 ? 0 : activeIndex)}
                                 >

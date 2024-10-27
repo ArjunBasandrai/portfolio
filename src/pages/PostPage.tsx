@@ -3,14 +3,16 @@
 import { useEffect, useState } from "react";
 import FadedSeparator from "@/components/FadedSeparator";
 import Footer from "@/components/Footer";
-import ProjectsHomeGrid from "@/components/ProjectsGrid/ProjectsGrid";
 
 import { gql } from "@apollo/client";
 import client from "../lib/apollo-client";
-import Project from "../lib/project-interface";
+import Post from "../lib/post-interface";
+import Parser from "@/lib/post-parser";
 
-export default function ProjectsPage() {
-    const [projects, setProjects] = useState<Project[] | null>(null);
+export default function ProjectPage({ projectSlug }: {
+    projectSlug: string
+}) {
+    const [post, setPost] = useState<Post | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -21,48 +23,36 @@ export default function ProjectsPage() {
 
                 const { data } = await client.query({
                     query: gql`
-                    query {
+                    query ($slug: String!) {
                         publication(id: "6717ca18fd2be89bc676fc81") {
-                            posts(first: 20) {
-                                edges {
-                                    node {
-                                        title
-                                        subtitle
-                                        slug
-                                        seo {
-                                            description
-                                        }
-                                        content {
-                                            markdown
-                                        }
-                                    }
+                            post (slug: $slug) {
+                                id
+                                title
+                                subtitle
+                                slug
+                                seo {
+                                    description
+                                }
+                                content {
+                                    html
                                 }
                             }
                         }
                     }
                     `,
+                    variables: { slug: projectSlug },
                     fetchPolicy: "network-only",
                 });
 
-                const posts = data.publication.posts;
+                const post = data.publication.post;
 
-                const projectsData: Project[] = posts.edges.map((edge: {
-                    node: {
-                        title: string;
-                        slug: string;
-                        subtitle: string;
-                        seo: {
-                            description: string;
-                        };
-                    };
-                }) => ({
-                    name: edge.node.title,
-                    slug: edge.node.slug,
-                    description: edge.node.seo.description,
-                    cover: edge.node.subtitle,
-                }));
+                const postData: Post = {
+                    title: post.title,
+                    cover: post.subtitle,
+                    content: post.content.html,
+                }
 
-                setProjects(projectsData);
+                setPost(postData);
                 setLoading(false);
             } catch {
                 setError("Failed to load projects");
@@ -71,7 +61,7 @@ export default function ProjectsPage() {
         };
 
         fetchProjects();
-    }, []);
+    }, [projectSlug]);
 
     if (loading) {
         return (
@@ -90,8 +80,20 @@ export default function ProjectsPage() {
     }
 
     return (
-        <div className="mt-[100px]">
-            <ProjectsHomeGrid params={{ projects: projects || [] }} />
+        <div className="mt-[100px] text-white max-w-5xl mx-auto md:px-0 px-2">
+            <h2 className="font-Apparel text-5xl px-4 md:px-0">{post?.title}</h2>
+            <p className="font-NotoSans mt-3 text-gray-500 px-4 md:px-0">January, 2024</p>
+            <video
+                className="w-full rounded-lg shadow-lg border-[1px] border-semiDarkGray mt-10"
+                src={post?.cover ? post?.cover : ""}
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls
+            />
+
+            <Parser rawPostContent={post?.content ? post?.content : ""} />
             <FadedSeparator />
             <Footer />
         </div>

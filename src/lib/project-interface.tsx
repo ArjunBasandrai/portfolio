@@ -1,7 +1,7 @@
 interface Project {
     name: string;
     description: string;
-    image: string;
+    cover: string;
     slug: string;
 }
 
