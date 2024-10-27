@@ -18,11 +18,6 @@ type BentoGridProps = {
 };
 
 const StatsCard: React.FC<StatsCardProps> = ({ heading, value, extraInfo, span }) => {
-    const randomGradientDirection = () => {
-        const directions = ['tr', 'br', 'tl', 'bl'];
-        return directions[Math.floor(Math.random() * directions.length)];
-    };
-
     const parseExtraInfo = (htmlContent: string) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -43,7 +38,7 @@ const StatsCard: React.FC<StatsCardProps> = ({ heading, value, extraInfo, span }
 
     return (
         <div
-            className={`flex flex-col justify-center px-6 py-10 bg-gradient-to-${randomGradientDirection()} transition-all duration-500 from-violet-500/20 to-purple-800/10 rounded-lg hover:bg-violet-900/10 hover:shadow-[0_0_10px_-2px_rgba(139,92,246,1)] mb-4 md:m-0`}
+            className="flex flex-col justify-center px-6 py-10 bg-gradient-to-tr transition-all duration-500 from-violet-500/20 to-purple-800/10 rounded-lg hover:bg-violet-900/10 hover:shadow-[0_0_10px_-2px_rgba(139,92,246,1)] mb-4 md:m-0"
             style={{ gridRow: `span ${span}` }}
         >
             <h2 className="text-2xl font-NotoSans text-gray-400">{heading}</h2>
