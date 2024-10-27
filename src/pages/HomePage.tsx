@@ -32,6 +32,7 @@ export default function HomePage() {
                                     edges {
                                         node {
                                             title
+                                            subtitle
                                             slug
                                             seo {
                                                 description
@@ -55,6 +56,7 @@ export default function HomePage() {
                     node: {
                         title: string;
                         slug: string;
+                        subtitle: string;
                         seo: {
                             description: string;
                         };
@@ -63,7 +65,7 @@ export default function HomePage() {
                     name: edge.node.title,
                     slug: edge.node.slug,
                     description: edge.node.seo.description,
-                    image: "https://images.unsplash.com/photo-1612830461340-3b1e8b7a1b1b",
+                    cover: edge.node.subtitle,
                 }));
 
                 setProjects(projectsData);
