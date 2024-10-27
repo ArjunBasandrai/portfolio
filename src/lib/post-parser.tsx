@@ -1,5 +1,6 @@
 import FadedSeparator from "@/components/FadedSeparator";
 import 'highlight.js/styles/github-dark.css';
+import BentoGrid from "./project-stats-parser";
 
 interface SubSection {
     title: string;
@@ -101,7 +102,7 @@ function separateSections(rawPostContent: string): string[] {
 }
 
 function parseHeadings(content: string): string {
-    const wrapNonEnglishChars = (text: string) => 
+    const wrapNonEnglishChars = (text: string) =>
         text.replace(/[^a-zA-Z\s]/g, (char) => `<span class="font-Bodoni">${char}</span>`);
 
     return content
@@ -189,49 +190,53 @@ export default function Parser({ rawPostContent }: { rawPostContent: string }) {
 
     if (structuredSections.length > 0 && structuredSections[0].title === 'Stats') {
         const statsSection = structuredSections[0];
-        projectStats = textParser(parseHeadings(`<h2>${statsSection.title}</h2>${statsSection.content}`));
+        projectStats = `<h2>${statsSection.title}</h2>${statsSection.content}`;
         remainingSections = structuredSections.slice(1);
     }
 
+
     return (
-        <div
-            className="text-white rounded-lg shadow-lg md:border md:border-semiDarkGray md:mt-10 px-4 md:px-[85px] py-[85px]"
-        >
-            {remainingSections.map((section, sectionIndex) => (
-                <div key={sectionIndex}>
-                    {sectionIndex > 0 && 
-                    <div className="my-[20px] md:my-[50px]">
-                    <FadedSeparator />
-                    </div>
-                    }
-                    <div
-                        dangerouslySetInnerHTML={{
-                            __html: textParser(parseHeadings(`<h2>${section.title}</h2>`))
-                        }}
-                    />
-                    {section.content && (
+        <>
+            <BentoGrid input={projectStats} />
+            <div
+                className="text-white rounded-lg shadow-lg md:border md:border-semiDarkGray md:mt-10 px-4 md:px-[85px] py-[85px]"
+            >
+                {remainingSections.map((section, sectionIndex) => (
+                    <div key={sectionIndex}>
+                        {sectionIndex > 0 &&
+                            <div className="my-[20px] md:my-[50px]">
+                                <FadedSeparator />
+                            </div>
+                        }
                         <div
                             dangerouslySetInnerHTML={{
-                                __html: textParser(parseHeadings(section.content))
+                                __html: textParser(parseHeadings(`<h2>${section.title}</h2>`))
                             }}
                         />
-                    )}
-                    {section.subsections.map((subsection, subsectionIndex) => (
-                        <div key={subsectionIndex}>
+                        {section.content && (
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: textParser(parseHeadings(`<h3>${subsection.title}</h3>`))
+                                    __html: textParser(parseHeadings(section.content))
                                 }}
                             />
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: textParser(parseHeadings(subsection.content))
-                                }}
-                            />
-                        </div>
-                    ))}
-                </div>
-            ))}
-        </div>
+                        )}
+                        {section.subsections.map((subsection, subsectionIndex) => (
+                            <div key={subsectionIndex}>
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: textParser(parseHeadings(`<h3>${subsection.title}</h3>`))
+                                    }}
+                                />
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: textParser(parseHeadings(subsection.content))
+                                    }}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                ))}
+            </div>
+        </>
     );
 }
