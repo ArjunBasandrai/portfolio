@@ -12,7 +12,7 @@ export default function Navbar() {
     const [hoveredIndex, setHoveredIndex] = useState(0);
     const [menuOpen, setMenuOpen] = useState(false);
     const cornerBorderRadius = '20px';
-    const borderRadius = '5px';
+    const borderRadius = '10px';
 
     useEffect(() => {
         const newIndex = links.findIndex((link) => {
@@ -27,9 +27,9 @@ export default function Navbar() {
     return (
         <nav className="fixed top-8 inset-x-0 z-50 mx-auto w-max">
             <div className="hidden shadow-lg sm:block bg-transparentDarkGray backdrop-blur-md text-white rounded-[50px] px-2 py-1 border-[0.1px] border-semiDarkGray">
-                <div className="relative flex items-center px-1 py-[2px] justify-between w-[300px]">
+                <div className="relative flex items-center px-1 py-[4px] justify-between w-[300px]">
                     <div
-                        className="absolute inset-y-1 left-0 bg-semiDarkGray transition-all duration-300 ease-in-out"
+                        className="absolute inset-y-1 left-0 bg-semiDarkGray transition-all duration-300 ease-in-out border-[0.5px] border-gray-500/50"
                         style={{
                             width: `${100 / links.length}%`,
                             transform: `translateX(${hoveredIndex * 100}%)`,
