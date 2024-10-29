@@ -36,13 +36,24 @@ const StatsCard: React.FC<StatsCardProps> = ({ heading, value, extraInfo, span }
         return doc.body.innerHTML;
     };
 
+    const renderValue = (text: string) => {
+        return text.split('').map((char, index) => {
+            const isEnglishLetter = /^[A-Za-z0-35-9.]$/.test(char);
+            return (
+                <span key={index} className={isEnglishLetter ? 'font-Apparel' : 'font-Bodoni'}>
+                    {char}
+                </span>
+            );
+        });
+    };
+
     return (
         <div
             className="flex flex-col justify-center px-6 py-10 bg-gradient-to-tr transition-all duration-500 from-violet-500/20 to-purple-800/10 rounded-lg hover:bg-violet-900/10 hover:shadow-[0_0_10px_-2px_rgba(139,92,246,1)] mb-4 md:m-0"
             style={{ gridRow: `span ${span}` }}
         >
-            <h2 className="text-2xl font-NotoSans text-gray-400">{heading}</h2>
-            <p className="text-5xl font-Apparel">{value}</p>
+            <h2 className="text-xl md:text-2xl font-NotoSans text-gray-400">{heading}</h2>
+            <p className="text-3xl md:text-4xl font-Apparel">{renderValue(value)}</p>
             <p
                 className="text-lg text-gray-400 font-NotoSans"
                 dangerouslySetInnerHTML={{ __html: parseExtraInfo(extraInfo) }}

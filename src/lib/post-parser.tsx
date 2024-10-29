@@ -36,14 +36,13 @@ function separateSubSections(sections: string[]): Section[] {
             });
         }
 
+        let sectionTextContent = "";
+        const subsections: SubSection[] = [];
+
         if (h3Indices.length === 0) {
-            result.push({
-                title: sectionTitle,
-                content: contentWithoutH2,
-                subsections: [],
-            });
+            sectionTextContent = contentWithoutH2;
         } else {
-            const subsections: SubSection[] = [];
+            sectionTextContent = contentWithoutH2.slice(0, h3Indices[0].index).trim();
 
             for (let i = 0; i < h3Indices.length; i++) {
                 const startIndex = h3Indices[i].index;
@@ -51,6 +50,7 @@ function separateSubSections(sections: string[]): Section[] {
                     i + 1 < h3Indices.length
                         ? h3Indices[i + 1].index
                         : contentWithoutH2.length;
+
                 const subsectionContent = contentWithoutH2
                     .slice(startIndex, endIndex)
                     .trim();
@@ -68,13 +68,13 @@ function separateSubSections(sections: string[]): Section[] {
                     content: contentWithoutH3,
                 });
             }
-
-            result.push({
-                title: sectionTitle,
-                content: '',
-                subsections: subsections,
-            });
         }
+
+        result.push({
+            title: sectionTitle,
+            content: sectionTextContent,
+            subsections: subsections,
+        });
     }
 
     return result;
@@ -100,6 +100,7 @@ function separateSections(rawPostContent: string): string[] {
 
     return sections;
 }
+
 
 function parseHeadings(content: string): string {
     const wrapNonEnglishChars = (text: string) =>
@@ -193,7 +194,6 @@ export default function Parser({ rawPostContent }: { rawPostContent: string }) {
         projectStats = `<h2>${statsSection.title}</h2>${statsSection.content}`;
         remainingSections = structuredSections.slice(1);
     }
-
 
     return (
         <>

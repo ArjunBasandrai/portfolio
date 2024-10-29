@@ -26,7 +26,6 @@ export default function ProjectPage({ projectSlug }: {
                     query ($slug: String!) {
                         publication(id: "6717ca18fd2be89bc676fc81") {
                             post (slug: $slug) {
-                                id
                                 title
                                 subtitle
                                 slug
