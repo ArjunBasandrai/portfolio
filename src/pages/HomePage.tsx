@@ -37,9 +37,6 @@ export default function HomePage() {
                                             seo {
                                                 description
                                             }
-                                            content {
-                                                markdown
-                                            }
                                         }
                                     }
                                 }
@@ -67,6 +64,8 @@ export default function HomePage() {
                     description: edge.node.seo.description,
                     cover: edge.node.subtitle,
                 }));
+
+                console.log(projectsData);
 
                 setProjects(projectsData);
                 setLoading(false);
