@@ -9,7 +9,7 @@ function ExperienceCard({ experience }: {
     experience: string[];
 }) {
     return (
-        <div className="px-5 py-7 bg-darkGray rounded-lg my-4 font-NotoSans">
+        <div className="px-5 py-7 bg-darkGray rounded-lg my-4 font-NotoSans transition-all duration-100 hover:bg-darkGray/90">
             <div className="flex justify-between text-white">
                 <h4 className="text-lg">{experience[0]}</h4>
                 <p className="text-md">{experience[2]}</p>
@@ -53,7 +53,7 @@ export default function AboutPage() {
                     ))}
                 </div>
 
-                <div className="mt-12 mb-12 p-4">
+                <div className="mt-12 mb-10 p-4">
                     <h4 className="text-3xl font-Apparel">Hobbies</h4>
                     <p className="font-NotoSans text-md text-gray-400 mt-4">
                         Outside of coding, I love exploring diverse passions that keep my creativity and discipline sharp. As an avid <span className="text-violet-500/70">bird watcher and photographer</span>, I enjoy capturing nature&apos;s intricate beauty through my lens—an experience that teaches me patience and precision. Music is another creative outlet, and I play the Electronic Keyboard, holding a <span className="text-violet-500/70">Grade 7 certification from Trinity College London</span>. Additionally, I hold a <span className="text-violet-500/70">Dan-1 black belt in Taekwondo</span>, a discipline that keeps me grounded, resilient, and ready to tackle challenges head-on.
