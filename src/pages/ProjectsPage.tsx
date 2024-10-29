@@ -32,9 +32,6 @@ export default function ProjectsPage() {
                                         seo {
                                             description
                                         }
-                                        content {
-                                            markdown
-                                        }
                                     }
                                 }
                             }
