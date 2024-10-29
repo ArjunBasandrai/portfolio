@@ -7,22 +7,22 @@ import { usePathname } from 'next/navigation';
 export default function Navbar() {
     const links = ['Home', 'Projects', 'About'];
     const pathname = usePathname();
-    
-    const activeIndex = links.findIndex((link) => {
-        const href = `/${link === 'Home' ? '' : link.toLowerCase()}`;
-        return pathname === href || (pathname === '/' && link === 'Home') || (link === 'Projects' && pathname?.startsWith('/projects'));
-    });
 
-    const [hoveredIndex, setHoveredIndex] = useState<number>(activeIndex === -1 ? 0 : activeIndex);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [hoveredIndex, setHoveredIndex] = useState(0);
     const [menuOpen, setMenuOpen] = useState(false);
     const cornerBorderRadius = '20px';
     const borderRadius = '5px';
 
     useEffect(() => {
-        if (hoveredIndex === null) {
-            setHoveredIndex(activeIndex);
-        }
-    }, [activeIndex, hoveredIndex]);
+        const newIndex = links.findIndex((link) => {
+            const href = `/${link === 'Home' ? '' : link.toLowerCase()}`;
+            return pathname === href || (pathname === '/' && link === 'Home') || (link === 'Projects' && pathname?.startsWith('/projects'));
+        });
+
+        setActiveIndex(newIndex === -1 ? 0 : newIndex);
+        setHoveredIndex(newIndex === -1 ? 0 : newIndex);
+    }, [pathname]);
 
     return (
         <nav className="fixed top-8 inset-x-0 z-50 mx-auto w-max">
@@ -32,17 +32,17 @@ export default function Navbar() {
                         className="absolute inset-y-1 left-0 bg-semiDarkGray transition-all duration-300 ease-in-out"
                         style={{
                             width: `${100 / links.length}%`,
-                            transform: `translateX(${(hoveredIndex ?? activeIndex) * 100}%)`,
+                            transform: `translateX(${hoveredIndex * 100}%)`,
                             borderTopLeftRadius:
-                                (hoveredIndex ?? activeIndex) === 0 ? cornerBorderRadius : borderRadius,
+                                hoveredIndex === 0 ? cornerBorderRadius : borderRadius,
                             borderBottomLeftRadius:
-                                (hoveredIndex ?? activeIndex) === 0 ? cornerBorderRadius : borderRadius,
+                                hoveredIndex === 0 ? cornerBorderRadius : borderRadius,
                             borderTopRightRadius:
-                                (hoveredIndex ?? activeIndex) === links.length - 1
+                                hoveredIndex === links.length - 1
                                     ? cornerBorderRadius
                                     : borderRadius,
                             borderBottomRightRadius:
-                                (hoveredIndex ?? activeIndex) === links.length - 1
+                                hoveredIndex === links.length - 1
                                     ? cornerBorderRadius
                                     : borderRadius,
                         }}
@@ -56,7 +56,7 @@ export default function Navbar() {
                                     href={href}
                                     className="block py-2 text-sm"
                                     onMouseEnter={() => setHoveredIndex(index)}
-                                    onMouseLeave={() => setHoveredIndex(activeIndex === -1 ? 0 : activeIndex)}
+                                    onMouseLeave={() => setHoveredIndex(activeIndex)}
                                 >
                                     {link}
                                 </Link>
