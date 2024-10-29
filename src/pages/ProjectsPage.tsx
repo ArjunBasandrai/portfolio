@@ -88,7 +88,7 @@ export default function ProjectsPage() {
 
     return (
         <div className="mt-[100px]">
-            <ProjectsHomeGrid params={{ projects: projects || [] }} />
+            <ProjectsHomeGrid params={{ projects: projects?.toReversed() || [] }} />
             <FadedSeparator />
             <Footer />
         </div>
