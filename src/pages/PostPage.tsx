@@ -49,6 +49,7 @@ export default function ProjectPage({ projectSlug }: {
                                     html
                                 }
                                 previousSlugs
+                                cuid
                             }
                         }
                     }
