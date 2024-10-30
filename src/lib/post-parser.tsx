@@ -207,19 +207,21 @@ export default function Parser({ rawPostContent }: { rawPostContent: string }) {
     const techStackSection = sectionsArray.find(section => section.includes("Tech Stack"));
     if (techStackSection) {
         techStack = extractTechStack(techStackSection);
-        console.log(techStack);
         remainingSections = remainingSections.filter(section => section.title !== 'Tech Stack');
     }
 
+    const isLargeScreen = window.innerWidth >= 1024;
+
     return (
         <>
-            <div className="md:border md:border-semiDarkGray mt-10 p-8 rounded-lg">
+            <div className="lg:border md:border-semiDarkGray mt-10 py-8 px-0 md:px-8 rounded-lg">
                 <BentoGrid input={projectStats} />
                 <FadedSeparator />
                 <TechStack stack={techStack} />
+                {!isLargeScreen && <FadedSeparator />}
             </div>
             <div
-                className="text-white rounded-lg shadow-lg md:border md:border-semiDarkGray md:mt-10 px-4 md:px-[85px] py-[85px]"
+                className="text-white rounded-lg shadow-lg lg:border md:border-semiDarkGray md:mt-10 px-4 md:px-[85px] py-0 lg:py-[85px]"
             >
                 {remainingSections.map((section, sectionIndex) => (
                     <div key={sectionIndex}>

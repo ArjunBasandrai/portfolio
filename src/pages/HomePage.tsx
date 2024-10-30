@@ -66,8 +66,6 @@ export default function HomePage() {
                     cover: edge.node.subtitle,
                 }));
 
-                console.log(projectsData);
-
                 setProjects(projectsData);
                 setLoading(false);
             } catch {
