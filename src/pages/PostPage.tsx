@@ -9,12 +9,24 @@ import client from "../lib/apollo-client";
 import Post from "../lib/post-interface";
 import Parser from "@/lib/post-parser";
 
+function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+    };
+    
+    return date.toLocaleDateString('en-US', options).replace(" ", ", ");
+}
+
 export default function ProjectPage({ projectSlug }: {
     projectSlug: string
 }) {
     const [post, setPost] = useState<Post | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [date, setDate] = useState<string>("");
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -27,6 +39,7 @@ export default function ProjectPage({ projectSlug }: {
                         publication(id: "6717ca18fd2be89bc676fc81") {
                             post (slug: $slug) {
                                 title
+                                publishedAt
                                 subtitle
                                 seo {
                                     description
@@ -35,7 +48,6 @@ export default function ProjectPage({ projectSlug }: {
                                     html
                                 }
                                 previousSlugs
-                                cuid
                             }
                         }
                     }
@@ -52,6 +64,7 @@ export default function ProjectPage({ projectSlug }: {
                     content: post.content.html,
                 }
 
+                setDate(formatDate(post.publishedAt));
                 setPost(postData);
                 setLoading(false);
             } catch {
@@ -80,9 +93,9 @@ export default function ProjectPage({ projectSlug }: {
     }
 
     return (
-        <div className="mt-[100px] text-white max-w-5xl mx-auto md:px-0 px-2">
+        <div className="mt-[140px] text-white max-w-5xl mx-auto md:px-0 px-2">
             <h2 className="font-Apparel text-5xl px-4 md:px-0">{post?.title}</h2>
-            <p className="font-NotoSans mt-3 text-gray-500 px-4 md:px-0">January, 2024</p>
+            <p className="font-NotoSans mt-3 text-gray-500 px-4 md:px-0 text-xl">{date}</p>
             <video
                 className="w-full rounded-lg shadow-lg border-[1px] border-semiDarkGray mt-10"
                 src={post?.cover ? post?.cover : ""}
