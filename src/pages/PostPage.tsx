@@ -11,12 +11,12 @@ import Parser from "@/lib/post-parser";
 
 function formatDate(dateString: string): string {
     const date = new Date(dateString);
-    
+
     const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
         month: 'long',
     };
-    
+
     return date.toLocaleDateString('en-US', options).replace(" ", ", ");
 }
 
@@ -42,6 +42,7 @@ export default function ProjectPage({ projectSlug }: {
                                 publishedAt
                                 subtitle
                                 seo {
+                                    title
                                     description
                                 }
                                 content {
@@ -62,6 +63,7 @@ export default function ProjectPage({ projectSlug }: {
                     title: post.title,
                     cover: post.subtitle,
                     content: post.content.html,
+                    sourceCode: post.seo.title,
                 }
 
                 setDate(formatDate(post.publishedAt));
@@ -95,7 +97,18 @@ export default function ProjectPage({ projectSlug }: {
     return (
         <div className="mt-[140px] text-white max-w-5xl mx-auto md:px-0 px-2">
             <h2 className="font-Apparel text-5xl px-4 md:px-0">{post?.title}</h2>
-            <p className="font-NotoSans mt-3 text-gray-500 px-4 md:px-0 text-xl">{date}</p>
+            <div className="flex justify-between mt-3">
+                <p className="font-NotoSans text-gray-500 px-4 md:px-0 text-xl">{date}</p>
+                <a
+                    className="font-NotoSans text-gray-500 px-4 md:px-0 text-md underline decoration-purple-500 underline-offset-4"
+                    href={post?.sourceCode}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Source Code 
+                    <svg className='inline ml-1' stroke="currentColor" fill="none" strokeWidth="0" viewBox="0 0 15 15" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M3.64645 11.3536C3.45118 11.1583 3.45118 10.8417 3.64645 10.6465L10.2929 4L6 4C5.72386 4 5.5 3.77614 5.5 3.5C5.5 3.22386 5.72386 3 6 3L11.5 3C11.6326 3 11.7598 3.05268 11.8536 3.14645C11.9473 3.24022 12 3.36739 12 3.5L12 9.00001C12 9.27615 11.7761 9.50001 11.5 9.50001C11.2239 9.50001 11 9.27615 11 9.00001V4.70711L4.35355 11.3536C4.15829 11.5488 3.84171 11.5488 3.64645 11.3536Z" fill="currentColor"></path></svg>
+                </a>
+            </div>
             <video
                 className="w-full rounded-lg shadow-lg border-[1px] border-semiDarkGray mt-10"
                 src={post?.cover ? post?.cover : ""}
@@ -105,7 +118,6 @@ export default function ProjectPage({ projectSlug }: {
                 playsInline
                 controls
             />
-
             <Parser rawPostContent={post?.content ? post?.content : ""} />
             <FadedSeparator />
             <Footer />
