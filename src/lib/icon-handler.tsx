@@ -39,6 +39,6 @@ export default function IconHandler({ name }: { name: string }) {
     }
 
     return (
-        <Image src={logoSrc} alt={name} className="w-24 h-24 lg:w-28 lg:h-28 bg-gradient-to-tr from-violet-500/30 to-violet-700/20 p-3 sm:p-4 md:p-5 rounded-md" />
+        <Image src={logoSrc} alt={name} className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 bg-gradient-to-tr from-violet-500/30 to-violet-700/20 p-3 sm:p-4 md:p-5 rounded-md" />
     );
 }
