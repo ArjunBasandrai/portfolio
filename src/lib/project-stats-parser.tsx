@@ -83,7 +83,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ input }) => {
     const items = parseInputHTMLString(input);
 
     return (
-        <div className="md:grid md:gap-4 mt-10">
+        <div className="md:grid md:gap-4 mb-12">
             {items.length === 3 && (
                 <div className="md:grid md:grid-cols-3 md:gap-4">
                     {items.map((item, index) => (

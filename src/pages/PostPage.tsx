@@ -34,9 +34,6 @@ export default function ProjectPage({ projectSlug }: {
                                 content {
                                     html
                                 }
-                                previousSlugs
-                                views
-                                cuid
                             }
                         }
                     }

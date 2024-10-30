@@ -1,6 +1,8 @@
 import FadedSeparator from "@/components/FadedSeparator";
 import 'highlight.js/styles/github-dark.css';
 import BentoGrid from "./project-stats-parser";
+import IconHandler from "./icon-handler";
+import TechStack from "@/components/TechStack";
 
 interface SubSection {
     title: string;
@@ -182,11 +184,18 @@ function textParser(content: string): string {
     return content;
 }
 
+function extractTechStack(content: string): string[] {
+    content = content.replace(/<h2[^>]*>.*?<\/h2>/i, '');
+    content = content.replace(/<\/?p>/gi, '').trim();
+    return content.split('«').map(item => item.trim());
+}
+
 export default function Parser({ rawPostContent }: { rawPostContent: string }) {
     const sectionsArray = separateSections(rawPostContent);
     const structuredSections = separateSubSections(sectionsArray);
 
     let projectStats = '';
+    let techStack: string[] = [];   
     let remainingSections = structuredSections;
 
     if (structuredSections.length > 0 && structuredSections[0].title === 'Stats') {
@@ -195,9 +204,20 @@ export default function Parser({ rawPostContent }: { rawPostContent: string }) {
         remainingSections = structuredSections.slice(1);
     }
 
+    const techStackSection = sectionsArray.find(section => section.includes("Tech Stack"));
+    if (techStackSection) {
+        techStack = extractTechStack(techStackSection);
+        console.log(techStack);
+        remainingSections = remainingSections.filter(section => section.title !== 'Tech Stack');
+    }
+
     return (
         <>
-            <BentoGrid input={projectStats} />
+            <div className="md:border md:border-semiDarkGray mt-10 p-8 rounded-lg">
+                <BentoGrid input={projectStats} />
+                <FadedSeparator />
+                <TechStack stack={techStack} />
+            </div>
             <div
                 className="text-white rounded-lg shadow-lg md:border md:border-semiDarkGray md:mt-10 px-4 md:px-[85px] py-[85px]"
             >

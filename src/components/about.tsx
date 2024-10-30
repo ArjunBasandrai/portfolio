@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
 import image1 from '../../images/1.jpg';
 import image2 from '../../images/2.jpg';
-import AboutSection from './aboutSection';
+import AboutSection from './AboutSection';
 
 function ease_p(p: number): number {
     return gsap.parseEase("power2.inOut")(p);
