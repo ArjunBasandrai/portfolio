@@ -32,6 +32,7 @@ export default function ProjectsPage() {
                                         seo {
                                             description
                                         }
+                                        views
                                     }
                                 }
                             }
@@ -88,7 +89,7 @@ export default function ProjectsPage() {
 
     return (
         <div className="mt-[100px]">
-            <ProjectsHomeGrid params={{ projects: projects?.toReversed() || [] }} />
+            <ProjectsHomeGrid params={{ projects: projects || [] }} />
             <FadedSeparator />
             <Footer />
         </div>

@@ -28,13 +28,15 @@ export default function ProjectPage({ projectSlug }: {
                             post (slug: $slug) {
                                 title
                                 subtitle
-                                slug
                                 seo {
                                     description
                                 }
                                 content {
                                     html
                                 }
+                                previousSlugs
+                                views
+                                cuid
                             }
                         }
                     }
@@ -44,6 +46,7 @@ export default function ProjectPage({ projectSlug }: {
                 });
 
                 const post = data.publication.post;
+                console.log(post);
 
                 const postData: Post = {
                     title: post.title,

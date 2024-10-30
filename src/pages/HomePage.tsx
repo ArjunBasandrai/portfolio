@@ -37,6 +37,7 @@ export default function HomePage() {
                                             seo {
                                                 description
                                             }
+                                            previousSlugs
                                         }
                                     }
                                 }
@@ -93,7 +94,7 @@ export default function HomePage() {
                 {error &&
                 <div className="text-white">{error}</div>}
                 {!error && !loading && projects &&
-                <ProjectsHomeGrid params={{ projects: projects || [] }} />}
+                <ProjectsHomeGrid params={{ projects: projects.toReversed() || [] }} />}
                 <FadedSeparator />
                 <Footer />
             </div>
