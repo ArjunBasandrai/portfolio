@@ -1,7 +1,6 @@
 import FadedSeparator from "@/components/FadedSeparator";
 import 'highlight.js/styles/github-dark.css';
 import BentoGrid from "./project-stats-parser";
-import IconHandler from "./icon-handler";
 import TechStack from "@/components/TechStack";
 
 interface SubSection {
