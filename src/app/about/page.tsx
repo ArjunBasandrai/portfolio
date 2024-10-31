@@ -4,6 +4,12 @@ import aboutImage from "../../images/about.jpg"
 import Image from "next/image";
 import FadedSeparator from "@/components/FadedSeparator";
 import Footer from "@/components/Footer";
+import { title } from "process";
+
+export const metadata = {
+    title: "Arjun Basandrai | About",
+    description: "Discover more about Arjun Basandrai - a machine learning enthusiast, software developer, and passionate explorer in bird photography and music.",
+};
 
 function ExperienceCard({ experience }: {
     experience: string[];

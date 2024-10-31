@@ -1,5 +1,11 @@
 import Link from "next/link";
 import "../styles/globals.css";
+
+export const metadata = {
+    title: "Arjun Basandrai | 404",
+    description: "404 | Page not found",
+};
+
 export default function NotFound() {
     return (
         <div className="w-screen h-screen text-white flex flex-col items-center justify-center px-4">
