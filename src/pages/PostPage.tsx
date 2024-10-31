@@ -38,6 +38,7 @@ export default function ProjectPage({ projectSlug }: {
                     query ($slug: String!) {
                         publication(id: "6717ca18fd2be89bc676fc81") {
                             post (slug: $slug) {
+                                id
                                 title
                                 publishedAt
                                 subtitle
@@ -48,8 +49,6 @@ export default function ProjectPage({ projectSlug }: {
                                 content {
                                     html
                                 }
-                                previousSlugs
-                                cuid
                             }
                         }
                     }
@@ -59,6 +58,8 @@ export default function ProjectPage({ projectSlug }: {
                 });
 
                 const post = data.publication.post;
+
+                console.log(post);
 
                 const postData: Post = {
                     title: post.title,
