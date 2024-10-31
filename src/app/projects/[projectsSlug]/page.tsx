@@ -13,7 +13,7 @@ export const generateMetadata = async ({ params }: {
 }): Promise<Metadata> => {
     const { projectsSlug } = params;
 
-    const { data }: any = await client.query({
+    const { data } = await client.query({
         query: gql`
             query ($slug: String!) {
                 publication(id: "6717ca18fd2be89bc676fc81") {

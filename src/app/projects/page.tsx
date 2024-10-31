@@ -1,4 +1,3 @@
-import { title } from 'process';
 import '../../styles/globals.css';
 import ProjectsPage from "@/pages/ProjectsPage";
 
