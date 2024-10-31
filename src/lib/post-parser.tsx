@@ -2,6 +2,7 @@ import FadedSeparator from "@/components/FadedSeparator";
 import 'highlight.js/styles/github-dark.css';
 import BentoGrid from "./project-stats-parser";
 import TechStack from "@/components/TechStack";
+import parse from 'html-react-parser';
 
 interface SubSection {
     title: string;
@@ -189,12 +190,21 @@ function extractTechStack(content: string): string[] {
     return content.split('«').map(item => item.trim());
 }
 
+const HeadingRenderer = ({ content, level }: { content: string; level: "h2" | "h3" | "h4" }) => {
+    const Tag = level;
+    return <Tag>{parse(content)}</Tag>;
+};
+
+const TextRenderer = ({ content }: { content: string }) => (
+    <div className="text-md md:text-lg text-gray-300/90 font-NotoSans mb-6">{parse(content)}</div>
+);
+
 export default function Parser({ rawPostContent }: { rawPostContent: string }) {
     const sectionsArray = separateSections(rawPostContent);
     const structuredSections = separateSubSections(sectionsArray);
 
     let projectStats = '';
-    let techStack: string[] = [];   
+    let techStack: string[] = [];
     let remainingSections = structuredSections;
 
     if (structuredSections.length > 0 && structuredSections[0].title === 'Stats') {
@@ -219,40 +229,20 @@ export default function Parser({ rawPostContent }: { rawPostContent: string }) {
                 <TechStack stack={techStack} />
                 {!isLargeScreen && <FadedSeparator />}
             </div>
-            <div
-                className="text-white rounded-lg shadow-lg lg:border md:border-semiDarkGray md:mt-10 px-4 md:px-[85px] py-0 lg:py-[85px]"
-            >
+            <div className="text-white rounded-lg shadow-lg lg:border md:border-semiDarkGray md:mt-10 px-4 md:px-[85px] py-0 lg:py-[85px]">
                 {remainingSections.map((section, sectionIndex) => (
                     <div key={sectionIndex}>
-                        {sectionIndex > 0 &&
+                        {sectionIndex > 0 && (
                             <div className="my-[20px] md:my-[50px]">
                                 <FadedSeparator />
                             </div>
-                        }
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: textParser(parseHeadings(`<h2>${section.title}</h2>`))
-                            }}
-                        />
-                        {section.content && (
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: textParser(parseHeadings(section.content))
-                                }}
-                            />
                         )}
+                        <HeadingRenderer content={parseHeadings(`<h2>${section.title}</h2>`)} level="h2" />
+                        {section.content && <TextRenderer content={textParser(parseHeadings(section.content))} />}
                         {section.subsections.map((subsection, subsectionIndex) => (
                             <div key={subsectionIndex}>
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: textParser(parseHeadings(`<h3>${subsection.title}</h3>`))
-                                    }}
-                                />
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: textParser(parseHeadings(subsection.content))
-                                    }}
-                                />
+                                <HeadingRenderer content={parseHeadings(`<h3>${subsection.title}</h3>`)} level="h3" />
+                                <TextRenderer content={textParser(parseHeadings(subsection.content))} />
                             </div>
                         ))}
                     </div>

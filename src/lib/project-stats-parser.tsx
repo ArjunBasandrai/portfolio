@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 
 type GridItem = {
     heading: string;
@@ -19,26 +20,22 @@ type BentoGridProps = {
 
 const StatsCard: React.FC<StatsCardProps> = ({ heading, value, extraInfo, span }) => {
     const parseExtraInfo = (htmlContent: string) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlContent, 'text/html');
-
         const svgIcon = `
             <svg class="inline ml-1" stroke="currentColor" fill="none" strokeWidth="0" viewBox="0 0 15 15" height="0.8em" width="0.8em" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M3.64645 11.3536C3.45118 11.1583 3.45118 10.8417 3.64645 10.6465L10.2929 4L6 4C5.72386 4 5.5 3.77614 5.5 3.5C5.5 3.22386 5.72386 3 6 3L11.5 3C11.6326 3 11.7598 3.05268 11.8536 3.14645C11.9473 3.24022 12 3.36739 12 3.5L12 9.00001C12 9.27615 11.7761 9.50001 11.5 9.50001C11.2239 9.50001 11 9.27615 11 9.00001V4.70711L4.35355 11.3536C4.15829 11.5488 3.84171 11.5488 3.64645 11.3536Z" fill="currentColor"></path>
             </svg>
         `;
-        
-        doc.querySelectorAll('a').forEach((anchor) => {
-            anchor.classList.add('underline', 'decoration-purple-500', 'underline-offset-[5px]', 'decoration-[2px]', 'hover:text-purple-700', 'transition-all', 'duration-200');
-            anchor.innerHTML += svgIcon;
+
+        const contentWithIcons = htmlContent.replace(/<a(.*?)>(.*?)<\/a>/g, (match, attrs, text) => {
+            return `<a ${attrs} class="underline decoration-purple-500 underline-offset-[5px] decoration-[2px] hover:text-purple-700 transition-all duration-200">${text}${svgIcon}</a>`;
         });
 
-        return doc.body.innerHTML;
+        return parse(contentWithIcons);
     };
 
     const renderValue = (text: string) => {
         return text.split('').map((char, index) => {
-            const isEnglishLetter = /^[A-Za-z0-35-9.]$/.test(char);
+            const isEnglishLetter = /^[A-Za-z0-9.]$/.test(char);
             return (
                 <span key={index} className={isEnglishLetter ? 'font-Apparel' : 'font-Bodoni'}>
                     {char}
@@ -54,10 +51,7 @@ const StatsCard: React.FC<StatsCardProps> = ({ heading, value, extraInfo, span }
         >
             <h2 className="text-xl md:text-2xl font-NotoSans text-gray-400">{heading}</h2>
             <p className="text-3xl md:text-4xl font-Apparel">{renderValue(value)}</p>
-            <p
-                className="text-lg text-gray-400 font-NotoSans"
-                dangerouslySetInnerHTML={{ __html: parseExtraInfo(extraInfo) }}
-            />
+            <p className="text-lg text-gray-400 font-NotoSans">{parseExtraInfo(extraInfo)}</p>
         </div>
     );
 };
@@ -105,8 +99,8 @@ const BentoGrid: React.FC<BentoGridProps> = ({ input }) => {
                         <StatsCard {...items[1]} span={1} />
                     </div>
                     <div className="md:grid md:grid-rows-2 md:gap-4">
-                        <StatsCard {...items[2]} span={1}/>
-                        <StatsCard {...items[3]} span={4}/>
+                        <StatsCard {...items[2]} span={1} />
+                        <StatsCard {...items[3]} span={4} />
                     </div>
                 </div>
             )}
@@ -114,15 +108,15 @@ const BentoGrid: React.FC<BentoGridProps> = ({ input }) => {
             {items.length === 5 && (
                 <div className="md:grid md:gap-4 h-full" style={{ gridTemplateColumns: '1fr 2fr' }}>
                     <div className="md:grid md:grid-rows-2 md:gap-4">
-                        <StatsCard {...items[0]} span={2}/>
-                        <StatsCard {...items[1]} span={1}/>
+                        <StatsCard {...items[0]} span={2} />
+                        <StatsCard {...items[1]} span={1} />
                     </div>
                     <div className="md:grid md:grid-rows-2 md:gap-4">
                         <div className="md:grid md:grid-cols-2 md:gap-4 h-full" style={{ gridRow: 'span 1' }}>
                             <StatsCard {...items[2]} span={1} />
                             <StatsCard {...items[3]} span={1} />
                         </div>
-                        <StatsCard {...items[4]} span={2}/>
+                        <StatsCard {...items[4]} span={2} />
                     </div>
                 </div>
             )}
