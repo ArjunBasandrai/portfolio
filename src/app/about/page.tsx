@@ -59,10 +59,12 @@ export default function AboutPage() {
                 </div>
 
                 <div className="mt-12 mb-10 p-4">
-                    <h4 className="text-3xl font-Apparel">Hobbies</h4>
-                    <p className="font-NotoSans text-md text-gray-400 mt-4">
-                        Outside of coding, I love exploring diverse passions that keep my creativity and discipline sharp. As an avid <span className="text-violet-500/70">bird watcher and photographer</span>, I enjoy capturing nature&apos;s intricate beauty through my lens—an experience that teaches me patience and precision. Music is another creative outlet, and I play the Electronic Keyboard, holding a <span className="text-violet-500/70">Grade 7 certification from Trinity College London</span>. Additionally, I hold a <span className="text-violet-500/70">Dan-1 black belt in Taekwondo</span>, a discipline that keeps me grounded, resilient, and ready to tackle challenges head-on.
-                    </p>
+                    <h4 className="text-3xl font-Apparel mb-4">Hobbies</h4>
+                    <p className="mb-4">Outside of coding, I love exploring diverse passions that keep my creativity and discipline sharp.</p>
+                    <p className="mb-4">As an avid <span className="text-violet-500/70">bird watcher and photographer</span>, I enjoy capturing nature&apos;s intricate beauty through my lens—an experience that teaches me patience and precision.</p>
+                    <p className="mb-4">Music is another creative outlet, and I play the Electronic Keyboard, holding a <span className="text-violet-500/70">Grade 7 certification from Trinity College London</span>.</p>
+                    <p className="mb-4">Additionally, I hold a <span className="text-violet-500/70">Dan-1 black belt in Taekwondo</span>, a discipline that keeps me grounded, resilient, and ready to tackle challenges head-on.</p>
+
                 </div>
             </div>
             <FadedSeparator />
