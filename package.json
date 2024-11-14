@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
+    "@vercel/analytics": "^1.4.0",
     "apollo-server-micro": "^3.13.0",
     "autoprefixer": "^10.4.20",
     "framer-motion": "^11.11.9",
