@@ -44,7 +44,7 @@ export default function Footer() {
                     </div>
 
                     <div className="text-center flex-1">
-                        <p>Built with 🖤</p>
+                        <p>Built with 💜</p>
                     </div>
 
                     <div className="text-right flex-1">
