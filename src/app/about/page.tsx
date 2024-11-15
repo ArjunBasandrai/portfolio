@@ -1,6 +1,8 @@
 import "../../styles/globals.css";
 
 import aboutImage from "../../images/about.jpg"
+import natureAboutImage from "../../images/nature_about.jpg"
+import taekwondoAboutImage from "../../images/taekwondo_about.jpg"
 import Image from "next/image";
 import FadedSeparator from "@/components/FadedSeparator";
 import Footer from "@/components/Footer";
@@ -62,8 +64,10 @@ export default function AboutPage() {
                     <h4 className="text-3xl font-Apparel mb-4">Hobbies</h4>
                     <p className="mb-4 text-gray-400 font-NotoSans">Outside of coding, I love exploring diverse passions that keep my creativity and discipline sharp.</p>
                     <p className="mb-4 text-gray-400 font-NotoSans">As an avid <span className="text-violet-500/70">bird watcher and photographer</span>, I enjoy capturing nature&apos;s intricate beauty through my lens—an experience that teaches me patience and precision.</p>
+                    <Image src={natureAboutImage} alt="Nature" className="w-full h-auto mb-4"/>
                     <p className="mb-4 text-gray-400 font-NotoSans">Music is another creative outlet, and I play the Electronic Keyboard, holding a <span className="text-violet-500/70">Grade 7 certification from Trinity College London</span>.</p>
-                    <p className="text-gray-400 font-NotoSans">Additionally, I hold a <span className="text-violet-500/70">Dan-1 black belt in Taekwondo</span>, a discipline that keeps me grounded, resilient, and ready to tackle challenges head-on.</p>
+                    <p className="mb-4 text-gray-400 font-NotoSans">Additionally, I hold a <span className="text-violet-500/70">Dan-1 black belt in Taekwondo</span>, a discipline that keeps me grounded, resilient, and ready to tackle challenges head-on.</p>
+                    <Image src={taekwondoAboutImage} alt="Nature" className="w-full h-auto mb-4"/>
 
                 </div>
             </div>
