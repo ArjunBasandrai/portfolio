@@ -12,8 +12,9 @@ import numpy from "../images/logos/numpy.svg";
 import matplotlib from "../images/logos/matplotlib.svg";
 import cpp   from "../images/logos/c-plusplus.svg";
 import rust from "../images/logos/rust.svg";
+import pytorch from "../images/logos/pytorch.svg";
 
-type LogoName = "flask" | "react" | "javascript" | "python" | "selenium" | "tensorflow" | "pandas" | "numpy" | "matplotlib" | "cpp" | "rust";
+type LogoName = "flask" | "react" | "javascript" | "python" | "selenium" | "tensorflow" | "pandas" | "numpy" | "matplotlib" | "cpp" | "rust" | "pytorch";
 
 const logos: { [key in LogoName]: string } = {
     flask,
@@ -27,6 +28,7 @@ const logos: { [key in LogoName]: string } = {
     matplotlib,
     cpp,
     rust,
+    pytorch,
 };
 
 export default function IconHandler({ name }: { name: string }) {
