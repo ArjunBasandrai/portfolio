@@ -32,8 +32,7 @@ export default function ProjectsPage() {
                                         seo {
                                             description
                                         }
-                                        url
-                                        previousSlugs
+                                        brief
                                     }
                                 }
                             }

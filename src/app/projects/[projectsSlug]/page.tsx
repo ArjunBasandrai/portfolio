@@ -23,12 +23,13 @@ export const generateMetadata = async ({ params }: {
                         seo {
                             description
                         }
+                        brief
                     }
                 }
             }
         `,
         variables: { slug: projectsSlug },
-        fetchPolicy: "cache-first",
+        fetchPolicy: "network-only",
     });
 
     const post = data.publication.post;

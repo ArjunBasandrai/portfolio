@@ -49,6 +49,7 @@ export default function ProjectPage({ projectSlug }: {
                                 content {
                                     html
                                 }
+                                    brief
                             }
                         }
                     }
@@ -58,8 +59,6 @@ export default function ProjectPage({ projectSlug }: {
                 });
 
                 const post = data.publication.post;
-
-                console.log(post);
 
                 const postData: Post = {
                     title: post.title,
