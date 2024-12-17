@@ -23,7 +23,6 @@ export const generateMetadata = async ({ params }: {
                         seo {
                             description
                         }
-                        brief
                     }
                 }
             }
