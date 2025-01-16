@@ -49,8 +49,7 @@ export default function ProjectPage({ projectSlug }: {
                                 content {
                                     html
                                 }
-                                brief
-                                slug
+                                url
                             }
                         }
                     }

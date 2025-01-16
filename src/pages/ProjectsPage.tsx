@@ -32,7 +32,7 @@ export default function ProjectsPage() {
                                         seo {
                                             description
                                         }
-                                        previousSlugs
+                                        url
                                     }
                                 }
                             }
