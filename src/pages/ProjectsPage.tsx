@@ -88,7 +88,7 @@ export default function ProjectsPage() {
     }
 
     return (
-        <div className="mt-[100px]">
+        <div className="pt-[100px]">
             <ProjectsHomeGrid params={{ projects: projects || [] }} />
             <FadedSeparator />
             <Footer />

@@ -29,8 +29,8 @@ function ExperienceCard({ experience }: {
 export default function AboutPage() {
     const experience = [["Talent Recruit Pvt. Ltd.", "Machine Learning Intern", "Mar 2024 - Jul 2024"]];
     return (
-        <>
-            <div className="text-white mt-[100px] md:mt-[175px] container max-w-xl mx-auto">
+        <div className="">
+            <div className="text-white pt-[100px] md:pt-[175px] container max-w-xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-center">
                     <div className="w-full md:w-[40%] p-4 flex md:justify-center">
                         <div className="w-[200px] h-[200px] overflow-hidden rounded-full cursor-pointer border-[5px] border-violet-500/60 transition-all duration-100 hover:border-[6px]">
@@ -73,6 +73,6 @@ export default function AboutPage() {
             </div>
             <FadedSeparator />
             <Footer />
-        </>
+        </div>
     );
 }
