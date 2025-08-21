@@ -27,7 +27,10 @@ function ExperienceCard({ experience }: {
 }
 
 export default function AboutPage() {
-    const experience = [["Talent Recruit Pvt. Ltd.", "Machine Learning Intern", "Mar 2024 - Jul 2024"]];
+    const experience = [
+        ["Tracelink Inc.", "Software Engineer Intern", "Mar 2025 - Oct 2025"], 
+        ["Talent Recruit Pvt. Ltd.", "Machine Learning Intern", "Mar 2024 - Jul 2024"]
+    ];
     return (
         <div className="">
             <div className="text-white pt-[100px] md:pt-[175px] container max-w-xl mx-auto">
