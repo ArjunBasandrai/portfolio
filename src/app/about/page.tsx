@@ -3,9 +3,11 @@ import "../../styles/globals.css";
 import aboutImage from "../../images/about.jpg"
 import natureAboutImage from "../../images/nature_about.jpg"
 import taekwondoAboutImage from "../../images/taekwondo_about.jpg"
+
 import Image from "next/image";
 import FadedSeparator from "@/components/FadedSeparator";
 import Footer from "@/components/Footer";
+import HobbyAccordion from "@/components/HobbyAccordion";
 
 export const metadata = {
     title: "Arjun Basandrai | About",
@@ -93,13 +95,47 @@ export default function AboutPage() {
 
                 <div className="mt-12 mb-10 p-4">
                     <h4 className="text-3xl font-Apparel mb-4">Hobbies</h4>
-                    <p className="mb-4 text-gray-400 font-NotoSans">Outside of coding, I love exploring diverse passions that keep my creativity and discipline sharp.</p>
-                    <p className="mb-4 text-gray-400 font-NotoSans">As an avid <span className="text-violet-500/70">bird watcher and photographer</span>, I enjoy capturing nature&apos;s intricate beauty through my lens—an experience that teaches me patience and precision.</p>
-                    <Image src={natureAboutImage} alt="Nature" className="w-full h-auto mb-4" />
-                    <p className="mb-4 text-gray-400 font-NotoSans">Music is another creative outlet, and I play the Electronic Keyboard, holding a <span className="text-violet-500/70">Grade 7 certification from Trinity College London</span>.</p>
-                    <p className="mb-4 text-gray-400 font-NotoSans">Additionally, I hold a <span className="text-violet-500/70">Dan-1 black belt in Taekwondo</span>, a discipline that keeps me grounded, resilient, and ready to tackle challenges head-on.</p>
-                    <Image src={taekwondoAboutImage} alt="Nature" className="w-full h-auto mb-4" />
+                    <HobbyAccordion title="Bird Watching and Wildlife Photography">
+                        <p>
+                            I have a deep passion for <span className="text-violet-500/90">bird watching and photography</span>.
+                            Spending time outdoors with my camera allows me to notice the fine details
+                            in nature that often go unseen.
+                            <br /><br />
+                            For me, each outing is a way to slow down, observe, and appreciate the beauty around me.
+                            Photographing birds requires quiet focus and patience and these moments outdoors give me both calm and discipline,
+                            which carry over into other parts of my life.
+                        </p>
+                        <Image
+                            src={natureAboutImage}
+                            alt="Nature"
+                            className="w-full h-auto mt-3 rounded"
+                        />
+                    </HobbyAccordion>
 
+                    <HobbyAccordion title="Electronic Keyboard">
+                        <p>
+                            Music has always been another creative outlet for me, and I play the Electronic Keyboard.
+                            Over the years, I have explored different styles of music and learned how each one brings
+                            out a new way of expression. I also hold a <span className="text-violet-500/90">Grade 7 certification from Trinity College London</span>,
+                            which reflects the effort and discipline I have put into my training.
+                            Playing music provides me balance and a sense of flow
+                            that complements my work in other areas of life.
+                        </p>
+                    </HobbyAccordion>
+
+                    <HobbyAccordion title="Kukkiwon Taekwondo Black Belt Dan-1">
+                        <p>
+                            I also hold a <span className="text-violet-500/70">Dan-1 black belt in Taekwondo</span>.
+                            Practicing Taekwondo helps me stay active and focused. The training help me build strength and sharpens
+                            reflexes and challenges me to think quickly and adapt. It is a practice that keeps
+                            me alert and steady in both body and mind.
+                        </p>
+                        <Image
+                            src={taekwondoAboutImage}
+                            alt="Taekwondo"
+                            className="w-full h-auto mt-3 rounded"
+                        />
+                    </HobbyAccordion>
                 </div>
             </div>
             <FadedSeparator />
