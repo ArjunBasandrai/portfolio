@@ -28,7 +28,7 @@ function ExperienceCard({ experience }: {
 
 export default function AboutPage() {
     const experience = [
-        ["Tracelink Inc.", "Software Engineer Intern", "Mar 2025 - Oct 2025"], 
+        ["Tracelink Inc.", "Software Engineer Intern", "Mar 2025 - Oct 2025"],
         ["Talent Recruit Pvt. Ltd.", "Machine Learning Intern", "Mar 2024 - Jul 2024"]
     ];
     return (
@@ -57,6 +57,34 @@ export default function AboutPage() {
                 </div>
 
                 <div className="mt-12 p-4">
+                    <h4 className="font-Apparel text-3xl mb-4">Links</h4>
+                    <div className="flex flex-wrap gap-4 items-center w-full">
+                        <a href="https://linkedin.com/in/arjun-basandrai" target="_blank" rel="noopener noreferrer">
+                            <img src="/linkedin.png" alt="LinkedIn" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="https://github.com/ArjunBasandrai" target="_blank" rel="noopener noreferrer">
+                            <img src="/github.png" alt="GitHub" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="https://x.com/ArjunBasandrai" target="_blank" rel="noopener noreferrer">
+                            <img src="/x.png" alt="X (Twitter)" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="mailto:basandraiarjun@gmail.com">
+                            <img src="/mail.png" alt="Email" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="https://instagram.com/birdingwitharjun" target="_blank" rel="noopener noreferrer">
+                            <img src="/instagram.png" alt="Instagram" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="https://birdingwitharjun.com/" target="_blank" rel="noopener noreferrer">
+                            <img src="/birdingwitharjun.jpg" alt="Custom" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                            <img src="/resume.png" alt="Resume" className="h-10 w-10 object-contain" />
+                        </a>
+                    </div>
+                </div>
+
+
+                <div className="mt-12 p-4">
                     <h4 className="font-Apparel text-3xl mb-4">Experience</h4>
                     {experience.map((experience, index) => (
                         <ExperienceCard key={index} experience={experience} />
@@ -67,10 +95,10 @@ export default function AboutPage() {
                     <h4 className="text-3xl font-Apparel mb-4">Hobbies</h4>
                     <p className="mb-4 text-gray-400 font-NotoSans">Outside of coding, I love exploring diverse passions that keep my creativity and discipline sharp.</p>
                     <p className="mb-4 text-gray-400 font-NotoSans">As an avid <span className="text-violet-500/70">bird watcher and photographer</span>, I enjoy capturing nature&apos;s intricate beauty through my lens—an experience that teaches me patience and precision.</p>
-                    <Image src={natureAboutImage} alt="Nature" className="w-full h-auto mb-4"/>
+                    <Image src={natureAboutImage} alt="Nature" className="w-full h-auto mb-4" />
                     <p className="mb-4 text-gray-400 font-NotoSans">Music is another creative outlet, and I play the Electronic Keyboard, holding a <span className="text-violet-500/70">Grade 7 certification from Trinity College London</span>.</p>
                     <p className="mb-4 text-gray-400 font-NotoSans">Additionally, I hold a <span className="text-violet-500/70">Dan-1 black belt in Taekwondo</span>, a discipline that keeps me grounded, resilient, and ready to tackle challenges head-on.</p>
-                    <Image src={taekwondoAboutImage} alt="Nature" className="w-full h-auto mb-4"/>
+                    <Image src={taekwondoAboutImage} alt="Nature" className="w-full h-auto mb-4" />
 
                 </div>
             </div>
