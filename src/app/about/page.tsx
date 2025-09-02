@@ -59,41 +59,13 @@ export default function AboutPage() {
                 </div>
 
                 <div className="mt-12 p-4">
-                    <h4 className="font-Apparel text-3xl mb-4">Links</h4>
-                    <div className="flex flex-wrap gap-4 items-center w-full">
-                        <a href="https://linkedin.com/in/arjun-basandrai" target="_blank" rel="noopener noreferrer">
-                            <img src="/linkedin.png" alt="LinkedIn" className="h-10 w-10 object-contain" />
-                        </a>
-                        <a href="https://github.com/ArjunBasandrai" target="_blank" rel="noopener noreferrer">
-                            <img src="/github.png" alt="GitHub" className="h-10 w-10 object-contain" />
-                        </a>
-                        <a href="https://x.com/ArjunBasandrai" target="_blank" rel="noopener noreferrer">
-                            <img src="/x.png" alt="X (Twitter)" className="h-10 w-10 object-contain" />
-                        </a>
-                        <a href="mailto:basandraiarjun@gmail.com">
-                            <img src="/mail.png" alt="Email" className="h-10 w-10 object-contain" />
-                        </a>
-                        <a href="https://instagram.com/birdingwitharjun" target="_blank" rel="noopener noreferrer">
-                            <img src="/instagram.png" alt="Instagram" className="h-10 w-10 object-contain" />
-                        </a>
-                        <a href="https://birdingwitharjun.com/" target="_blank" rel="noopener noreferrer">
-                            <img src="/birdingwitharjun.jpg" alt="Custom" className="h-10 w-10 object-contain" />
-                        </a>
-                        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-                            <img src="/resume.png" alt="Resume" className="h-10 w-10 object-contain" />
-                        </a>
-                    </div>
-                </div>
-
-
-                <div className="mt-12 p-4">
                     <h4 className="font-Apparel text-3xl mb-4">Experience</h4>
                     {experience.map((experience, index) => (
                         <ExperienceCard key={index} experience={experience} />
                     ))}
                 </div>
 
-                <div className="mt-12 mb-10 p-4">
+                <div className="mt-12 p-4">
                     <h4 className="text-3xl font-Apparel mb-4">Hobbies</h4>
                     <HobbyAccordion title="Bird Watching and Wildlife Photography">
                         <p>
@@ -136,6 +108,33 @@ export default function AboutPage() {
                             className="w-full h-auto mt-3 rounded"
                         />
                     </HobbyAccordion>
+                </div>
+
+                <div className="mt-12 mb-10 p-4">
+                    <h4 className="font-Apparel text-3xl mb-4">Links</h4>
+                    <div className="flex flex-wrap gap-4 items-center w-full">
+                        <a href="https://linkedin.com/in/arjun-basandrai" target="_blank" rel="noopener noreferrer">
+                            <img src="/linkedin.png" alt="LinkedIn" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="https://github.com/ArjunBasandrai" target="_blank" rel="noopener noreferrer">
+                            <img src="/github.png" alt="GitHub" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="https://x.com/ArjunBasandrai" target="_blank" rel="noopener noreferrer">
+                            <img src="/x.png" alt="X (Twitter)" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="mailto:basandraiarjun@gmail.com">
+                            <img src="/mail.png" alt="Email" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="https://instagram.com/birdingwitharjun" target="_blank" rel="noopener noreferrer">
+                            <img src="/instagram.png" alt="Instagram" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="https://birdingwitharjun.com/" target="_blank" rel="noopener noreferrer">
+                            <img src="/birdingwitharjun.jpg" alt="Custom" className="h-10 w-10 object-contain" />
+                        </a>
+                        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                            <img src="/resume.png" alt="Resume" className="h-10 w-10 object-contain" />
+                        </a>
+                    </div>
                 </div>
             </div>
             <FadedSeparator />
