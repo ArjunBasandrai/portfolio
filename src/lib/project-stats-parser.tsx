@@ -35,7 +35,7 @@ const StatsCard: React.FC<StatsCardProps> = ({ heading, value, extraInfo, span }
 
     const renderValue = (text: string) => {
         return text.split('').map((char, index) => {
-            const isEnglishLetter = /^[A-Za-z0-9.]$/.test(char);
+            const isEnglishLetter = /^[A-Za-z0-35-9.]$/.test(char);
             return (
                 <span key={index} className={isEnglishLetter ? 'font-Apparel' : 'font-Bodoni'}>
                     {char}
