@@ -52,9 +52,6 @@ export default function AboutPage() {
                             <p className="my-5">
                                 I enjoy working with big data, solving challenging problems, and developing meaningful applications. I enjoy building solutions that digitize and automate everyday processes, making life easier and businesses more efficient.
                             </p>
-                            <p className="my-5">
-                                I&apos;m currently exploring Cybersecurity by studying for <span className="underline decoration-violet-500 underline-offset-4">INE&apos;s eJPTv2 certification</span> while continuing to build Machine Learning projects.
-                            </p>
                         </div>
                     </div>
                 </div>

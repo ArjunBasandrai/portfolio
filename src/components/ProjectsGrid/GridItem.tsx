@@ -20,12 +20,12 @@ export default function GridItem({ name, description, slug, cover }: GridItemPro
         <div className="relative group cursor-pointer">
           <div className="bg-darkGray h-80 flex items-center justify-center text-white rounded-xl z-0 border-[1px] border-gray-500 overflow-hidden">
             {cover && (
-              <video 
-                className="z-9 inset-0 w-full h-full object-cover object-center" 
-                src={cover} 
-                autoPlay 
-                loop 
-                muted 
+              <video
+                className="z-9 inset-0 w-full h-full object-cover object-center"
+                src={cover}
+                autoPlay
+                loop
+                muted
                 playsInline
               />
             )}
@@ -48,7 +48,17 @@ export default function GridItem({ name, description, slug, cover }: GridItemPro
         </div>
       </Link>
       <div className='text-white p-6'>
-        <h1 className="font-Apparel text-4xl">{name}</h1>
+        <h1 className="font-Apparel text-4xl">
+          {name.split("-").map((part, index, arr) => (
+            <span key={index}>
+              {part}
+              {index < arr.length - 1 && (
+                <span className="font-Bodoni">-</span>
+              )}
+            </span>
+          ))}
+        </h1>
+
         <p className='text-gray-400 mr-0 mt-0 mb-4 md:mr-10 md:mt-3'>{description}</p>
         <Link href={`/projects/${name.replace(/\s+/g, '').toLowerCase()}`}>
           <span className="text-lg relative inline-flex items-center before:content-[''] before:absolute before:-bottom-1 before:left-0 before:h-[2px] before:w-full before:scale-x-0 before:origin-right before:bg-gray-400 before:transition-transform before:duration-300 hover:before:scale-x-100 hover:before:origin-left">
