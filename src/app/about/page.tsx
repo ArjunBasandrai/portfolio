@@ -30,6 +30,7 @@ function ExperienceCard({ experience }: {
 
 export default function AboutPage() {
     const experience = [
+        ["Micron Technology, Inc.", "AI Applications Engineer Intern", "Feb 2026 - Jul 2026"],
         ["Tracelink Inc.", "Software Engineer Intern", "Mar 2025 - Oct 2025"],
         ["Talent Recruit Pvt. Ltd.", "Machine Learning Intern", "Mar 2024 - Jul 2024"]
     ];
