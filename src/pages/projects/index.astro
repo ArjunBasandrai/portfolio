@@ -1,0 +1,162 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Projects — Arjun Basandrai"
+  description="Machine learning, systems, and full-stack projects by Arjun Basandrai."
+  current="projects"
+>
+  <main>
+    <section class="page-head wrap">
+      <span class="eyebrow">Selected work</span>
+      <h1 style="margin:18px 0 14px;">Projects</h1>
+      <p class="lead">A mix of research implementations, production ML systems, and things I built because the problem wouldn't leave me alone. Each one has a write-up — problem, approach, and what actually happened.</p>
+    </section>
+
+    <!-- Featured -->
+    <section class="wrap" style="padding-bottom:10px;">
+      <a class="pfeat reveal" href="/projects/birdnet-edge">
+        <div class="ph"><span>hero — spectrogram + waveform</span></div>
+        <div class="pfeat-body">
+          <span class="badge is-active"><span class="dot"></span> Active · Featured</span>
+          <h2>BirdNET-Edge</h2>
+          <p>An on-device bioacoustic classifier that identifies 1,400+ bird species from raw microphone audio, running at under 40ms latency on a $35 Raspberry Pi. Built for conservation field stations with no connectivity.</p>
+          <div class="pfeat-stats">
+            <div class="s"><b>1,400+</b><span>species</span></div>
+            <div class="s"><b>38ms</b><span>latency</span></div>
+            <div class="s"><b>11×</b><span>smaller</span></div>
+          </div>
+          <div class="pfeat-links">
+            <span class="btn btn--solid">Read case study <span class="arr">→</span></span>
+            <span class="btn btn--ghost">GitHub ↗</span>
+          </div>
+        </div>
+      </a>
+    </section>
+
+    <!-- Filter + grid -->
+    <section class="wrap">
+      <div class="filter-bar" data-filter-bar>
+        <span class="lbl">Category</span>
+        <button data-tag="all" class="is-active">All</button>
+        <button data-tag="ml">Machine Learning</button>
+        <button data-tag="research">Research</button>
+        <button data-tag="systems">Systems</button>
+        <button data-tag="fullstack">Full Stack</button>
+        <button data-tag="tools">Birding Tools</button>
+      </div>
+
+      <div class="proj-grid">
+        <a class="card proj" href="/projects/birdnet-edge" data-tags="ml,tools">
+          <div class="ph"><span>spectrogram</span></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="cat">Applied ML</span><span class="badge is-active"><span class="dot"></span> Active</span></div>
+            <h3>BirdNET-Edge</h3>
+            <p>Quantized audio CNN for real-time species ID on embedded hardware, deployed at 6 conservation sites.</p>
+            <div class="proj-stack tag-row"><span class="tag">PyTorch</span><span class="tag">ONNX</span><span class="tag">C++</span></div>
+            <div class="proj-foot"><a href="#">GitHub ↗</a><a href="#">Demo ↗</a></div>
+          </div>
+        </a>
+
+        <a class="card proj" href="/projects/birdnet-edge" data-tags="research,ml">
+          <div class="ph"><span>routing diagram</span></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="cat">Research</span><span class="badge is-progress"><span class="dot"></span> In progress</span></div>
+            <h3>Sparse Routing for Long-Context Retrieval</h3>
+            <p>A learned router that cuts retrieval FLOPs 6× while improving recall on long documents. Preprint out.</p>
+            <div class="proj-stack tag-row"><span class="tag">JAX</span><span class="tag">Flax</span><span class="tag">MoE</span></div>
+            <div class="proj-foot"><a href="#">Paper ↗</a><a href="#">Code ↗</a></div>
+          </div>
+        </a>
+
+        <a class="card proj" href="/projects/birdnet-edge" data-tags="systems">
+          <div class="ph"><span>schema graph</span></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="cat">Systems</span><span class="badge is-active"><span class="dot"></span> Active</span></div>
+            <h3>Quill — typed feature store</h3>
+            <p>Schema-validated feature pipelines in Rust + TypeScript, with point-in-time correctness built in.</p>
+            <div class="proj-stack tag-row"><span class="tag">Rust</span><span class="tag">TypeScript</span><span class="tag">DuckDB</span></div>
+            <div class="proj-foot"><a href="#">GitHub ↗</a></div>
+          </div>
+        </a>
+
+        <a class="card proj" href="/projects/birdnet-edge" data-tags="fullstack,tools">
+          <div class="ph"><span>map UI</span></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="cat">Full Stack</span><span class="badge is-done"><span class="dot"></span> Completed</span></div>
+            <h3>Migration — a birding map</h3>
+            <p>Real-time visualization of eBird sightings with a serverless backend on the edge. 40k MAU.</p>
+            <div class="proj-stack tag-row"><span class="tag">Astro</span><span class="tag">D1</span><span class="tag">MapLibre</span></div>
+            <div class="proj-foot"><a href="#">Demo ↗</a><a href="#">GitHub ↗</a></div>
+          </div>
+        </a>
+
+        <a class="card proj" href="/projects/birdnet-edge" data-tags="ml,research">
+          <div class="ph"><span>calibration curves</span></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="cat">Machine Learning</span><span class="badge is-done"><span class="dot"></span> Completed</span></div>
+            <h3>Tempo — calibration toolkit</h3>
+            <p>A small library for measuring and fixing model calibration, with a focus on actionable diagnostics.</p>
+            <div class="proj-stack tag-row"><span class="tag">Python</span><span class="tag">scikit-learn</span></div>
+            <div class="proj-foot"><a href="#">GitHub ↗</a><a href="#">Docs ↗</a></div>
+          </div>
+        </a>
+
+        <a class="card proj" href="/projects/birdnet-edge" data-tags="systems,fullstack">
+          <div class="ph"><span>pipeline DAG</span></div>
+          <div class="proj-body">
+            <div class="proj-top"><span class="cat">Systems</span><span class="badge is-archive"><span class="dot"></span> Archived</span></div>
+            <h3>Driftwatch</h3>
+            <p>Lightweight data-drift monitoring that pages you before your model quietly rots. Now folded into Quill.</p>
+            <div class="proj-stack tag-row"><span class="tag">Python</span><span class="tag">Prometheus</span></div>
+            <div class="proj-foot"><a href="#">GitHub ↗</a></div>
+          </div>
+        </a>
+      </div>
+      <p class="count-note"><span data-filter-count>6</span> projects shown</p>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .page-head { padding-top: clamp(40px, 7vw, 88px); }
+  .page-head h1 { font-family: var(--font-serif); font-size: clamp(2.6rem, 6vw, 4.4rem); letter-spacing: -0.02em; }
+
+  /* featured project */
+  .pfeat { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .pfeat .ph { border: 0; border-right: 1px solid var(--line); min-height: 360px; }
+  .pfeat-body { padding: clamp(28px, 4vw, 52px); display: flex; flex-direction: column; }
+  .pfeat-body h2 { font-family: var(--font-serif); font-size: clamp(1.9rem, 3.6vw, 2.9rem); letter-spacing: -0.015em; margin: 14px 0; }
+  .pfeat-body p { color: var(--ink-soft); }
+  .pfeat-stats { display: flex; gap: 36px; margin: 26px 0; }
+  .pfeat-stats .s b { font-family: var(--font-serif); font-size: 1.8rem; display: block; }
+  .pfeat-stats .s span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .pfeat-links { display: flex; gap: 12px; margin-top: auto; padding-top: 20px; }
+
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .filter-bar .lbl { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-right: 8px; }
+  .filter-bar button { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); background: transparent; border: 1px solid var(--line); padding: 5px 13px; border-radius: 100px; cursor: pointer; transition: all .2s; }
+  .filter-bar button:hover { color: var(--ink); border-color: var(--line-strong); }
+  .filter-bar button.is-active { color: var(--accent-ink); border-color: var(--accent-line); background: var(--accent-soft); }
+
+  .proj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 32px; }
+  .proj { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+  .proj .ph { aspect-ratio: 16/9; border: 0; border-bottom: 1px solid var(--line); }
+  .proj-body { padding: 26px; display: flex; flex-direction: column; flex: 1; }
+  .proj-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .proj .cat { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); }
+  .proj h3 { font-family: var(--font-serif); font-size: 1.5rem; letter-spacing: -0.01em; margin-bottom: 10px; }
+  .proj p { color: var(--muted); font-size: 14.5px; flex: 1; }
+  .proj-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .proj-foot { display: flex; gap: 16px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 12.5px; }
+  .proj-foot a { color: var(--ink-soft); display: inline-flex; align-items: center; gap: 5px; }
+  .proj-foot a:hover { color: var(--accent-ink); }
+  .count-note { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); margin: 26px 0 0; }
+
+  @media (max-width: 860px) {
+    .pfeat { grid-template-columns: 1fr; }
+    .pfeat .ph { border-right: 0; border-bottom: 1px solid var(--line); min-height: 220px; }
+    .proj-grid { grid-template-columns: 1fr; }
+  }
+</style>

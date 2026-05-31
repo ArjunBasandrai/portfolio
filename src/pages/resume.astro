@@ -1,0 +1,155 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Résumé — Arjun Basandrai"
+  description="Résumé of Arjun Basandrai — ML engineer and researcher."
+  current="resume"
+>
+  <main>
+    <section class="resume-top wrap">
+      <div>
+        <span class="eyebrow">Résumé</span>
+        <h1 style="margin-top:14px;">Curriculum vitae</h1>
+        <div class="note"><span class="dot"></span> Last updated May 2026 · Open to ML / research roles</div>
+      </div>
+      <div class="resume-actions">
+        <a class="btn btn--solid" href="#" onclick="window.print();return false;">Download PDF ↓</a>
+        <a class="btn btn--ghost" href="/contact">Get in touch</a>
+      </div>
+    </section>
+
+    <section class="wrap section--tight" style="padding-top:18px;">
+      <div class="sheet reveal">
+        <div class="sheet-head">
+          <div>
+            <div class="name">Arjun Basandrai</div>
+            <div class="role">Machine Learning Engineer &amp; Researcher</div>
+          </div>
+          <div class="contact">
+            Lisbon, Portugal<br>
+            <a href="/contact">hello@arjunbasandrai.dev</a><br>
+            <a href="#">github.com/arjun</a> · <a href="#">linkedin</a>
+          </div>
+        </div>
+
+        <div class="rsec">
+          <h2>Summary</h2>
+          <p class="summary">ML engineer and researcher specializing in efficient retrieval, edge inference, and ML systems that survive contact with production. Author of peer-reviewed work on retrieval and bioacoustics; happiest at the seam between research and shipping.</p>
+        </div>
+
+        <div class="rsec">
+          <h2>Experience</h2>
+          <div>
+            <div class="entry">
+              <div class="er"><div><h3>ML Engineer</h3><span class="org">Aviary Labs</span></div><span class="when">2024 — Present</span></div>
+              <ul>
+                <li>Own the feature store and inference-serving stack for a long-context document platform.</li>
+                <li>Shipped point-in-time-correct pipelines that eliminated training/serving skew (6.2 → 0.4 AUC gap).</li>
+                <li>Cut p99 inference latency 40% via int8 quantization and batched serving on Triton.</li>
+              </ul>
+            </div>
+            <div class="entry">
+              <div class="er"><div><h3>Applied Scientist (Intern → Contract)</h3><span class="org">Coastline Conservation Trust</span></div><span class="when">2022 — 2024</span></div>
+              <ul>
+                <li>Designed BirdNET-Edge, an on-device classifier for 1,400+ species now deployed at 6 field stations.</li>
+                <li>Achieved 11× model compression at 0.91 macro-F1 and 38ms edge latency.</li>
+              </ul>
+            </div>
+            <div class="entry">
+              <div class="er"><div><h3>Research Assistant</h3><span class="org">University ML Lab</span></div><span class="when">2021 — 2022</span></div>
+              <ul>
+                <li>Co-authored two papers on uncertainty-aware annotation for citizen-science audio.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="rsec">
+          <h2>Education</h2>
+          <div class="two">
+            <div class="entry">
+              <div class="er"><div><h3>M.S. Computer Science</h3><span class="org">ML track</span></div></div>
+              <ul><li>Thesis: efficient long-context retrieval.</li><li>TA, Deep Learning.</li></ul>
+              <span class="when" style="display:block;margin-top:8px;">2022 — 2024</span>
+            </div>
+            <div class="entry">
+              <div class="er"><div><h3>B.S. Computer Science</h3><span class="org">Minor in Ecology</span></div></div>
+              <ul><li>Signal processing focus.</li><li>Graduated with honors.</li></ul>
+              <span class="when" style="display:block;margin-top:8px;">2018 — 2022</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rsec">
+          <h2>Selected Publications</h2>
+          <div>
+            <div class="entry"><div class="er"><div><h3 style="font-size:1.05rem;">Sparse Routing for Efficient Long-Context Retrieval</h3><span class="org">arXiv preprint · under review</span></div><span class="when">2026</span></div></div>
+            <div class="entry"><div class="er"><div><h3 style="font-size:1.05rem;">Distilling Bioacoustic Classifiers for the Edge</h3><span class="org">NeurIPS Workshop</span></div><span class="when">2025</span></div></div>
+            <div class="entry"><div class="er"><div><h3 style="font-size:1.05rem;">Uncertainty-Aware Annotation for Citizen-Science Audio</h3><span class="org">Ecological Informatics</span></div><span class="when">2024</span></div></div>
+          </div>
+        </div>
+
+        <div class="rsec">
+          <h2>Skills</h2>
+          <div class="skill-grid">
+            <div class="sg"><span class="lab">Modeling</span><div class="vals"><span class="tag">PyTorch</span><span class="tag">JAX</span><span class="tag">Transformers</span><span class="tag">ONNX</span></div></div>
+            <div class="sg"><span class="lab">Systems</span><div class="vals"><span class="tag">Rust</span><span class="tag">Ray</span><span class="tag">Triton</span><span class="tag">Docker</span></div></div>
+            <div class="sg"><span class="lab">Full stack</span><div class="vals"><span class="tag">TypeScript</span><span class="tag">Astro</span><span class="tag">Cloudflare</span><span class="tag">D1</span></div></div>
+            <div class="sg"><span class="lab">Data</span><div class="vals"><span class="tag">DuckDB</span><span class="tag">Polars</span><span class="tag">SQL</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .resume-top { padding-top: clamp(40px, 7vw, 80px); display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .resume-top h1 { font-family: var(--font-serif); font-size: clamp(2.4rem, 5vw, 3.6rem); letter-spacing: -0.02em; }
+  .resume-top .note { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); margin-top: 12px; display: flex; align-items: center; gap: 10px; }
+  .resume-top .note .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--st-active); }
+  .resume-actions { display: flex; gap: 10px; }
+
+  /* the sheet */
+  .sheet { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(28px, 5vw, 64px); box-shadow: var(--shadow-md); margin-top: 8px; }
+  .sheet-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; padding-bottom: 24px; border-bottom: 2px solid var(--ink); }
+  .sheet-head .name { font-family: var(--font-serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.015em; }
+  .sheet-head .role { color: var(--accent-ink); font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; margin-top: 6px; }
+  .sheet-head .contact { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-soft); text-align: right; line-height: 1.9; }
+  .sheet-head .contact a:hover { color: var(--accent-ink); }
+
+  .rsec { padding: 26px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 150px 1fr; gap: 28px; }
+  .rsec:last-child { border-bottom: 0; padding-bottom: 0; }
+  .rsec > h2 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 400; padding-top: 4px; }
+  .rsec .summary { font-size: 1.05rem; line-height: 1.6; color: var(--ink-soft); }
+
+  .entry { padding-bottom: 22px; }
+  .entry:last-child { padding-bottom: 0; }
+  .entry .er { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .entry h3 { font-family: var(--font-serif); font-size: 1.25rem; }
+  .entry .org { color: var(--accent-ink); font-size: 14px; }
+  .entry .when { font-family: var(--font-mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .entry ul { margin: 10px 0 0; padding-left: 1.1em; color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; }
+  .entry li { margin: 5px 0; }
+
+  .skill-grid { display: grid; gap: 12px; }
+  .skill-grid .sg { display: grid; grid-template-columns: 130px 1fr; gap: 14px; align-items: baseline; }
+  .skill-grid .sg .lab { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .skill-grid .sg .vals { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+
+  @media (max-width: 720px) {
+    .rsec { grid-template-columns: 1fr; gap: 12px; }
+    .two { grid-template-columns: 1fr; }
+    .skill-grid .sg { grid-template-columns: 1fr; gap: 6px; }
+  }
+  @media print {
+    :global(.site-head), :global(.site-foot), :global(.menu-btn) { display: none !important; }
+    .resume-top { display: none !important; }
+    :global(body) { background: #fff; }
+    .sheet { box-shadow: none; border: 0; padding: 0; }
+  }
+</style>

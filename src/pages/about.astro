@@ -1,0 +1,133 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="About — Arjun Basandrai"
+  description="ML engineer and researcher, amateur ornithologist. Education, experience, and the things I care about."
+  current="about"
+>
+  <main>
+    <section class="about-hero wrap">
+      <div>
+        <span class="eyebrow">About</span>
+        <h1 style="margin-top:18px;">I build ML systems and <em>listen to birds.</em></h1>
+        <p class="lead">Two activities with more in common than you'd think — both are mostly about telling very similar things apart from incomplete signals.</p>
+      </div>
+      <div class="ph about-portrait"><span>portrait.jpg</span></div>
+    </section>
+
+    <!-- Bio -->
+    <section class="section--tight wrap bio">
+      <div class="body">
+        <p class="first">I'm a machine learning engineer and researcher based in Lisbon. I work on the parts of ML that decide whether a model is a demo or a product — data correctness, efficient inference, evaluation that reflects reality — and I care a lot about systems that have to work in places where the cloud doesn't reach.</p>
+        <p>My path here wasn't a straight line. I started in <strong>signal processing</strong>, drifted into deep learning when it ate the field, and kept one foot in the natural sciences the whole way. That overlap turned out to be the interesting part: the bioacoustics work I do now is where my research and my hobby finally collapsed into the same thing.</p>
+        <p>I write up the things I build because explaining a project is how I find out whether I actually understood the problem. Most of what's on this site started as a note to myself that got out of hand.</p>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Experience + Education -->
+    <section class="section--tight wrap two-col">
+      <div>
+        <span class="eyebrow">Experience</span>
+        <div class="timeline" style="margin-top:22px;">
+          <div class="row"><span class="yr">2024 — now</span><div><h4>ML Engineer</h4><div class="org">Aviary Labs</div><p>Build retrieval and inference infrastructure for a long-context document platform. Own the feature store and serving stack.</p></div></div>
+          <div class="row"><span class="yr">2022 — 24</span><div><h4>Applied Scientist, Intern → Contract</h4><div class="org">Coastline Conservation Trust</div><p>Designed the edge bioacoustic monitoring system now deployed across six field stations.</p></div></div>
+          <div class="row"><span class="yr">2021 — 22</span><div><h4>Research Assistant</h4><div class="org">University ML Lab</div><p>Worked on uncertainty-aware annotation for citizen-science datasets; co-authored two papers.</p></div></div>
+        </div>
+      </div>
+      <div>
+        <span class="eyebrow">Education</span>
+        <div class="timeline" style="margin-top:22px;">
+          <div class="row"><span class="yr">2022 — 24</span><div><h4>M.S. Computer Science</h4><div class="org">Machine Learning track</div><p>Thesis on efficient retrieval. Graduate teaching assistant for Deep Learning.</p></div></div>
+          <div class="row"><span class="yr">2018 — 22</span><div><h4>B.S. Computer Science</h4><div class="org">Minor in Ecology</div><p>The minor that explains the whole rest of this page.</p></div></div>
+        </div>
+        <span class="eyebrow" style="margin-top:36px; display:inline-flex;">Toolbox</span>
+        <div class="stacklist" style="margin-top:14px;">
+          <div class="line"><span class="l">Modeling</span><span class="r">PyTorch · JAX · ONNX</span></div>
+          <div class="line"><span class="l">Systems</span><span class="r">Rust · Ray · Triton</span></div>
+          <div class="line"><span class="l">Full stack</span><span class="r">TypeScript · Astro · D1</span></div>
+          <div class="line"><span class="l">Data</span><span class="r">DuckDB · Polars · SQL</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Personal -->
+    <section class="personal section">
+      <div class="wrap personal-grid">
+        <div class="reveal">
+          <span class="eyebrow">The other half</span>
+          <h2 class="sect-title" style="margin:16px 0;">Things that aren't on my résumé.</h2>
+          <p class="lead">I keep a life list (<strong>412 species</strong> and counting), travel mostly to go birding and pretend it's a coincidence, and I'm slowly learning the cello — badly, but with enthusiasm. I bake sourdough on a strict deployment schedule, and I think the best debugging happens on a long walk.</p>
+          <p style="margin-top:18px;"><a class="txtlink" href="/projects">See what I've built →</a></p>
+        </div>
+        <div class="personal-photos reveal">
+          <div class="ph tall"><span>egret, low tide</span></div>
+          <div class="ph"><span>trail map</span></div>
+          <div class="ph"><span>sourdough</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Connect -->
+    <section class="section wrap connect">
+      <span class="eyebrow" style="justify-content:center;">Say hello</span>
+      <h2 class="display" style="margin:18px auto 0; max-width:14ch;">Let's find a reason to <em>talk.</em></h2>
+      <div class="connect-links">
+        <a class="btn btn--solid" href="/contact">Contact me <span class="arr">→</span></a>
+        <a class="btn btn--ghost" href="/resume">Résumé</a>
+        <a class="btn btn--ghost" href="#">GitHub ↗</a>
+        <a class="btn btn--ghost" href="#">LinkedIn ↗</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .about-hero { padding-top: clamp(40px, 7vw, 88px); display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(28px,5vw,64px); align-items: center; }
+  .about-hero h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.4rem, 5.5vw, 4.2rem); line-height: 1.0; letter-spacing: -0.022em; }
+  .about-hero h1 em { font-style: italic; color: var(--accent-ink); }
+  .about-hero .lead { margin-top: 24px; }
+  .about-portrait { aspect-ratio: 4/5; border-radius: var(--radius); }
+
+  .bio { display: grid; grid-template-columns: 1fr minmax(0,640px) 1fr; }
+  .bio .body { grid-column: 2; }
+  .bio p { font-size: 1.12rem; line-height: 1.75; color: var(--ink-soft); }
+  .bio p + p { margin-top: 1.2em; }
+  .bio p strong { color: var(--ink); font-weight: 600; }
+  .bio .first::first-letter { font-family: var(--font-serif); font-size: 3.4em; line-height: 0.8; float: left; padding: 6px 12px 0 0; color: var(--accent-ink); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px,6vw,72px); }
+
+  .timeline .row { display: grid; grid-template-columns: 96px 1fr; gap: 22px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .timeline .yr { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); padding-top: 3px; }
+  .timeline h4 { font-family: var(--font-serif); font-size: 1.25rem; }
+  .timeline .org { color: var(--accent-ink); font-size: 14px; margin: 3px 0 8px; }
+  .timeline p { color: var(--muted); font-size: 14px; margin: 0; line-height: 1.5; }
+
+  .col-title { font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 8px; }
+
+  .stacklist { display: grid; gap: 0; }
+  .stacklist .line { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  .stacklist .line .l { font-size: 15px; }
+  .stacklist .line .r { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-align: right; }
+
+  .personal { background: var(--paper-2); border-block: 1px solid var(--line); }
+  .personal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px,5vw,56px); align-items: center; }
+  .personal-photos { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 12px; }
+  .personal-photos .ph { aspect-ratio: 1; }
+  .personal-photos .ph.tall { grid-row: span 2; aspect-ratio: 1/2; }
+
+  .connect { text-align: center; }
+  .connect-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 26px; }
+
+  @media (max-width: 860px) {
+    .about-hero { grid-template-columns: 1fr; }
+    .about-portrait { max-width: 320px; }
+    .bio { grid-template-columns: 1fr; }
+    .bio .body { grid-column: 1; }
+    .two-col, .personal-grid { grid-template-columns: 1fr; }
+  }
+</style>

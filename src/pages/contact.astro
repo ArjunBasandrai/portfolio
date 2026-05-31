@@ -1,0 +1,152 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Contact — Arjun Basandrai"
+  description="Get in touch with Arjun Basandrai about ML roles, project collaboration, or birds."
+  current="contact"
+>
+  <main>
+    <section class="contact-grid wrap">
+      <div>
+        <span class="eyebrow">Contact</span>
+        <h1 style="margin-top:18px;">Tell me what you're <em>working on.</em></h1>
+        <p class="lead" style="margin-top:20px;">I read everything. Recruiters, researchers, and curious strangers all welcome — a sentence about what you need helps me reply usefully.</p>
+
+        <div class="why">
+          <div class="w">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><h4>Roles &amp; recruiting</h4><p>ML / research positions. Résumé is one click away — happy to talk fit.</p></div>
+          </div>
+          <div class="w">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1M7.7 16.3l-2.1 2.1" stroke-linecap="round"/></svg>
+            <div><h4>Project collaboration</h4><p>Retrieval, efficient ML, bioacoustics. Always up for a good problem.</p></div>
+          </div>
+          <div class="w">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><h4>Just to chat</h4><p>A project you saw here, a bird I have to see, or where to get good pastéis de nata.</p></div>
+          </div>
+        </div>
+
+        <div class="direct">
+          <span class="lbl">Email</span> &nbsp;<a href="mailto:hello@arjunbasandrai.dev">hello@arjunbasandrai.dev</a><br>
+          <span class="lbl">Elsewhere</span> &nbsp;<a href="#">GitHub</a> · <a href="#">LinkedIn</a><br>
+          <span class="lbl">Response</span> &nbsp;usually within 2 days
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <form class="form-card" data-contact novalidate>
+        <div class="hp" aria-hidden="true">
+          <label for="company">Company</label>
+          <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="two">
+          <div class="field" data-field>
+            <label for="name">Name <span class="req">*</span></label>
+            <input id="name" name="name" type="text" required placeholder="Your name" autocomplete="name" />
+            <div data-err></div>
+          </div>
+          <div class="field" data-field>
+            <label for="email">Email <span class="req">*</span></label>
+            <input id="email" name="email" type="email" required placeholder="you@domain.com" autocomplete="email" />
+            <div data-err></div>
+          </div>
+        </div>
+
+        <div class="two">
+          <div class="field" data-field>
+            <label for="reason">Reason</label>
+            <select id="reason" name="reason">
+              <option value="">Choose one…</option>
+              <option>A role or opportunity</option>
+              <option>Project collaboration</option>
+              <option>A project of yours</option>
+              <option>Just saying hello</option>
+            </select>
+            <div data-err></div>
+          </div>
+          <div class="field" data-field>
+            <label for="subject">Subject</label>
+            <input id="subject" name="subject" type="text" placeholder="Optional" />
+            <div data-err></div>
+          </div>
+        </div>
+
+        <div class="field" data-field>
+          <label for="message">Message <span class="req">*</span></label>
+          <textarea id="message" name="message" required placeholder="A few sentences about what you have in mind…"></textarea>
+          <div class="field-foot">
+            <div data-err></div>
+            <span data-count>0 / 2000</span>
+          </div>
+        </div>
+
+        <div
+          class="cf-turnstile"
+          data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}
+          data-theme="auto"
+        >
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn--solid">Send message <span class="arr">→</span></button>
+          <span class="form-status" data-status></span>
+        </div>
+
+        <div class="privacy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linejoin="round"/></svg>
+          Protected by rate limiting &amp; spam filtering. Your details are never shared, and nothing is stored beyond what's needed to reply.
+        </div>
+      </form>
+    </section>
+
+    <div class="section--tight"></div>
+  </main>
+</BaseLayout>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline></script>
+
+<style>
+  .contact-grid { padding-top: clamp(40px, 7vw, 80px); display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(36px, 6vw, 80px); align-items: start; }
+  .contact-grid h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: 1.0; letter-spacing: -0.02em; }
+  .contact-grid h1 em { font-style: italic; color: var(--accent-ink); }
+  .why { margin-top: 28px; display: grid; gap: 0; }
+  .why .w { display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line); align-items: start; }
+  .why .w .ic { width: 20px; height: 20px; color: var(--accent-ink); margin-top: 2px; }
+  .why .w h4 { font-size: 15px; font-weight: 600; }
+  .why .w p { color: var(--muted); font-size: 13.5px; margin: 3px 0 0; line-height: 1.5; }
+  .direct { margin-top: 28px; font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); line-height: 2; }
+  .direct a:hover { color: var(--accent-ink); }
+  .direct .lbl { color: var(--muted); }
+
+  /* form */
+  .form-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(24px, 4vw, 40px); box-shadow: var(--shadow-md); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .cf-turnstile { margin-bottom: 18px; }
+  .field { margin-bottom: 20px; }
+  .field label { display: block; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .field label .req { color: var(--accent-ink); }
+  .field input, .field textarea, .field select {
+    width: 100%; font-family: var(--font-sans); font-size: 15.5px; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--line-strong); border-radius: var(--radius);
+    padding: 12px 14px; transition: border-color .2s, box-shadow .2s; resize: vertical;
+  }
+  .field textarea { min-height: 140px; line-height: 1.6; }
+  .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .field.invalid input, .field.invalid textarea, .field.invalid select { border-color: oklch(0.55 0.15 25); }
+  .field.valid input, .field.valid textarea, .field.valid select { border-color: var(--accent-line); }
+  .field [data-err] { color: oklch(0.55 0.15 25); font-size: 12.5px; margin-top: 6px; min-height: 1em; font-family: var(--font-mono); }
+  .field-foot { display: flex; justify-content: space-between; align-items: center; }
+  [data-count] { font-family: var(--font-mono); font-size: 11.5px; color: var(--faint); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-actions { display: flex; align-items: center; gap: 16px; margin-top: 8px; }
+  .form-status { font-size: 14px; }
+  .form-status.ok { color: var(--accent-ink); }
+  .form-status.err { color: oklch(0.55 0.15 25); }
+  .privacy { font-family: var(--font-mono); font-size: 11px; color: var(--faint); margin-top: 18px; display: flex; align-items: center; gap: 8px; line-height: 1.5; }
+  .privacy svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; } .two { grid-template-columns: 1fr; } }
+</style>

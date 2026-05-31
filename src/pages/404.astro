@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Page not found — Arjun Basandrai"
+  description="That page flew off. Head back to the nest."
+>
+  <main>
+    <section class="section wrap nf">
+      <span class="eyebrow" style="justify-content:center;">Error 404</span>
+      <h1 class="display">This page has <em>flown off.</em></h1>
+      <p class="lead">The link you followed is broken or the page has migrated. Let's get you back to solid ground.</p>
+      <div class="nf-actions">
+        <a class="btn btn--solid" href="/">Back home <span class="arr">→</span></a>
+        <a class="btn btn--ghost" href="/projects">Browse projects</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .nf { text-align: center; display: grid; place-items: center; gap: 22px; min-height: 56vh; align-content: center; }
+  .nf .display { max-width: 16ch; }
+  .nf .lead { max-width: 46ch; }
+  .nf-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 8px; }
+</style>
