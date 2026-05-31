@@ -1,4 +1,4 @@
-/* Field Notes — shared site behavior */
+/* Field Notes - shared site behavior */
 (function () {
   // ---- Theme ----
   const root = document.documentElement;
@@ -165,7 +165,7 @@
           form.reset();
           fields.forEach((f) => f.classList.remove("valid", "invalid"));
           status.className = "form-status ok";
-          status.innerHTML = "Thanks \u2014 your message is on its way. I usually reply within a couple of days.";
+          status.innerHTML = "Thanks, your message is on its way. I usually reply within a couple of days.";
           const cnt = form.querySelector("[data-count]"); if (cnt) cnt.textContent = "0 / 2000";
         } else {
           status.className = "form-status err";

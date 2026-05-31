@@ -1,10 +1,10 @@
-/* Tailwind v4 — utilities only (no preflight) so the hand-built design system stays authoritative */
+/* Tailwind v4 -utilities only (no preflight) so the hand-built design system stays authoritative */
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 
 /* ============================================================
-   FIELD NOTES — design system for Arjun Basandrai portfolio
+   FIELD NOTES -design system for Arjun Basandrai portfolio
    Editorial × technical. Warm paper + ink, palm-leaf accent.
    ============================================================ */
 
@@ -33,7 +33,7 @@
   --accent-soft:  #f0f3e6ff;
   --accent-line:  #d4deb5ff;
 
-  /* Status hues — muted earth tones */
+  /* Status hues -muted earth tones */
   --st-active:    #8b9556ff;
   --st-progress:  #c9a566ff;
   --st-done:      #6b8fa3ff;
@@ -70,7 +70,7 @@
   --accent-soft:  #4a5228ff;
   --accent-line:  #6b7a3dff;
 
-  /* Status hues — warm earth, adjusted for dark */
+  /* Status hues -warm earth, adjusted for dark */
   --st-active:    #a8c75dff;
   --st-progress:  #d4ba7aff;
   --st-done:      #7fa3bbff;

@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-  title="BirdNET-Edge — Arjun Basandrai"
+  title="BirdNET-Edge · Arjun Basandrai"
   description="On-device bioacoustic classifier identifying 1,400+ bird species at under 40ms latency on a Raspberry Pi."
   current="projects"
 >
@@ -17,12 +17,12 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         <a class="btn btn--solid" href="#">View on GitHub ↗</a>
         <a class="btn btn--ghost" href="#">Live demo ↗</a>
       </div>
-      <div class="ph proj-cover"><span>cover — field station at dawn</span></div>
+      <div class="ph proj-cover"><span>cover, field station at dawn</span></div>
     </section>
 
     <section class="wrap" style="padding-bottom:8px;">
       <dl class="meta-strip">
-        <div class="m"><dt>Role</dt><dd>Solo — research & build</dd></div>
+        <div class="m"><dt>Role</dt><dd>Solo, research & build</dd></div>
         <div class="m"><dt>Timeline</dt><dd>8 months</dd></div>
         <div class="m"><dt>Stack</dt><dd>PyTorch · ONNX · C++</dd></div>
         <div class="m"><dt>Status</dt><dd>Deployed at 6 sites</dd></div>
@@ -47,13 +47,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
         <div class="case-body">
           <section id="problem">
             <h2><span class="num">01</span> The problem</h2>
-            <p>Conservation field stations want to monitor bird populations continuously, but the places that matter most — wetlands, remote forest, island reserves — rarely have power or connectivity. Cloud-based audio classification is a non-starter when you can't reach the cloud, and shipping raw audio off-site is both expensive and slow.</p>
+            <p>Conservation field stations want to monitor bird populations continuously, but the places that matter most, like wetlands, remote forest, and island reserves, rarely have power or connectivity. Cloud-based audio classification is a non-starter when you can't reach the cloud, and shipping raw audio off-site is both expensive and slow.</p>
             <p>The goal was a classifier that runs <strong>entirely on-device</strong>, in real time, on hardware cheap enough to deploy by the dozen and rugged enough to leave in a swamp for a season.</p>
           </section>
 
           <section id="motivation">
             <h2><span class="num">02</span> Motivation</h2>
-            <p>I'd been birding by ear for years, and I kept thinking about how much information is in a dawn chorus that no human can fully transcribe. Existing models were accurate but heavy — hundreds of megabytes, hundreds of milliseconds per inference. None of them fit the constraint that actually mattered: a Raspberry Pi, a USB mic, and a solar panel.</p>
+            <p>I'd been birding by ear for years, and I kept thinking about how much information is in a dawn chorus that no human can fully transcribe. Existing models were accurate but heavy: hundreds of megabytes, hundreds of milliseconds per inference. None of them fit the constraint that actually mattered: a Raspberry Pi, a USB mic, and a solar panel.</p>
           </section>
 
           <section id="approach">
@@ -67,13 +67,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
             </ul>
             <div class="callout">
               <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <p><strong>Key decision</strong>The rare species are the whole point of conservation monitoring. I weighted the loss so a missed warbler hurt far more than a missed pigeon — accuracy went down on paper, value went up in the field.</p>
+              <p><strong>Key decision</strong>The rare species are the whole point of conservation monitoring. I weighted the loss so a missed warbler hurt far more than a missed pigeon. Accuracy went down on paper, value went up in the field.</p>
             </div>
           </section>
 
           <section id="architecture">
             <h2><span class="num">04</span> Architecture</h2>
-            <p>The on-device path is deliberately boring — predictable latency beats peak throughput when you're running on a battery.</p>
+            <p>The on-device path is deliberately boring, because predictable latency beats peak throughput when you're running on a battery.</p>
             <div class="arch">
               <div class="step"><div class="k">in</div><div class="t">Mic → 3s rolling buffer</div></div>
               <div class="step"><div class="k">pre</div><div class="t">Mel-spectrogram (C++)</div></div>
@@ -82,7 +82,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
             </div>
             <figure>
               <div class="ph"><span>architecture diagram</span></div>
-              <figcaption>Fig. 1 — End-to-end inference path, entirely on the Raspberry Pi.</figcaption>
+              <figcaption>Fig. 1: End-to-end inference path, entirely on the Raspberry Pi.</figcaption>
             </figure>
           </section>
 
