@@ -1,0 +1,90 @@
+---
+title: "xU-NetFullSharp Chest XRay Bone Shadow Suppression"
+description: "An xU-NetFullSharp implementation that removes rib and clavicle shadows from chest X-rays, trained on the augmented JSRT dataset and reaching 0.987 SSIM and 37.39 dB PSNR."
+summary: "A deep network that erases rib and clavicle shadows from chest X-rays so the lungs underneath read clearly, reconstructing fine detail at 0.987 SSIM."
+category: "Computer Vision"
+tags: ["cv", "ml"]
+status: "done"
+statusLabel: "Released"
+year: "2025"
+role: "Solo"
+timeline: "1 month"
+stack: ["Python", "PyTorch", "Matplotlib"]
+stats:
+  - { value: "0.987", label: "test SSIM" }
+  - { value: "37.39 dB", label: "test PSNR" }
+  - { value: "4,000+", label: "X-ray pairs", note: "augmented JSRT" }
+links:
+  github: "https://github.com/ArjunBasandrai/xU-NetFullSharp-Bone-Shadow-Suppression"
+featured: false
+order: 4
+coverLabel: "Bone shadow suppression"
+---
+
+import Callout from "../../components/project/Callout.astro";
+import Figure from "../../components/project/Figure.astro";
+import Equation from "../../components/project/Equation.astro";
+
+<section>
+
+## The problem
+
+On a chest X-ray, the ribs and clavicle sit directly over the lungs, and their shadows hide exactly the soft-tissue detail a radiologist needs. Bone shadow suppression is the task of removing those overlapping bone structures while leaving the lung detail intact, effectively turning a standard X-ray into a soft-tissue image without a second exposure.
+
+</section>
+
+<section>
+
+## Dataset
+
+I trained on the augmented JSRT and BSE-JSRT datasets from [Kaggle](https://www.kaggle.com/datasets/hmchuong/xray-bone-shadow-supression): more than 4,000 chest X-rays, each paired with a version where the rib and clavicle shadows have been removed. That paired structure makes this a supervised image-to-image problem, the model learns the mapping from "with bone shadows" to "without."
+
+</section>
+
+<section>
+
+## Model
+
+I implemented the recent [xU-NetFullSharp](https://github.com/xKev1n/xU-NetFullSharp) architecture. It builds on U-NetSharp and uses bidirectional multi-scale skip connections, in the spirit of U-Net3+, so features flow between encoder and decoder at every scale rather than only at matching depths. It also swaps plain ReLU for the more modern xUnit activation, which learns a spatial activation map rather than applying a fixed pointwise nonlinearity.
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737031302009/9a262c0f-295a-4e96-abfd-80f54873b07f.jpeg" alt="xU-NetFullSharp architecture" caption="xU-NetFullSharp: bidirectional multi-scale skip connections with xUnit activations." />
+
+The full model is large, so the implementation lives in the [training notebook](https://github.com/ArjunBasandrai/xU-NetFullSharp-Bone-Shadow-Suppression/blob/main/notebooks/xu-netfullsharp-training.ipynb) rather than inline here.
+
+</section>
+
+<section>
+
+## Loss
+
+I trained on an L1-SSIM loss, a weighted blend of pixel-wise L1 (mean absolute error) and a structural similarity term. L1 keeps the per-pixel intensities honest, while SSIM rewards preserving local structure and contrast, which is what actually matters for keeping lung detail legible.
+
+<Equation label="L1-SSIM, a + b = 1">loss = a · L1 + b · (1 − SSIM)</Equation>
+
+Optimizing for structure as well as raw pixel error is what pushes the reconstructions past the smeared look that pure MSE training tends to produce.
+
+</section>
+
+<section>
+
+## Results
+
+The trained model reaches **0.987 SSIM** and **37.39 dB PSNR** on the test set, and more importantly it reconstructs the finer detail inside the lungs that the bone shadows had been hiding.
+
+<Callout label="What worked">
+Suppressing the ribs without smearing the lung tissue is the hard part. The structural loss term is what kept the fine vascular detail intact while the bone shadows came out.
+</Callout>
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035365415/cd90608e-ea0b-4dac-91ba-6f5cdf13e070.png" alt="Suppression result" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035369616/3ab39048-95b0-441e-a04d-cace58c17021.png" alt="Suppression result" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035376098/d60708d5-86ef-4e66-81a0-2fdbf98be074.png" alt="Suppression result" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035459779/cbb265f6-3447-4cfd-a876-362b0afe1325.png" alt="Reconstructed lung detail" caption="The model reconstructs fine detail in the lungs that the bone shadows had obscured." />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035463817/73b5e6cc-ebbb-4fd3-8140-fe2ad88b3638.png" alt="Reconstructed lung detail" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035468950/ebb52da4-620f-407a-8242-a0ba0f3aa7b8.png" alt="Reconstructed lung detail" />
+
+</section>

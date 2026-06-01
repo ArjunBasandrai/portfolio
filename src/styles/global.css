@@ -310,3 +310,42 @@ a.tag:hover, .tag.is-active { color: var(--accent-ink); border-color: var(--acce
   body { font-size: 16px; }
   .foot-inner { grid-template-columns: 1fr; }
 }
+
+/* ===== Case-study prose (MDX project content) ===== */
+.case-prose { counter-reset: sec; }
+.case-prose > section { margin-top: 3em; scroll-margin-top: 90px; }
+.case-prose h2 {
+  font-family: var(--font-serif); font-size: clamp(1.6rem, 3vw, 2.2rem);
+  letter-spacing: -0.015em; margin: 2.2em 0 0.8em; scroll-margin-top: 90px;
+  display: flex; align-items: baseline; gap: 14px;
+}
+.case-prose h2:first-child { margin-top: 0; }
+.case-prose h2::before {
+  counter-increment: sec; content: counter(sec, decimal-leading-zero);
+  font-family: var(--font-mono); font-size: 13px; color: var(--accent-ink); font-weight: 400;
+}
+.case-prose h3 { font-family: var(--font-serif); font-size: 1.3rem; margin: 1.8em 0 0.5em; scroll-margin-top: 90px; }
+.case-prose h4 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 1.6em 0 0.5em; }
+.case-prose p { color: var(--ink-soft); font-size: 1.1rem; line-height: 1.75; }
+.case-prose p + p { margin-top: 1.2em; }
+.case-prose ul, .case-prose ol { color: var(--ink-soft); font-size: 1.1rem; line-height: 1.7; padding-left: 1.2em; margin-top: 1em; }
+.case-prose li { margin: 0.5em 0; }
+.case-prose li::marker { color: var(--accent-ink); }
+.case-prose strong { color: var(--ink); font-weight: 600; }
+.case-prose a { color: var(--accent-ink); border-bottom: 1px solid var(--accent-line); }
+.case-prose a:hover { border-bottom-color: var(--accent-ink); }
+.case-prose img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); margin-top: 1.6em; }
+.case-prose :not(pre) > code {
+  font-family: var(--font-mono); font-size: 0.86em; color: var(--accent-ink);
+  background: var(--accent-soft); padding: 2px 6px; border-radius: 6px;
+}
+.case-prose pre {
+  background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 20px 22px; overflow-x: auto; margin-top: 1.6em; font-size: 13px; line-height: 1.6;
+}
+.case-prose pre code { font-family: var(--font-mono); background: none; padding: 0; }
+.case-prose blockquote {
+  margin-top: 1.6em; padding: 4px 0 4px 20px; border-left: 2px solid var(--accent-line);
+  color: var(--muted); font-style: italic;
+}
+.case-prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.4em 0 0; }

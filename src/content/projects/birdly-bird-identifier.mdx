@@ -1,0 +1,107 @@
+---
+title: "Birdly Bird Identifier"
+description: "A bird image classifier covering nearly all 1,250 species found in India, trained on over a million scraped images and an EfficientNetV2L transfer-learning base, reaching 82.3% test accuracy."
+summary: "A bird classifier for almost every species in India, trained on a million-plus scraped images. The birdwatching and the deep learning finally met in one project."
+category: ["Computer Vision", "Full Stack"]
+tags: ["ml", "cv", "birding", "fullstack"]
+status: "done"
+statusLabel: "Released"
+year: "2024"
+role: "Solo"
+timeline: "7 months"
+stack: ["Python", "TensorFlow", "Flask", "Selenium", "React"]
+stats:
+  - { value: "82.3%", label: "test accuracy" }
+  - { value: "1,250", label: "species", note: "nearly all birds of India" }
+  - { value: "1M+", label: "training images", note: "~200GB scraped" }
+links:
+  github: "https://github.com/ArjunBasandrai/birdly-ml"
+featured: false
+order: 3
+coverLabel: "Birdly, bird classifier"
+---
+
+import Callout from "../../components/project/Callout.astro";
+import Figure from "../../components/project/Figure.astro";
+
+<section>
+
+## Motivation
+
+Birdly is where my three favorite things finally met: birdwatching, photography, and deep learning. For years I had wanted a tool that could name a bird from a single photo, the kind of thing you reach for in the field when a small brown bird refuses to cooperate. Birdly is that idea built out: an image classifier that covers nearly all 1,250 species found across India, linked against the full [eBird India list](https://ebird.org/region/IN/bird-list).
+
+</section>
+
+<section>
+
+## The data problem
+
+A classifier this broad needs an enormous, varied dataset, and that is exactly where the project nearly stalled. Scraping roughly 200GB of bird images from public sources was by far the most time-consuming stage. On my college network, just collecting the image links took about three weeks, and downloading the images themselves took another seven. By the time the dataset existed I was already three months in.
+
+The dataset was also too large to live on my machine, in storage and in RAM. I moved everything onto Kaggle, where it could sit privately and be trained against remotely, a transfer that, again throttled by the college network, ate another two to three weeks.
+
+</section>
+
+<section>
+
+## Training
+
+Training a CNN from scratch on a million-plus images would have been slow and almost certainly worse than transfer learning, so I started from a pretrained EfficientNet base and replaced the head. The first run, a handful of epochs on Kaggle's free GPU, took around eight hours and reached about 72% test accuracy. A promising start.
+
+Then saving the model threw a Keras serialization error I had never seen. Two days of digging traced it to a bug in the TensorFlow/Keras version I was on. The fix was to either downgrade TensorFlow or move to the V2 EfficientNet models. I chose V2, which is what the final architecture uses.
+
+```python
+import tensorflow as tf
+from keras import Sequential
+from keras.layers import RandomFlip, RandomContrast
+from keras.layers import GlobalAveragePooling2D, Dense, BatchNormalization, Dropout
+from keras.applications import EfficientNetV2L as base_m
+from keras.losses import SparseCategoricalCrossentropy as scc
+
+def create_model():
+    data_augmentation = Sequential([
+        RandomFlip('horizontal'),
+        RandomContrast(0.2),
+    ])
+
+    base_model = base_m(input_shape=(*image_size, 3), include_top=False, weights='imagenet')
+    base_model.trainable = False
+
+    model = Sequential([
+        data_augmentation,
+        base_model,
+        GlobalAveragePooling2D(),
+        Dense(4096, activation='swish'),
+        BatchNormalization(),
+        Dropout(0.4),
+        Dense(1024, activation='swish'),
+        BatchNormalization(),
+        Dropout(0.3),
+        Dense(1000),
+    ])
+
+    model.compile(optimizer=Adam(lr_init), loss=scc(from_logits=True), metrics=['accuracy'])
+    return model
+```
+
+### Why TPUs
+
+Even on Kaggle's fastest GPU, each epoch took about 16 minutes, and that was on a fraction of the data, 50 classes out of 1,250. At one or two models a day I burned through the GPU quota in two days and then waited five for it to reset. The math did not work.
+
+TPUs did. The hard part was getting there: documentation on TPUs and TFRecords was sparse at the time, and converting the dataset into TFRecords took weeks of trial and error against scattered community notes. But once the setup worked, a full epoch over all 1,250 classes finished in under 19 minutes.
+
+<Callout label="The turning point">
+The same epoch that took 16 minutes on a slice of the data ran in under 19 minutes on the entire 1,250-class dataset once it was on a TPU. That single change is what made the rest of the project possible.
+</Callout>
+
+With that headroom I could finally iterate on architecture and training routine. The final model used early stopping, warm-up epochs, learning-rate scheduling, and checkpointing. Kaggle's 9 to 12 hour notebook limit meant training in batches: four rounds plus a fine-tuning pass brought it to **82.3% test accuracy**.
+
+</section>
+
+<section>
+
+## Where it landed
+
+82.3% across 1,250 species is a result I am proud of, given the dataset. It is also clearly not finished. The classes are heavily imbalanced, some rare species have fewer than 100 images while common ones have the full 1,000, and image quality swings widely. After nearly seven months I paused Birdly to move on to other work, but it is one I fully intend to come back to.
+
+</section>

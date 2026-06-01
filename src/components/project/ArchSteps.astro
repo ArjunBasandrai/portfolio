@@ -1,0 +1,28 @@
+---
+interface Step {
+  k: string;
+  t: string;
+}
+interface Props {
+  steps: Step[];
+}
+const { steps } = Astro.props;
+---
+
+<div class="arch">
+  {steps.map((s) => (
+    <div class="step"><div class="k">{s.k}</div><div class="t" set:html={s.t} /></div>
+  ))}
+</div>
+
+<style>
+  .arch { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 10px; margin-top: 1.6em; }
+  .arch .step { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; position: relative; background: var(--surface); }
+  .arch .step .k { font-family: var(--font-mono); font-size: 11px; color: var(--accent-ink); }
+  .arch .step .t { font-size: 14px; margin-top: 8px; line-height: 1.4; }
+  .arch .step:not(:last-child)::after { content:"\2192"; position: absolute; right: -9px; top: 50%; transform: translateY(-50%); color: var(--faint); z-index: 2; }
+  @media (max-width: 760px) {
+    .arch { grid-auto-flow: row; grid-auto-columns: auto; }
+    .arch .step::after { display: none; }
+  }
+</style>

@@ -1,5 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const all = await getCollection("projects");
+const order = ["art", "elixir-chess-engine", "birdly-bird-identifier"];
+const featured = order
+  .map((id) => all.find((p) => p.id === id))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
 ---
 
 <BaseLayout
@@ -54,24 +61,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </div>
 
       <div class="feat-list">
-        <a class="feat reveal" href="/projects/birdnet-edge">
-          <span class="feat-no">01</span>
-          <span class="feat-title"><span class="kind">Applied ML</span>BirdNET-Edge</span>
-          <span class="feat-desc">On-device bioacoustic classifier identifying 1,400+ species from raw audio at &lt;40ms latency on a Raspberry Pi.</span>
-          <span class="feat-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </a>
-        <a class="feat reveal" href="/projects/birdnet-edge">
-          <span class="feat-no">02</span>
-          <span class="feat-title"><span class="kind">Research</span>Sparse Routing for Long-Context Retrieval</span>
-          <span class="feat-desc">A learned router that cuts retrieval FLOPs by 6× while improving recall on long documents.</span>
-          <span class="feat-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </a>
-        <a class="feat reveal" href="/projects/birdnet-edge">
-          <span class="feat-no">03</span>
-          <span class="feat-title"><span class="kind">Systems</span>Quill, a typed feature store</span>
-          <span class="feat-desc">Schema-validated feature pipelines in Rust + TypeScript, with point-in-time correctness baked in.</span>
-          <span class="feat-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </a>
+        {featured.map((p, i) => (
+          <a class="feat reveal" href={`/projects/${p.id}`}>
+            <span class="feat-no">{String(i + 1).padStart(2, "0")}</span>
+            <span class="feat-title"><span class="kind">{p.data.category.join(" · ")}</span>{p.data.title}</span>
+            <span class="feat-desc">{p.data.summary}</span>
+            <span class="feat-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        ))}
       </div>
     </section>
 
@@ -82,20 +79,20 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <div class="focus-cell">
           <span class="n">01</span>
           <h3>Machine Learning</h3>
-          <p>Training and evaluating models that hold up outside the notebook: representation learning, retrieval, and sequence modeling.</p>
-          <div class="skills"><span class="tag">PyTorch</span><span class="tag">JAX</span><span class="tag">Transformers</span></div>
+          <p>A model is only as good as the data and the evaluation behind it, and that is where most of my work goes.</p>
+          <div class="skills"><span class="tag">PyTorch</span><span class="tag">Numpy</span><span class="tag">scikit-learn</span></div>
         </div>
         <div class="focus-cell">
           <span class="n">02</span>
-          <h3>ML Systems</h3>
-          <p>The unglamorous half: data pipelines, feature stores, inference serving, and the observability that keeps models honest.</p>
-          <div class="skills"><span class="tag">Rust</span><span class="tag">Ray</span><span class="tag">Triton</span></div>
+          <h3>MLOps</h3>
+          <p>I take models out of the notebook: packaging them, serving them, and tracking experiments and metrics in production.</p>
+          <div class="skills"><span class="tag">Docker</span><span class="tag">MLflow</span><span class="tag">DVC</span></div>
         </div>
         <div class="focus-cell">
           <span class="n">03</span>
           <h3>Full-Stack Engineering</h3>
-          <p>Turning models into things people can actually use, from the API down to the interface they click on.</p>
-          <div class="skills"><span class="tag">TypeScript</span><span class="tag">Astro</span><span class="tag">D1</span></div>
+          <p>I build the API and the interface around a model so it becomes something people can actually use.</p>
+          <div class="skills"><span class="tag">TypeScript</span><span class="tag">React</span><span class="tag">FastAPI</span></div>
         </div>
       </div>
     </section>
@@ -104,15 +101,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <section class="field section">
       <div class="wrap field-grid">
         <div class="field-photos reveal">
-          <div class="ph"><span>field photo</span></div>
-          <div class="ph"><span>kingfisher</span></div>
-          <div class="ph"><span>notebook</span></div>
+          <div class="ph"><img src="/sutlej-riverbed-birding.webp" alt="Arjun, turned away from the camera in a wildlife hat and holding a camera, birding on the Sutlej riverbed" loading="lazy" /></div>
+          <div class="ph"><img src="/asian-green-bee-eater.jpg" alt="An Asian Green Bee-eater taking off in light rain, with water droplets scattered across the background" loading="lazy" /></div>
+          <div class="ph"><img src="/chandra-taal-cartwheel.jpg" alt="Arjun mid-cartwheel in front of Chandra Taal lake in Spiti" loading="lazy" /></div>
         </div>
         <div class="reveal">
           <span class="eyebrow">Away from the keyboard</span>
-          <h2 class="sect-title" style="margin:16px 0;">A life list, kept in the margins.</h2>
-          <p class="lead">When I'm not building models, I'm usually outside trying to figure out what just flew past. I write about the birds and places I find on a separate blog, and honestly a lot of my eye for detail comes from learning to tell two nearly identical sparrows apart from across a field.</p>
-          <p style="margin-top:18px;"><a class="txtlink" href="/about">More about me →</a> &nbsp;·&nbsp; <a class="txtlink" href="https://birdingwitharjun.com/">Birding &amp; travel blog ↗</a></p>
+          <h2 class="sect-title" style="margin:16px 0;">The other half of the story.</h2>
+          <p class="lead">When I'm not building models, I'm usually out photographing birds. And this is where a lot of the patience and attention to detail I bring to my work comes from. I write about my birding adventures on a separate blog.</p>
+          <p style="margin-top:18px;"><a class="txtlink" href="/about">More about me →</a> &nbsp;·&nbsp; <a class="txtlink" href="https://birdingwitharjun.com/" target="_blank">Birding &amp; travel blog ↗</a></p>
         </div>
       </div>
     </section>
@@ -189,7 +186,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   .field-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(28px,5vw,56px); align-items: center; }
   .field-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .field-photos .ph:first-child { grid-row: span 2; aspect-ratio: 3/4; }
-  .field-photos .ph { aspect-ratio: 4/3; }
+  .field-photos .ph { aspect-ratio: 4/3; border: none; background: none; }
+  .field-photos .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   /* CTA */
   .cta { text-align: center; }

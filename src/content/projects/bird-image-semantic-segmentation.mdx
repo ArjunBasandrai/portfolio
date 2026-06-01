@@ -1,0 +1,84 @@
+---
+title: "Bird Image Semantic Segmentation"
+description: "A U-Net trained on CUB-200-2011 to segment birds from their backgrounds, reaching 0.1193 BCE loss and surfacing a clear domain gap between North American and Indian species."
+summary: "A U-Net that masks birds out of their backgrounds, and an accidental lesson in domain gap when it met species it had never trained on."
+category: "Computer Vision"
+tags: ["cv", "ml", "birding"]
+status: "done"
+statusLabel: "Released"
+year: "2024"
+role: "Solo"
+timeline: "1 week"
+stack: ["Python", "PyTorch", "Matplotlib"]
+stats:
+  - { value: "0.1193", label: "validation BCE loss" }
+  - { value: "11,788", label: "images", note: "CUB-200-2011" }
+  - { value: "200", label: "bird species" }
+links: {}
+featured: false
+order: 7
+coverLabel: "Bird semantic segmentation"
+---
+
+import Callout from "../../components/project/Callout.astro";
+import Figure from "../../components/project/Figure.astro";
+
+<section>
+
+## The task
+
+Semantic segmentation is per-pixel classification: rather than asking "is there a bird," the model labels every pixel as bird or background, producing a precise mask of the animal. I trained a U-Net to do exactly that on bird photographs.
+
+</section>
+
+<section>
+
+## Dataset
+
+CUB-200-2011 (Caltech-UCSD Birds-200-2011) is a standard benchmark for bird vision work: 11,788 images across 200 species, with species labels, bounding boxes, and crucially for this project, segmentation masks. The masks are what make supervised segmentation possible here.
+
+</section>
+
+<section>
+
+## Model
+
+U-Net is the workhorse of image segmentation. Its encoder-decoder shape, joined by skip connections, is what lets it produce high-precision masks: the encoder uses convolutions and max-pooling to compress the image into high-level features, the decoder uses transposed convolutions to rebuild a full-resolution mask, and the skip connections carry fine spatial detail across from encoder to decoder so it is not lost in the bottleneck.
+
+<Figure src="https://miro.medium.com/v2/resize:fit:1400/1*VUS2cCaPB45wcHHFp_fQZQ.png" alt="U-Net architecture" caption="U-Net: an encoder-decoder with skip connections that preserve spatial detail." />
+
+</section>
+
+<section>
+
+## Results
+
+On in-domain images, North American birds like those in CUB-200-2011, the model segments cleanly, reaching a validation BCE loss of **0.1193**.
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615634661/838484a5-4b7e-438e-bf87-92041677d62c.png" alt="In-domain segmentation result" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615636241/9e163291-09ab-4ff0-aaa3-0e5e9461c16a.png" alt="In-domain segmentation result" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615642230/cda810dc-ea7d-4b86-8468-98b0e663b631.png" alt="In-domain segmentation result" />
+
+<Callout label="The interesting failure">
+The model segments North American birds well, but hand it a species from the Indian subcontinent, outside the CUB-200 domain, and the masks fall apart. A clean demonstration of domain gap: the network learned the birds it saw, not "birdness" in general.
+</Callout>
+
+The out-of-domain results, on Indian subcontinent species the model never trained on, are visibly worse.
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615800709/92667374-8448-4010-841f-eb7bfa829429.png" alt="Out-of-domain segmentation result" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615807865/38481f58-9593-430b-ac32-e50c640deafd.png" alt="Out-of-domain segmentation result" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615807570/25739eaa-9634-4873-afb6-9739bb637e46.png" alt="Out-of-domain segmentation result" />
+
+</section>
+
+<section>
+
+## Where it could go
+
+This was a quick build on a plain U-Net, so the obvious next step is attention gates, which let the decoder focus on the relevant regions of the image instead of weighting everything equally. They are a natural fit for the domain-gap problem above: a model that attends to bird-shaped structure rather than memorized appearance should generalize better to species it has not seen.
+
+</section>

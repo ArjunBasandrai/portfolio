@@ -1,0 +1,113 @@
+---
+title: "DnCNN Image Gaussian Denoising"
+description: "A from-scratch PyTorch implementation of DnCNN for Gaussian image denoising, trained on BSDS500 to predict and subtract the noise residual, reaching 0.0002 validation MSE."
+summary: "An image denoiser that learns the noise instead of the image, predicting the Gaussian residual and subtracting it. A clean reproduction of the DnCNN paper."
+category: "Computer Vision"
+tags: ["cv", "ml"]
+status: "done"
+statusLabel: "Released"
+year: "2024"
+role: "Solo"
+timeline: "2 weeks"
+stack: ["Python", "PyTorch", "Matplotlib"]
+stats:
+  - { value: "0.0002", label: "validation MSE" }
+  - { value: "BSDS500", label: "500 natural images" }
+  - { value: "Residual", label: "learning target", note: "predicts the noise" }
+links: {}
+featured: false
+order: 6
+coverLabel: "DnCNN denoiser"
+---
+
+import Callout from "../../components/project/Callout.astro";
+import Figure from "../../components/project/Figure.astro";
+
+<section>
+
+## The idea
+
+The clever move in DnCNN is what it predicts. Instead of mapping a noisy image straight to a clean one, the network learns the *noise* itself, the residual, and the clean image is recovered by subtracting that predicted noise from the input. Learning the residual is an easier target than reconstructing the whole image, and it is what makes the architecture train cleanly. This is a from-scratch reproduction of the original [DnCNN paper](https://arxiv.org/pdf/1608.03981).
+
+</section>
+
+<section>
+
+## Dataset
+
+I used the Berkeley Segmentation Dataset 500 (BSDS500), 500 clean natural images. To build training pairs I added Gaussian noise at random, bounded power levels, so each clean image yields a noisy input and a known noise target. The images were then cut into patches of size `(2d + 1) x (2d + 1)`, where `d` is the network depth.
+
+</section>
+
+<section>
+
+## Model
+
+The DnCNN architecture is a straight stack of `d` blocks:
+
+- The **first** block is a Conv2D followed by ReLU.
+- The **middle** `d - 2` blocks are each Conv2D, then batch normalization, then ReLU.
+- The **last** block is a single Conv2D.
+
+The output is the predicted noise pattern, which gets subtracted from the noisy input to produce the denoised image.
+
+<Figure src="https://www.researchgate.net/publication/353258436/figure/fig1/AS:1045676733526016@1626320169128/The-DnCNN-Network-Architecture.jpg" alt="DnCNN architecture" caption="DnCNN: a stack of Conv-BN-ReLU blocks that regress the noise residual." />
+
+</section>
+
+<section>
+
+## Training
+
+I trained for 50 epochs with Adam at a `1e-4` initial learning rate, under an MSE loss against the true noise. A cosine annealing schedule decayed the rate over the run, and early stopping watched the validation loss with a `min_delta` of `1e-5` and a patience of 5 epochs.
+
+```python
+model = DnCNN(in_channels=3).to(device)
+early_stop = EarlyStopping(tolerance=5, min_delta=0.00001)
+
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=1e-4)
+scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs)
+
+for epoch in range(num_epochs):
+    model.train()
+    for x, y in train_loader:
+        x, y = x.to(device), y.to(device)
+        optimizer.zero_grad()
+        loss = criterion(model(x), y)
+        loss.backward()
+        optimizer.step()
+
+    model.eval()
+    val_loss = 0.0
+    with torch.no_grad():
+        for x_val, y_val in val_loader:
+            x_val, y_val = x_val.to(device), y_val.to(device)
+            val_loss += criterion(model(x_val), y_val).item()
+    val_loss /= len(val_loader)
+
+    scheduler.step()
+    early_stop(val_loss, model.state_dict(), optimizer.state_dict(), epoch)
+    if early_stop.early_stop:
+        break
+```
+
+</section>
+
+<section>
+
+## Results
+
+Validation MSE bottomed out at **0.0002**, and the qualitative results reproduce the paper's: the model isolates the noise pattern cleanly and reconstructs sharp, denoised images.
+
+<Callout label="Reproduced">
+The goal here was faithfulness, not novelty, and the denoised outputs match what the DnCNN paper reports. Predicting the residual rather than the image is the whole trick, and it held up.
+</Callout>
+
+<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1734455723/pbhcyfq9pjo04ebkuy73.png" alt="Denoising result" />
+
+<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1734455803/nlgdx30ufh2didzijire.png" alt="Denoising result" />
+
+<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1734455832/voi2n3cailserjnbgp6a.png" alt="Denoising result" />
+
+</section>

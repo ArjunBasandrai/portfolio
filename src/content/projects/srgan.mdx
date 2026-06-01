@@ -1,0 +1,123 @@
+---
+title: "SRGAN Image Super Resolution"
+description: "A from-scratch PyTorch implementation of SRResNet and SRGAN for 4x photo-realistic super-resolution, trained on an ImageNet subset with a VGG perceptual loss."
+summary: "A from-scratch SRGAN that upscales images 4x and tries to hallucinate plausible detail rather than blur, built around the paper's perceptual loss."
+category: "Computer Vision"
+tags: ["cv", "ml"]
+status: "done"
+statusLabel: "Released"
+year: "2024"
+role: "Solo"
+timeline: "1 month"
+stack: ["Python", "PyTorch", "Matplotlib"]
+stats:
+  - { value: "4x", label: "upscaling factor" }
+  - { value: "30k", label: "training images", note: "ImageNet subset" }
+  - { value: "100k", label: "GAN iterations" }
+links: {}
+featured: false
+order: 5
+coverLabel: "SRGAN super-resolution"
+---
+
+import Callout from "../../components/project/Callout.astro";
+import Figure from "../../components/project/Figure.astro";
+
+<section>
+
+## The idea
+
+Classic super-resolution methods optimize pixel-wise error like MSE, which reliably produces blurry, over-smoothed results, the model hedges toward the average of every plausible high-res image. SRGAN takes a different bet: use a GAN and a perceptual loss so the network learns to hallucinate detail that looks real, even if it is not pixel-perfect against the ground truth. This is a from-scratch PyTorch implementation of both halves, SRResNet and the full SRGAN.
+
+</section>
+
+<section>
+
+## Dataset
+
+I worked with a subset of ImageNet, splitting the high-resolution images into 96x96 patches and downscaling them 4x to generate the low-resolution inputs. Kaggle's compute limits meant I could only use about 30k of the 100k available images, a constraint that shows up later in the results.
+
+</section>
+
+<section>
+
+## Architecture
+
+### SRResNet
+
+The generator is the SRResNet from the paper: a modified ResNet with 16 residual blocks and 2 upscaling blocks at the end. The paper requires the generator output to fall in `[-1, 1]`, so I added a Tanh activation at the very end to clamp it into range.
+
+<Figure src="https://miro.medium.com/v2/resize:fit:2000/1*_n6qA_1MBR-XD_EBqeO_wA.png" alt="SRResNet and SRGAN architecture" caption="SRResNet generator and the SRGAN discriminator." />
+
+I first trained SRResNet on its own, without the GAN framework. Kaggle's GPU quota and notebook time limit capped me at 25 epochs, roughly 46k iterations, against the 1M iterations the paper uses.
+
+### SRGAN
+
+With SRResNet trained, I loaded it into a fresh notebook and added the discriminator from the paper to form the full SRGAN, then trained for about 100k iterations at a `1e-4` learning rate. The paper follows up with another 100k iterations at `1e-5`, which the same hardware limits put out of reach.
+
+</section>
+
+<section>
+
+## Loss
+
+The heart of SRGAN is the perceptual loss, a weighted sum of a content loss and an adversarial loss.
+
+### Content loss
+
+Rather than comparing pixels, the content loss compares deep features. It runs both the generated and target images through a pretrained VGG19 and takes the MSE between their feature maps at the `relu5_4` layer, which is what lets the network match high-level structure instead of exact pixel values. Borrowing an idea from ESRGAN, I took the features just *before* the `relu5_4` activation rather than after it.
+
+```python
+class VGG19(nn.Module):
+    def __init__(self, feature_layer='relu5_4'):
+        super(VGG19, self).__init__()
+        self.vgg = models.vgg19(pretrained=True).features
+        self.feature_layer = self._get_layer_index(feature_layer)
+        self.criterion = nn.MSELoss()
+        for param in self.vgg.parameters():
+            param.requires_grad = False
+
+    def forward(self, input_image, target):
+        input_features = self._extract_features(self._vgg_preprocess(input_image))
+        target_features = self._extract_features(self._vgg_preprocess(target))
+        return self.criterion(input_features, target_features) / 12.75
+
+    def _extract_features(self, x):
+        for idx, layer in enumerate(self.vgg):
+            if idx == self.feature_layer:  # features before ReLU5_4 (ESRGAN idea)
+                break
+            x = layer(x)
+        return x
+```
+
+### Adversarial loss
+
+This is the standard GAN adversarial term, with the common stability tweak of minimizing `-log(D(G(x)))` rather than `log(1 - D(G(x)))` for better gradients early in training.
+
+```python
+class AdversarialLoss(nn.Module):
+    def forward(self, discriminator_output):
+        return -torch.log(discriminator_output + 1e-8).mean()
+```
+
+</section>
+
+<section>
+
+## Results
+
+<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1735463423/ebfnk5hlpwndyqb5zzgn.png" alt="Super-resolution result" />
+
+<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1735463453/odcunstwtlj4blukfpa0.png" alt="Super-resolution result" />
+
+<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1735463519/q8fmrfydlsa4f2ampm5p.png" alt="Super-resolution result" />
+
+<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1735463396/xatjasiournlxcwp8ad8.png" alt="Super-resolution result" />
+
+<Callout label="The honest version">
+Given how far under the paper's training budget I ran, on a third of the data and a fraction of the iterations, the results came out better than I expected. The usual SRGAN failure modes are visible: trouble with fine detail and the occasional hallucination, both of which ESRGAN was later designed to fix.
+</Callout>
+
+The imperfections come from three places at once: the small training set, the truncated iteration count, and the known limits of the SRGAN formulation itself. ESRGAN addresses all three, and it is the natural next thing to try.
+
+</section>

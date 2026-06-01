@@ -1,0 +1,150 @@
+---
+title: "Adaptive Resampling based Training for Imbalanced Classification"
+description: "Adaptive Resampling-based Training, a method that reshapes the training distribution from a model's own class-wise F1 scores to handle class imbalance. Improves macro F1 by 2.64 points on average and is modality agnostic."
+summary: "A training method that watches which classes a model is failing and resamples the data toward them, mid-training. Modality agnostic, statistically significant, and submitted to MLWA."
+category: "Research"
+tags: ["research", "ml"]
+status: "done"
+statusLabel: "Preprint"
+year: "2025"
+role: "Lead author"
+timeline: "Ongoing"
+stack: ["Python", "PyTorch", "Matplotlib"]
+stats:
+  - { value: "+2.64", label: "macro F1 points", note: "avg over tabular benchmarks" }
+  - { value: "p < 0.05", label: "statistically significant", note: "t-test and Wilcoxon" }
+  - { value: "Any", label: "modality", note: "tabular, text, image" }
+links:
+  paper: "https://arxiv.org/abs/2509.00955"
+  github: "https://github.com/ArjunBasandrai/art"
+featured: false
+order: 2
+coverLabel: "ART, adaptive resampling"
+---
+
+import Callout from "../../components/project/Callout.astro";
+import Figure from "../../components/project/Figure.astro";
+import Equation from "../../components/project/Equation.astro";
+
+<section>
+
+## The problem
+
+Class imbalance is everywhere in real datasets, and the usual fixes are surprisingly blunt. Resampling methods pick a fixed distribution up front: undersample the majority, or oversample the minority, and then train as if that ratio were correct for the whole run. The trouble is that a static ratio assumes class difficulty is static too. It is not. Some classes are learned in the first few epochs, others never get easy, and a fixed sampler keeps spending the same effort on both.
+
+ART, Adaptive Resampling-based Training, starts from that observation. Instead of fixing the sampling distribution before training, it updates the distribution periodically based on how the model is actually performing on each class.
+
+</section>
+
+<section>
+
+## Why class level, not instance level
+
+A tempting alternative is to model difficulty per example: find the hard samples and focus on them. In practice that signal is noisy and oversensitive to outliers and mislabeled points, the model chases individual stragglers rather than real structure.
+
+ART adapts at the class level instead, using class-wise macro F1 as the difficulty signal. Macro F1 balances precision and recall and ignores class frequency, so a low score is a clean indicator that a class is genuinely underperforming, not just rare. That keeps the adaptation aligned with the actual optimization objective rather than with the loudest outliers.
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1770466761715/7f4adb57-d119-478d-8936-360718d0f339.jpeg" alt="ART overview" caption="ART periodically rereads class-wise performance and shifts the sampling distribution toward the classes that are lagging." />
+
+</section>
+
+<section>
+
+## Method
+
+ART is best understood as dynamic reweighting that operates on the data distribution rather than on the loss. Standard empirical risk minimization on imbalanced data minimizes a weighted sum of class-wise risks, where the weights are fixed empirical priors:
+
+<Equation label="static ERM">R(θ) = Σᵢ Πᵢ · E₍ₓ,ᵧ₎∼Dᵢ [ L(f_θ(x), y) ]</Equation>
+
+Because the prior `Πᵢ` is fixed, majority classes dominate every gradient update and minority classes stay under-optimized for the whole run, regardless of how learning actually progresses.
+
+ART swaps the fixed prior for a time-varying sampling distribution that adapts to performance. At step `t` it approximately optimizes:
+
+<Equation label="dynamic ERM">Rᵗ(θ) = Σᵢ pᵢᵗ · E₍ₓ,ᵧ₎∼Dᵢ [ L(f_θ(x), y) ]</Equation>
+
+Nothing about the loss changes. What changes is how often each class is sampled, and poorly performing classes are sampled more.
+
+### Performance-based sampling
+
+Every `bf` epochs, ART evaluates class-wise F1 on a validation set and converts each score into a difficulty:
+
+<Equation>sᵢ = 1 − fᵢ</Equation>
+
+Difficulties are normalized into a sampling distribution, so the worst classes get the most exposure, and the focus shifts automatically as they improve:
+
+<Equation>wᵢ = sᵢ / Σⱼ sⱼ</Equation>
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1770470397834/20b600a8-ac1e-49b4-97fa-c1f19793c10e.jpeg" alt="Performance-based sampling weights" caption="Sampling weights derived from class-wise difficulty, recomputed at each refresh." />
+
+### Blending with class priors
+
+Sampling purely by difficulty is unstable early on, when a class can briefly drop to near-zero weight and effectively vanish from training. ART blends the adaptive weights back toward the empirical priors:
+
+<Equation label="blend">pᵢ = c · Πᵢ + (1 − c) · wᵢ</Equation>
+
+The coefficient `c ∈ [0,1]` sets the trade-off: high `c` stays close to the original distribution, low `c` leans hard into the struggling classes. The blend guarantees no class is ever fully starved.
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1770466855517/39d6854b-c575-4399-ade2-e73915c07f1c.png" alt="Blended sampling distribution" caption="The blended distribution keeps every class present while still prioritizing the hard ones." />
+
+</section>
+
+<section>
+
+## What it costs
+
+ART is identical to the baseline except during periodic refreshes. Over `E` epochs with boost frequency `bf`, the overhead is just a handful of refresh steps:
+
+<Equation>T_ART = T_baseline + ⌊E / bf⌋ · T_refresh</Equation>
+
+Each refresh is one validation forward pass, a per-class F1 computation, and a rebuild of the sampler. Dataset size never changes; the only memory cost is a few temporary arrays during the refresh, and nothing accumulates with training length.
+
+</section>
+
+<section>
+
+## Experiments
+
+ART is benchmarked against a deliberately broad field, spanning every common family of imbalance handling:
+
+- **No handling**: the plain baseline.
+- **Resampling**: random over- and undersampling, SMOTE, MSMOTE, NearMiss.
+- **Loss-based**: cost-sensitive learning, focal loss, OHEM, LDAM with deferred reweighting.
+- **Hybrid**: Balanced Meta-Softmax.
+
+Every method is run across 20 random seeds. I report mean and standard deviation of macro F1 on a held-out test set, the average rank across runs, and both a paired t-test and a Wilcoxon signed-rank test against each baseline.
+
+</section>
+
+<section>
+
+## Results
+
+ART consistently lands the highest macro F1 across the imbalanced benchmarks, on binary and multi-class tasks alike. On tabular data the gains are significant under both the paired t-test and the Wilcoxon test, and text and image tasks stay consistently favorable. Averaged across tabular datasets, ART improves macro F1 by 2.64 percentage points.
+
+<Callout label="Why it matters">
+Most imbalance methods win on some datasets and lose on others. ART was the only method that delivered the top macro F1 everywhere it was tested, which is what makes it a safe default rather than another knob to tune.
+</Callout>
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1770467049398/b0e790dc-f79d-493d-a0fa-04b345b77b71.png" alt="Main results table" caption="Macro F1 across benchmark datasets and competing methods." />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1770467330879/557c68ac-0cf9-47bc-b367-6c96a448d9e0.png" alt="Significance results" caption="Significance and average rank across 20 seeds." />
+
+</section>
+
+<section>
+
+## Ablations
+
+The ablations isolate the moving parts: the boost frequency `bf`, the blend coefficient `c`, and the choice of macro F1 as the difficulty signal.
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1770467378027/0fb8ca8d-eadc-4bc6-98ca-e71d577a0a16.png" alt="Ablation 1" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1770467381987/8c7184ce-c836-47ff-a6c6-7243315095eb.png" alt="Ablation 2" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1770467388098/077f5140-f45f-4faf-a3c1-7f4386fee89e.png" alt="Ablation 3" />
+
+<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1770467391397/2eaa904f-1369-42e4-afb3-7182e5316fd4.png" alt="Ablation 4" />
+
+The preprint is on [arXiv](https://arxiv.org/abs/2509.00955), with the full method, proofs, and per-dataset tables.
+
+</section>
