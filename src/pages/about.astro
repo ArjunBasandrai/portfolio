@@ -4,130 +4,134 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout
   title="About · Arjun Basandrai"
-  description="ML engineer and researcher, amateur ornithologist. Education, experience, and the things I care about."
+  description="Arjun Basandrai — the person behind the projects. Birding, travel, music, and cooking."
   current="about"
 >
   <main>
-    <section class="about-hero wrap">
-      <div>
+    <!-- ===== HERO ===== -->
+    <section class="ab-hero wrap">
+      <div class="ab-hero-text">
         <span class="eyebrow">About</span>
-        <h1 style="margin-top:18px;">I build ML systems and <em>listen to birds.</em></h1>
-        <p class="lead">Two activities with more in common than you'd think. Both are mostly about telling very similar things apart from incomplete signals.</p>
-      </div>
-      <div class="ph about-portrait"><span>portrait.jpg</span></div>
-    </section>
-
-    <!-- Bio -->
-    <section class="section--tight wrap bio">
-      <div class="body">
-        <p class="first">I'm a machine learning engineer and researcher based in Lisbon. I work on the parts of ML that decide whether a model is a demo or a product: data correctness, efficient inference, and evaluation that reflects reality. I care a lot about systems that have to work in places where the cloud doesn't reach.</p>
-        <p>My path here wasn't a straight line. I started in <strong>signal processing</strong>, drifted into deep learning when it ate the field, and kept one foot in the natural sciences the whole way. That overlap turned out to be the interesting part: the bioacoustics work I do now is where my research and my hobby finally collapsed into the same thing.</p>
-        <p>I write up the things I build because explaining a project is how I find out whether I actually understood the problem. Most of what's on this site started as a note to myself that got out of hand.</p>
+        <h1>The person<br>behind the <em>projects.</em></h1>
+        <p class="lead">This page is about everything that isn't on my résumé: birds, travel, music, and cooking. But first, let me tell you a bit about myself.</p>
       </div>
     </section>
 
-    <hr class="divider" />
-
-    <!-- Experience + Education -->
-    <section class="section--tight wrap two-col">
-      <div>
-        <span class="eyebrow">Experience</span>
-        <div class="timeline" style="margin-top:22px;">
-          <div class="row"><span class="yr">2024–now</span><div><h4>ML Engineer</h4><div class="org">Aviary Labs</div><p>Build retrieval and inference infrastructure for a long-context document platform. Own the feature store and serving stack.</p></div></div>
-          <div class="row"><span class="yr">2022–24</span><div><h4>Applied Scientist, Intern → Contract</h4><div class="org">Coastline Conservation Trust</div><p>Designed the edge bioacoustic monitoring system now deployed across six field stations.</p></div></div>
-          <div class="row"><span class="yr">2021–22</span><div><h4>Research Assistant</h4><div class="org">University ML Lab</div><p>Worked on uncertainty-aware annotation for citizen-science datasets; co-authored two papers.</p></div></div>
-        </div>
-      </div>
-      <div>
-        <span class="eyebrow">Education</span>
-        <div class="timeline" style="margin-top:22px;">
-          <div class="row"><span class="yr">2022–24</span><div><h4>M.S. Computer Science</h4><div class="org">Machine Learning track</div><p>Thesis on efficient retrieval. Graduate teaching assistant for Deep Learning.</p></div></div>
-          <div class="row"><span class="yr">2018–22</span><div><h4>B.S. Computer Science</h4><div class="org">Minor in Ecology</div><p>The minor that explains the whole rest of this page.</p></div></div>
-        </div>
-        <span class="eyebrow" style="margin-top:36px; display:inline-flex;">Toolbox</span>
-        <div class="stacklist" style="margin-top:14px;">
-          <div class="line"><span class="l">Modeling</span><span class="r">PyTorch · JAX · ONNX</span></div>
-          <div class="line"><span class="l">Systems</span><span class="r">Rust · Ray · Triton</span></div>
-          <div class="line"><span class="l">Full stack</span><span class="r">TypeScript · Astro · D1</span></div>
-          <div class="line"><span class="l">Data</span><span class="r">DuckDB · Polars · SQL</span></div>
-        </div>
-      </div>
+    <!-- ===== ESSAY ===== -->
+    <section class="essay wrap read">
+      <p class="first">I came to machine learning through birds. My father introduced me to birding when I was three years old, and I learned to identify common birds before I had learned the English alphabet. Then years later, in high school, I took the Bombay Natural History Society's (BNHS) Basic Course in Ornithology. There I learned how camera traps enable bird monitoring and support conservation. I was intrigued to see how a machine could understand fine-grained differences between similar-looking bird species, and this led me to machine learning.</p>
+      <p>It didn't stop at birds and machine learning. Since then I've built a chess engine, a new training method for imbalanced classification, and even spent a stretch on brain cancer survival analysis. None of it was part of a plan, just curiosity. I like picking up new things and exploring them in depth.</p>
+      <p>And this curiosity is why I'm out birding most weekends, why I travel to places I've never seen, why I learn new pieces on the keyboard, and why I'm always experimenting with different ingredients and techniques to see what works. The rest of this page is about that side of me.</p>
     </section>
 
-    <!-- Personal -->
-    <section class="personal section">
-      <div class="wrap personal-grid">
-        <div class="reveal">
-          <span class="eyebrow">The other half</span>
-          <h2 class="sect-title" style="margin:16px 0;">Things that aren't on my résumé.</h2>
-          <p class="lead">I keep a life list (<strong>412 species</strong> and counting), travel mostly to go birding and pretend it's a coincidence, and I'm slowly learning the cello, badly but with enthusiasm. I bake sourdough on a strict deployment schedule, and I think the best debugging happens on a long walk.</p>
-          <p style="margin-top:18px;"><a class="txtlink" href="/projects">See what I've built →</a></p>
+    <!-- ===== PASSIONS ===== -->
+    <section class="section--tight wrap">
+      <!-- 01 Birding -->
+      <article class="passion reveal">
+        <div class="passion-media">
+          <div class="ph"><img src="/asian-green-bee-eater.jpg" alt="An Asian Green Bee-eater taking off in light rain, with water droplets scattered across the background" loading="lazy" /></div>
         </div>
-        <div class="personal-photos reveal">
-          <div class="ph tall"><span>egret, low tide</span></div>
-          <div class="ph"><span>trail map</span></div>
-          <div class="ph"><span>sourdough</span></div>
+        <div class="passion-body">
+          <span class="passion-num">01</span><span class="passion-ey">Birding &amp; photography</span>
+          <h2>So, why do I like birds?</h2>
+          <p>Birding is my reason to get outdoors and off a screen. Being out in nature, photographing birds, is when I feel the most at peace. The interesting thing is that birding has trained my memory in a practical way. To identify birds in the field, you need to remember differences in plumages, calls and behaviors and be able to recall them on the spot. And over the years, that has sharpened both my memory and my attention to detail.</p>
+          <p>For me, a lot of the pull is that you never really know what you'll find, or whether you'll find anything at all, and there's a real thrill in that uncertainty. The rest of it is how close birding keeps me to the natural world. The more time I spend out there, the more I believe everyone should learn a bit about wildlife, because real conservation only happens once people care, and it's hard to care about something you've never stopped to notice.</p>
         </div>
-      </div>
+      </article>
+
+      <!-- 02 Travel -->
+      <article class="passion reveal">
+        <div class="passion-media">
+          <div class="ph"><img class="anchor-bottom" src="/mahabaleshwar-seasonal-waterfall-mist.jpg" alt="A seasonal waterfall near Mahabaleshwar shrouded in heavy mist and fog under dark, moody light" loading="lazy" /></div>
+        </div>
+        <div class="passion-body">
+          <span class="passion-num">02</span><span class="passion-ey">Travel</span>
+          <h2>New places, same reason.</h2>
+          <p>Most of my trips are planned around birds. And chasing them has led me to some of the most stunning, under-the-radar places that I would never have found otherwise. Like this waterfall, which I discovered while searching for Brown-cheeked Fulvettas in the Western Ghats.</p>
+          <p>I enjoy the slower parts of travel just as much. The food, the people, and the little everyday things that are different everywhere you go. Those small things tend to stay with me the longest, and I think carrying these experiences home is the real souvenir.</p>
+        </div>
+      </article>
+
+      <!-- 03 Music -->
+      <article class="passion reveal">
+        <div class="passion-media">
+          <div class="ph"><img src="/hand-playing-keyboard-moody-dark.png" alt="An abstract, close-up shot of a hand playing an electronic keyboard in a dark room under moody lighting" loading="lazy" /></div>
+        </div>
+        <div class="passion-body">
+          <span class="passion-num">03</span><span class="passion-ey">Keyboard &amp; Music</span>
+          <h2>On the keys.</h2>
+          <p>Music has always been another creative outlet for me, and I play the electronic keyboard. Over the years I've explored different styles of music and learned how each one brings out a new way of expression.</p>
+          <p>I also hold a <strong>Grade 7 certification</strong> in Electronic Keyboard from <strong>Trinity College London</strong>.</p>
+          <p>Outside of playing, I listen to a lot of music. I'm a big fan of rock, but I like plenty of other genres just as much, from classical ghazals to contemporary pop. What interests me is real technical ability, which is why Pink Floyd, Michael Jackson, Queen, and Fleetwood Mac are some of my all-time favorites.</p>
+        </div>
+      </article>
+
+      <!-- 04 Cooking -->
+      <article class="passion reveal">
+        <div class="passion-media wide">
+          <div class="ph"><img src="/paneer-medallions-cauliflower-puree-plated.png" alt="A fine-dining plate of paneer medallions over cauliflower purée with coral tuiles, served with a lychee-elderflower mocktail" loading="lazy" /></div>
+        </div>
+        <div class="passion-body">
+          <span class="passion-num">04</span><span class="passion-ey">Cooking</span>
+          <h2>What's on my menu?</h2>
+          <p>Rarely the same thing twice. Most of what I cook starts as an experiment, mixing ingredients and techniques to see which flavors and textures actually work together.</p>
+          <p>I don't follow recipes too closely. I'd rather understand the flavors and the techniques and improvise from there. Plenty of it doesn't pan out, but the times it does are worth it.</p>
+        </div>
+      </article>
     </section>
 
-    <!-- Connect -->
-    <section class="section wrap connect">
+    <!-- ===== CLOSE ===== -->
+    <section class="section wrap ab-close">
       <span class="eyebrow" style="justify-content:center;">Say hello</span>
-      <h2 class="display" style="margin:18px auto 0; max-width:14ch;">Let's find a reason to <em>talk.</em></h2>
-      <div class="connect-links">
-        <a class="btn btn--solid" href="/contact">Contact me <span class="arr">→</span></a>
-        <a class="btn btn--ghost" href="/resume">Résumé</a>
-        <a class="btn btn--ghost" href="#">GitHub ↗</a>
-        <a class="btn btn--ghost" href="#">LinkedIn ↗</a>
+      <h2 class="display">Curious about any of <em>it?</em></h2>
+      <p class="lead">Birds, music, a recipe, or the work, I'm always happy to talk. So feel free to reach out.</p>
+      <div class="actions">
+        <a class="btn btn--solid" href="/contact">Get in touch <span class="arr">→</span></a>
+        <a class="btn btn--ghost" href="/projects">See my work</a>
       </div>
     </section>
   </main>
 </BaseLayout>
 
 <style>
-  .about-hero { padding-top: clamp(40px, 7vw, 88px); display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(28px,5vw,64px); align-items: center; }
-  .about-hero h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.4rem, 5.5vw, 4.2rem); line-height: 1.0; letter-spacing: -0.022em; }
-  .about-hero h1 em { font-style: italic; color: var(--accent-ink); }
-  .about-hero .lead { margin-top: 24px; }
-  .about-portrait { aspect-ratio: 4/5; border-radius: var(--radius); }
+  /* ---- Hero ---- */
+  .ab-hero { padding-top: clamp(48px, 9vw, 104px); padding-bottom: clamp(20px, 4vw, 40px); }
+  .ab-hero-text { text-align: center; display: flex; flex-direction: column; align-items: center; }
+  .ab-hero h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.9rem, 7vw, 5.6rem); line-height: 0.96; letter-spacing: -0.026em; margin-top: 22px; max-width: 16ch; }
+  .ab-hero h1 em { font-style: italic; color: var(--accent-ink); }
+  .ab-hero .lead { margin-top: 30px; max-width: 52ch; font-size: clamp(1.1rem, 1.7vw, 1.38rem); }
 
-  .bio { display: grid; grid-template-columns: 1fr minmax(0,640px) 1fr; }
-  .bio .body { grid-column: 2; }
-  .bio p { font-size: 1.12rem; line-height: 1.75; color: var(--ink-soft); }
-  .bio p + p { margin-top: 1.2em; }
-  .bio p strong { color: var(--ink); font-weight: 600; }
-  .bio .first::first-letter { font-family: var(--font-serif); font-size: 3.4em; line-height: 0.8; float: left; padding: 6px 12px 0 0; color: var(--accent-ink); }
+  /* ---- Essay ---- */
+  .essay { padding-top: clamp(48px, 8vw, 96px); }
+  .essay p { font-size: 1.15rem; line-height: 1.78; color: var(--ink-soft); }
+  .essay p + p { margin-top: 1.3em; }
+  .essay p strong { color: var(--ink); font-weight: 600; }
+  .essay .first::first-letter { font-family: var(--font-serif); font-size: 3.6em; line-height: 0.78; float: left; padding: 6px 14px 0 0; color: var(--accent-ink); }
 
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px,6vw,72px); }
+  /* ---- Passions ---- */
+  .passion { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: center; padding-block: clamp(44px, 7vw, 84px); border-top: 1px solid var(--line); }
+  .passion:nth-child(even) .passion-media { order: 2; }
+  .passion-num { font-family: var(--font-mono); font-size: 12px; color: var(--accent-ink); letter-spacing: 0.06em; }
+  .passion-ey { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-left: 14px; }
+  .passion h2 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(1.8rem, 3.4vw, 2.7rem); letter-spacing: -0.018em; margin: 18px 0 0; }
+  .passion p { color: var(--ink-soft); font-size: 1.06rem; line-height: 1.72; margin: 16px 0 0; }
+  .passion p strong { color: var(--ink); font-weight: 600; }
+  .passion-media .ph { aspect-ratio: 4/5; border-radius: var(--radius); }
+  .passion-media.wide .ph { aspect-ratio: 5/4; }
+  .passion-media .ph:has(img) { border: none; background: none; overflow: hidden; }
+  .passion-media .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .passion-media .ph img.anchor-bottom { position: absolute; left: 0; bottom: 0; height: auto; transform: translateY(5%); }
 
-  .timeline .row { display: grid; grid-template-columns: 96px 1fr; gap: 22px; padding: 22px 0; border-bottom: 1px solid var(--line); }
-  .timeline .yr { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); padding-top: 3px; }
-  .timeline h4 { font-family: var(--font-serif); font-size: 1.25rem; }
-  .timeline .org { color: var(--accent-ink); font-size: 14px; margin: 3px 0 8px; }
-  .timeline p { color: var(--muted); font-size: 14px; margin: 0; line-height: 1.5; }
-
-  .col-title { font-family: var(--font-serif); font-size: 1.6rem; margin-bottom: 8px; }
-
-  .stacklist { display: grid; gap: 0; }
-  .stacklist .line { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--line); }
-  .stacklist .line .l { font-size: 15px; }
-  .stacklist .line .r { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-align: right; }
-
-  .personal { background: var(--paper-2); border-block: 1px solid var(--line); }
-  .personal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px,5vw,56px); align-items: center; }
-  .personal-photos { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 12px; }
-  .personal-photos .ph { aspect-ratio: 1; }
-  .personal-photos .ph.tall { grid-row: span 2; aspect-ratio: 1/2; }
-
-  .connect { text-align: center; }
-  .connect-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 26px; }
+  /* ---- Close ---- */
+  .ab-close { text-align: center; border-top: 1px solid var(--line); }
+  .ab-close .display { margin: 18px auto 0; max-width: 18ch; }
+  .ab-close .lead { margin: 22px auto 0; max-width: 46ch; }
+  .ab-close .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 34px; }
 
   @media (max-width: 860px) {
-    .about-hero { grid-template-columns: 1fr; }
-    .about-portrait { max-width: 320px; }
-    .bio { grid-template-columns: 1fr; }
-    .bio .body { grid-column: 1; }
-    .two-col, .personal-grid { grid-template-columns: 1fr; }
+    .ab-hero-text { max-width: none; }
+    .passion { grid-template-columns: 1fr; gap: 26px; }
+    .passion:nth-child(even) .passion-media { order: 0; }
+    .passion-media .ph, .passion-media.wide .ph { aspect-ratio: 16/10; max-width: 100%; }
   }
 </style>
