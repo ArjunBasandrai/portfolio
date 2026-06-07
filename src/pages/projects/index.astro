@@ -31,14 +31,13 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
     <section class="page-head wrap">
       <span class="eyebrow">Selected work</span>
       <h1 style="margin:18px 0 14px;">Projects</h1>
-      <p class="lead">A mix of research, models I trained to see how far I could push them, and things I built because the problem would not leave me alone. Each one has a write-up: the problem, the approach, and what actually happened.</p>
     </section>
 
     {featured && (
       <section class="wrap" style="padding-bottom:10px;">
         <a class="pfeat reveal" href={`/projects/${featured.id}`}>
-          {featured.data.cover
-            ? <img class="pfeat-cover" src={featured.data.cover} alt={featured.data.title} />
+          {featured.data.coverSquare
+            ? <img class="pfeat-cover" src={featured.data.coverSquare} alt={featured.data.title} />
             : <div class="ph"><span>{featured.data.coverLabel}</span></div>}
           <div class="pfeat-body">
             <span class={`badge ${statusClass[featured.data.status]}`}><span class="dot"></span> {featured.data.statusLabel ?? statusText[featured.data.status]} · Featured</span>
