@@ -9,7 +9,11 @@ import Equation from "../../components/project/Equation.astro";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
-  const sorted = projects.sort((a, b) => a.data.order - b.data.order);
+  const sorted = projects.sort((a, b) => {
+    const at = (a.data.publishedDate ?? new Date(`${a.data.year}-01-01`)).getTime();
+    const bt = (b.data.publishedDate ?? new Date(`${b.data.year}-01-01`)).getTime();
+    return bt - at || a.data.order - b.data.order;
+  });
   return sorted.map((entry, i) => ({
     params: { slug: entry.id },
     props: { entry, next: sorted[(i + 1) % sorted.length] },
@@ -54,7 +58,9 @@ const components = { Callout, Figure, ArchSteps, Results, Equation };
           {d.links.dataset && <a class="btn btn--ghost" href={d.links.dataset} target="_blank" rel="noopener">Dataset ↗</a>}
         </div>
       )}
-      {d.cover
+      {d.coverVideo
+        ? <video class="proj-cover-img" src={d.coverVideo} poster={d.cover} autoplay loop muted playsinline aria-label={d.title}></video>
+        : d.cover
         ? <img class="proj-cover-img" src={d.cover} alt={d.title} />
         : <div class="ph proj-cover"><span>{d.coverLabel}</span></div>}
     </section>

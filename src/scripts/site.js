@@ -43,6 +43,7 @@
     if (filterBar) {
       const items = [...document.querySelectorAll("[data-tags]")];
       const counter = document.querySelector("[data-filter-count]");
+      const breaker = document.querySelector("[data-breaker]");
       filterBar.addEventListener("click", (e) => {
         const btn = e.target.closest("[data-tag]");
         if (!btn) return;
@@ -56,6 +57,7 @@
           if (ok) shown++;
         });
         if (counter) counter.textContent = shown;
+        if (breaker) breaker.style.display = tag === "all" ? "" : "none";
       });
     }
 

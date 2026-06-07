@@ -14,6 +14,7 @@ const projects = defineCollection({
     status: z.enum(["active", "progress", "done", "archived"]),
     statusLabel: z.string().optional(),
     year: z.string(),
+    publishedDate: z.coerce.date().optional(),
     role: z.string(),
     timeline: z.string(),
     stack: z.array(z.string()).default([]),
@@ -36,8 +37,10 @@ const projects = defineCollection({
       .default({}),
     cover: z.string().optional(),
     coverSquare: z.string().optional(),
+    coverVideo: z.string().optional(),
     coverLabel: z.string().default("project cover"),
     featured: z.boolean().default(false),
+    major: z.boolean().default(false),
     order: z.number().default(99),
   }).refine(
     (data) => !data.featured || (typeof data.coverSquare === "string" && data.coverSquare.trim().length > 0),

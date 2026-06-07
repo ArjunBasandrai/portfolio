@@ -2,9 +2,16 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const all = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
+const pubTime = (p: { data: { publishedDate?: Date; year: string } }) =>
+  (p.data.publishedDate ?? new Date(`${p.data.year}-01-01`)).getTime();
+const all = (await getCollection("projects")).sort(
+  (a, b) => pubTime(b) - pubTime(a) || a.data.order - b.data.order
+);
 const featured = all.find((p) => p.data.featured) ?? all[0];
 const rest = all;
+const majors = rest.filter((p) => p.data.major);
+const minors = rest.filter((p) => !p.data.major);
+const ordered = [...majors, ...minors];
 
 const statusText = { active: "Active", progress: "In progress", done: "Completed", archived: "Archived" };
 const statusClass = { active: "is-active", progress: "is-progress", done: "is-done", archived: "is-archive" };
@@ -67,21 +74,25 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
       </div>
 
       <div class="proj-grid">
-        {rest.map((p) => (
-          <a class="card proj" href={`/projects/${p.id}`} data-tags={p.data.tags.join(",")}>
-            {p.data.cover
-              ? <img class="proj-cover" src={p.data.cover} alt={p.data.title} />
-              : <div class="ph"><span>{p.data.coverLabel}</span></div>}
-            <div class="proj-body">
-              <div class="proj-top"><span class="cat">{p.data.category.join(" · ")}</span><span class={`badge ${statusClass[p.data.status]}`}><span class="dot"></span> {p.data.statusLabel ?? statusText[p.data.status]}</span></div>
-              <h3>{p.data.title}</h3>
-              <p>{p.data.summary}</p>
-              <div class="proj-stack tag-row">{p.data.stack.slice(0, 3).map((s) => <span class="tag">{s}</span>)}</div>
-            </div>
-          </a>
+        {ordered.map((p, i) => (
+          <Fragment>
+            {i === majors.length && majors.length > 0 && minors.length > 0 && (
+              <div class="grid-breaker" data-breaker></div>
+            )}
+            <a class="card proj" href={`/projects/${p.id}`} data-tags={p.data.tags.join(",")}>
+              {p.data.cover
+                ? <img class="proj-cover" src={p.data.cover} alt={p.data.title} />
+                : <div class="ph"><span>{p.data.coverLabel}</span></div>}
+              <div class="proj-body">
+                <div class="proj-top"><span class="cat">{p.data.category.join(" · ")}</span><span class={`badge ${statusClass[p.data.status]}`}><span class="dot"></span> {p.data.statusLabel ?? statusText[p.data.status]}</span></div>
+                <h3>{p.data.title}</h3>
+                <p>{p.data.summary}</p>
+                <div class="proj-stack tag-row">{p.data.stack.slice(0, 3).map((s) => <span class="tag">{s}</span>)}</div>
+              </div>
+            </a>
+          </Fragment>
         ))}
       </div>
-      <p class="count-note"><span data-filter-count>{rest.length}</span> projects shown</p>
     </section>
   </main>
 </BaseLayout>
@@ -117,7 +128,7 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
   .proj h3 { font-family: var(--font-serif); font-size: 1.5rem; letter-spacing: -0.01em; margin-bottom: 10px; }
   .proj p { color: var(--muted); font-size: 14.5px; flex: 1; }
   .proj-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
-  .count-note { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); margin: 26px 0 0; }
+  .grid-breaker { grid-column: 1 / -1; height: 1px; background: var(--line); margin: 8px 0; }
 
   @media (max-width: 860px) {
     .pfeat { grid-template-columns: 1fr; }
