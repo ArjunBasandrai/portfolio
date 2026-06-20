@@ -19,6 +19,7 @@ stats:
 links: {}
 featured: false
 order: 7
+cover: "/images/projects/bird-image-semantic-segmentation/cover.png"
 coverLabel: "Bird semantic segmentation"
 ---
 
@@ -37,17 +38,18 @@ Semantic segmentation is per-pixel classification: rather than asking "is there 
 
 ## Dataset
 
-CUB-200-2011 (Caltech-UCSD Birds-200-2011) is a standard benchmark for bird vision work: 11,788 images across 200 species, with species labels, bounding boxes, and crucially for this project, segmentation masks. The masks are what make supervised segmentation possible here.
-
+The CUB-200-2011 dataset, also known as the Caltech-UCSD Birds-200-2011, is a popular dataset, often used for bird-related computer vision projects. It consists of 11,788 images of 200 different bird species. This dataset also includes detailed annotations, such as species labels, bounding boxes, and segmentation masks, making it a perfect choice for this project.
 </section>
 
 <section>
 
 ## Model
 
-U-Net is the workhorse of image segmentation. Its encoder-decoder shape, joined by skip connections, is what lets it produce high-precision masks: the encoder uses convolutions and max-pooling to compress the image into high-level features, the decoder uses transposed convolutions to rebuild a full-resolution mask, and the skip connections carry fine spatial detail across from encoder to decoder so it is not lost in the bottleneck.
+The U-Net architecture is a well-regarded model in the field of image semantic segmentation. Its encoder-decoder structure, paired with skip connections, is very effective for generating high precision segmentation masks. These skip connections bridge the encoder and decoder paths, helping retain spatial details while also capturing broader semantic features.
 
 <Figure src="https://miro.medium.com/v2/resize:fit:1400/1*VUS2cCaPB45wcHHFp_fQZQ.png" alt="U-Net architecture" caption="U-Net: an encoder-decoder with skip connections that preserve spatial detail." />
+
+The encoder portion of U-Net uses convolutional layers along with max-pooling to progressively reduce the spatial dimensions of the image while extracting high-level features. The decoder then uses transposed convolutional layers to reconstruct the image, merging the high-level features from the encoder with the spatial information through skip connections.
 
 </section>
 
@@ -55,32 +57,28 @@ U-Net is the workhorse of image segmentation. Its encoder-decoder shape, joined 
 
 ## Results
 
-On in-domain images, North American birds like those in CUB-200-2011, the model segments cleanly, reaching a validation BCE loss of **0.1193**.
+On in-domain images, North American birds like those in CUB-200-2011, the model segments cleanly.
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615634661/838484a5-4b7e-438e-bf87-92041677d62c.png" alt="In-domain segmentation result" />
+<Figure src="/images/projects/bird-image-semantic-segmentation/in-domain-result-1.png" alt="In-domain segmentation result on a North American bird (1 of 3): original image, predicted mask, and segmented overlay" />
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615636241/9e163291-09ab-4ff0-aaa3-0e5e9461c16a.png" alt="In-domain segmentation result" />
+<Figure src="/images/projects/bird-image-semantic-segmentation/in-domain-result-2.png" alt="In-domain segmentation result on a North American bird (2 of 3): original image, predicted mask, and segmented overlay" />
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615642230/cda810dc-ea7d-4b86-8468-98b0e663b631.png" alt="In-domain segmentation result" />
+<Figure src="/images/projects/bird-image-semantic-segmentation/in-domain-result-3.png" alt="In-domain segmentation result on a North American bird (3 of 3): original image, predicted mask, and segmented overlay" />
 
-<Callout label="The interesting failure">
-The model segments North American birds well, but hand it a species from the Indian subcontinent, outside the CUB-200 domain, and the masks fall apart. A clean demonstration of domain gap: the network learned the birds it saw, not "birdness" in general.
-</Callout>
+But, surprisingly, for images not belonging to that domain space (ood data), the model seemed to struggle to find proper segmentation masks. Given below are the results given by the model on images of bird species of the Indian subcontinent.
 
-The out-of-domain results, on Indian subcontinent species the model never trained on, are visibly worse.
+<Figure src="/images/projects/bird-image-semantic-segmentation/out-of-domain-result-1.png" alt="Out-of-domain segmentation result on a bird from the Indian subcontinent (1 of 3): original image, predicted mask, and segmented overlay" />
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615800709/92667374-8448-4010-841f-eb7bfa829429.png" alt="Out-of-domain segmentation result" />
+<Figure src="/images/projects/bird-image-semantic-segmentation/out-of-domain-result-2.png" alt="Out-of-domain segmentation result on a bird from the Indian subcontinent (2 of 3): original image, predicted mask, and segmented overlay" />
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615807865/38481f58-9593-430b-ac32-e50c640deafd.png" alt="Out-of-domain segmentation result" />
-
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1733615807570/25739eaa-9634-4873-afb6-9739bb637e46.png" alt="Out-of-domain segmentation result" />
+<Figure src="/images/projects/bird-image-semantic-segmentation/out-of-domain-result-3.png" alt="Out-of-domain segmentation result on a bird from the Indian subcontinent (3 of 3): original image, predicted mask, and segmented overlay" />
 
 </section>
 
 <section>
 
-## Where it could go
+## Conclusion
 
-This was a quick build on a plain U-Net, so the obvious next step is attention gates, which let the decoder focus on the relevant regions of the image instead of weighting everything equally. They are a natural fit for the domain-gap problem above: a model that attends to bird-shaped structure rather than memorized appearance should generalize better to species it has not seen.
+Since this was a very quick project, I only used a simple U-Net architecture. However, in future, I would like to explore some improvements on the U-Net architecture, particularly by adding Attention Gates (AG). These gates can help the model focus on relevant regions in the image, potentially improving its ability to generate accurate segmentation masks, especially for bird species outside the training domain space.
 
 </section>
