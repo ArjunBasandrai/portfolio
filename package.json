@@ -15,9 +15,11 @@
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/vercel": "^8.2.11",
     "@tailwindcss/vite": "^4.0.0",
+    "@types/katex": "^0.16.8",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
     "astro": "^5.1.0",
+    "katex": "^0.17.0",
     "resend": "^6.12.4",
     "tailwindcss": "^4.0.0"
   }

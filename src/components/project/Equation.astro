@@ -1,17 +1,24 @@
 ---
+import katex from "katex";
+import "katex/dist/katex.min.css";
+
 interface Props {
+  tex: string;
   label?: string;
 }
-const { label } = Astro.props;
+const { tex, label } = Astro.props;
+const html = katex.renderToString(tex, { displayMode: true, throwOnError: false });
 ---
 
 <div class="eq">
-  <code><slot /></code>
+  <span class="eq-math" set:html={html} />
   {label && <span class="eq-label">{label}</span>}
 </div>
 
 <style>
   .eq { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin: 1.6em 0 0; padding: 18px 22px; border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: var(--radius); background: var(--paper-2); }
-  .eq code { font-family: var(--font-mono); font-size: 14.5px; color: var(--ink); background: none; padding: 0; letter-spacing: 0.01em; }
-  .eq .eq-label { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+  .eq-math { color: var(--ink); font-size: 1.05rem; }
+  .eq-label { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+  .eq :global(.katex-display) { margin: 0; }
+  .eq :global(.katex) { color: var(--ink); }
 </style>
