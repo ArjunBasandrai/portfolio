@@ -9,13 +9,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 >
   <main>
     <section class="resume-top wrap">
-      <div>
-        <span class="eyebrow">Résumé</span>
-        <h1 style="margin-top:14px;">Curriculum vitae</h1>
-        <div class="note"><span class="dot"></span> Last updated June 2026 · Open to ML / research roles</div>
-      </div>
+      <h1 style="margin-top:14px;">Résumé</h1>
       <div class="resume-actions">
-        <a class="btn btn--solid" href="#" onclick="window.print();return false;">Download PDF ↓</a>
+        <a class="btn btn--solid" href="/docs/resume.pdf" download>Download PDF ↓</a>
         <a class="btn btn--ghost" href="/contact">Get in touch</a>
       </div>
     </section>
@@ -28,78 +24,328 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <div class="role">Machine Learning Engineer</div>
           </div>
           <div class="contact">
-            Punjab, India<br>
-            <a href="/contact">basandrai.arjun@gmail.com</a><br>
-            <a href="https://github.com/ArjunBasandrai">GitHub.com/ArjunBasandrai</a> · <a href="https://www.linkedin.com/in/arjun-basandrai/">LinkedIn</a>
+            Ithaca, NY, USA<br>
+            <a href="mailto:basandrai.arjun@gmail.com">basandrai.arjun@gmail.com</a><br>
+            <a href="https://github.com/ArjunBasandrai" target="_blank">GitHub/ArjunBasandrai</a> · <a href="https://www.linkedin.com/in/arjun-basandrai/" target="_blank">LinkedIn/arjun-basandrai</a><br>
+            <a href="https://arjunbasandrai.dev/" target="_blank">arjunbasandrai.dev</a>
           </div>
-        </div>
-
-        <div class="rsec">
-          <h2>Summary</h2>
-          <p class="summary">ML engineer and researcher specializing in efficient retrieval, edge inference, and ML systems that survive contact with production. Author of peer-reviewed work on retrieval and bioacoustics; happiest at the seam between research and shipping.</p>
         </div>
 
         <div class="rsec">
           <h2>Experience</h2>
           <div>
-            <div class="entry">
-              <div class="er"><div><h3>AI Applications Engineer Intern</h3><span class="org">Micron Semiconductor Technology India</span></div><span class="when">Feb 2026 - Present</span></div>
+            <div class="entry entry-mb">
+              <div class="er">
+                <div>
+                  <h3>AI Applications Engineer Intern</h3>
+                  <span class="org">
+                    Micron Semiconductor Technology India · Ahmedabad, India
+                  </span>
+                </div>
+                <span class="when">Feb 2026 - Jul 2026</span>
+              </div>
+
               <ul>
-                <li>Own the feature store and inference-serving stack for a long-context document platform.</li>
-                <li>Shipped point-in-time-correct pipelines that eliminated training/serving skew (6.2 → 0.4 AUC gap).</li>
-                <li>Cut p99 inference latency 40% via int8 quantization and batched serving on Triton.</li>
+                <li>
+                  Developed and deployed an Automatic Defect Classification
+                  system for wire bonders using a ResNet-50 image classifier,
+                  reducing defect identification and reject-code assignment
+                  time from 3-5 minutes to about 30 seconds.
+                </li>
+                <li>
+                  Developed operator and admin dashboards for production use,
+                  adding automated inference, role-based access, API-key
+                  management, rate limiting, model versioning, prediction
+                  logging, and model monitoring.
+                </li>
+                <li>
+                  Implemented a Gold Wire Monitoring System for 400 wire
+                  bonders that detects abnormal 99.9%-pure gold wire
+                  consumption, possible theft, material loss, and machine-wear
+                  signals and reduces machine-level analysis time from 15
+                  minutes to 1 minute.
+                </li>
+                <li>
+                  Implemented an Airflow ETL pipeline and SPC-based detection
+                  using control limits with hysteresis, CUSUM excursion, EWMA
+                  max-slope, and intra-lot variance checks.
+                </li>
               </ul>
+
+              <p class="entry-tech">
+                <strong>Technologies:</strong> Python, PyTorch, FastAPI, PostgreSQL, Redis, React, TypeScript, DVC, Apache Airflow, Docker, Prometheus, Grafana, Microsoft Entra ID, OpenShift, Kubernetes
+              </p>
+            </div>
+            <div class="entry entry-mb">
+              <div class="er">
+                <div>
+                  <h3>Software Engineer Intern</h3>
+                  <span class="org">TraceLink Inc. · Pune, India</span>
+                </div>
+                <span class="when">May 2025 - Oct 2025</span>
+              </div>
+
+              <ul>
+                <li>
+                  Developed Solution Tester, a no-code UI regression-testing
+                  framework for TraceLink's OPUS platform that validates
+                  configurable customer pages through reusable BDD scenarios.
+                </li>
+                <li>
+                  Designed the Playwright-based test engine and custom BDD
+                  parser, converting human-readable specifications into
+                  executable browser tests and integrating critical platform
+                  paths into the nightly regression suite.
+                </li>
+              </ul>
+
+              <p class="entry-tech">
+                <strong>Technologies:</strong> JavaScript, Playwright, BDD
+              </p>
             </div>
             <div class="entry">
-              <div class="er"><div><h3>Software Engineer Intern</h3><span class="org">Tracelink Inc.</span></div><span class="when">May 2025 - Oct 2025</span></div>
+              <div class="er">
+                <div>
+                  <h3>Machine Learning Intern</h3>
+                  <span class="org">
+                    Talent Recruit Software Pvt. Ltd. · Remote
+                  </span>
+                </div>
+                <span class="when">Mar 2024 - Jul 2024</span>
+              </div>
+
               <ul>
-                <li>Designed and developed Solution Tester, a Playwright-based no-code UI regression testing agent for the OPUS platform</li>
-                <li>Built an automated release notes generator that parsed JIRA tickets to produce versioned Markdown notes integrated with the CI/CD pipeline</li>
-                <li>Partnered with QA and Product Managers to prioritize critical scenarios and automated nightly smoke test suites in CI</li>
+                <li>
+                  Researched and benchmarked bias-detection and mitigation
+                  methods for applicant-tracking and resume-screening systems.
+                </li>
+                <li>
+                  Co-developed a bias-governance platform that enabled internal
+                  teams and clients to evaluate disparate-impact and other
+                  fairness metrics, supporting product changes that improved
+                  the disparate impact ratio for underrepresented groups by
+                  19.7%.
+                </li>
               </ul>
-            </div>
-            <div class="entry">
-              <div class="er"><div><h3>Machine Learning Intern</h3><span class="org">Talent Recruit Software Pvt. Ltd.</span></div><span class="when">Mar 2024 - Jul 2024</span></div>
-              <ul>
-                <li>Researched and benchmarked bias-detection / mitigation algorithms for ATS</li>
-                <li>Co-developed a bias-governance tool using IBM AIF360 to audit and reduce screening bias, increasing the disparate impact ratio of underrepresented groups by 19.7%</li>
-              </ul>
+
+              <p class="entry-tech">
+                <strong>Technologies:</strong> Python, Flask, IBM AI Fairness 360, Pandas, NumPy
+              </p>
             </div>
           </div>
         </div>
 
         <div class="rsec">
           <h2>Education</h2>
-          <div class="two">
+          <div>
             <div class="entry">
-              <div class="er"><div><h3>M.S. Computer Science</h3><span class="org">ML track</span></div></div>
-              <ul><li>Thesis: efficient long-context retrieval.</li><li>TA, Deep Learning.</li></ul>
-              <span class="when" style="display:block;margin-top:8px;">2022–2024</span>
+              <div class="er">
+                <div>
+                  <h3>Master of Engineering in Computer Science</h3>
+                  <span class="org">Cornell University · Ithaca, NY</span>
+                </div>
+                <span class="when">Expected May 2027</span>
+              </div>
             </div>
+
             <div class="entry">
-              <div class="er"><div><h3>B.S. Computer Science</h3><span class="org">Minor in Ecology</span></div></div>
-              <ul><li>Signal processing focus.</li><li>Graduated with honors.</li></ul>
-              <span class="when" style="display:block;margin-top:8px;">2018–2022</span>
+              <div class="er">
+                <div>
+                  <h3>Bachelor of Technology in Computer Science and Engineering</h3>
+                  <span class="org">Vellore Institute of Technology · Vellore, India</span>
+                </div>
+                <span class="when">May 2026</span>
+              </div>
+              <span class="when">CGPA: 9.38/10</span>
+            </div>
+
+            <div class="entry">
+              <div class="er">
+                <div>
+                  <h3>Higher Secondary Certificate Examination</h3>
+                  <span class="org">Kundan Vidya Mandir Sr. Sec. School · Ludhiana, India</span>
+                </div>
+                <span class="when">May 2022</span>
+              </div>
+              <span class="when">Percentage: 96.6%</span>
             </div>
           </div>
         </div>
 
         <div class="rsec">
-          <h2>Selected Publications</h2>
+          <h2>Projects & Research</h2>
           <div>
-            <div class="entry"><div class="er"><div><h3 style="font-size:1.05rem;">Sparse Routing for Efficient Long-Context Retrieval</h3><span class="org">arXiv preprint · under review</span></div><span class="when">2026</span></div></div>
-            <div class="entry"><div class="er"><div><h3 style="font-size:1.05rem;">Distilling Bioacoustic Classifiers for the Edge</h3><span class="org">NeurIPS Workshop</span></div><span class="when">2025</span></div></div>
-            <div class="entry"><div class="er"><div><h3 style="font-size:1.05rem;">Uncertainty-Aware Annotation for Citizen-Science Audio</h3><span class="org">Ecological Informatics</span></div><span class="when">2024</span></div></div>
+            <div class="entry entry-mb">
+              <div class="er">
+                <div>
+                  <h3 style="font-size:1.05rem;">Adaptive Resampling-based Training for Imbalanced Classification</h3>
+                  <span class="org">
+                    <a href="https://arxiv.org/abs/2509.00955" target="_blank">arXiv</a> |
+                    <a href="https://github.com/ArjunBasandrai/art" target="_blank">GitHub</a> |
+                    <a href="https://pypi.org/project/art-resampling/" target="_blank">PyPI</a> 
+                  </span>
+                </div>
+                <div class="er-date">
+                  <span class="when">Mar 2025 - Feb 2026</span>
+                  <span class="manuscript-note">under review at MLWA</span>
+                </div>
+              </div>
+              <ul>
+                <li>Developed ART, an adaptive resampling method that updates training distributions using class-wise validation macro-F1 and empirical class priors.</li>
+                <li>Benchmarked ART against 11 class-imbalance methods across five tabular, image, and text datasets using 20 fixed-seed runs per method-dataset pair, improving macro-F1 by 2.64 percentage points on average across the tabular datasets.</li>
+                <li>Validated results using Wilcoxon signed-rank tests at p &lt; 0.05 and released ART as a reusable PyTorch package.</li>
+              </ul>
+              <p class="entry-tech">
+                <strong>Technologies:</strong> Python, PyTorch, scikit-learn, NumPy, Pandas, Optuna, pytest
+              </p>
+            </div>
+            
+            <div class="entry entry-mb">
+              <div class="er">
+                <div>
+                  <h3 style="font-size:1.05rem;">TCGA GBM Survival Analysis</h3>
+                  <span class="org">
+                    <a href="https://github.com/ArjunBasandrai/tcga-gbm-survival-analysis" target="_blank">GitHub</a>
+                  </span>
+                </div>
+                <span class="when">Jan 2025 - Mar 2025</span>
+              </div>
+              <ul>
+                <li>Built a survival-analysis pipeline using TCGA glioblastoma clinical and somatic-mutation data to study mutation patterns associated with patient outcomes.</li>
+                <li>Combined PyTorch autoencoders, K-means clustering, chi-square tests, KEGG pathway enrichment, Cox proportional-hazards modeling, Kaplan-Meier analysis, and log-rank tests.</li>
+                <li>Identified six candidate survival-associated genes and built an inference tool that generates individualized survival-probability curves from their mutation status.</li>
+              </ul>
+              <p class="entry-tech">
+                <strong>Technologies:</strong> Python, PyTorch, scikit-learn, GSEApy, SciPy, Pandas, NumPy, Matplotlib, Seaborn
+              </p>
+            </div>
+
+            <div class="entry entry-mb">
+              <div class="er">
+                <div>
+                  <h3 style="font-size:1.05rem;">Elixir Chess Engine</h3>
+                  <span class="org">
+                    <a href="https://github.com/ArjunBasandrai/elixir-chess-engine" target="_blank">GitHub</a> |
+                    <a href="https://lichess.org/@/ElixirChessEngine" target="_blank">Lichess</a> |
+                    <a href="https://computerchess.org.uk/4040/cgi/engine_details.cgi?print=Details&each_game=0&eng=Elixir%203.0%2064-bit%204CPU#Elixir_3_0_64-bit_4CPU" target="_blank">CCRL 40/15</a> |
+                    <a href="https://computerchess.org.uk/404/cgi/engine_details.cgi?print=Details&each_game=1&eng=Elixir%203.0%2064-bit#Elixir_3_0_64-bit" target="_blank">CCRL Blitz</a>
+                  </span>
+                </div>
+                <span class="when">Feb 2024 - Nov 2024</span>
+              </div>
+              <ul>
+                <li>Built a UCI-compatible C++ chess engine combining NNUE evaluation with alpha-beta search, quiescence search, transposition tables, and advanced pruning, achieving 3,500+ Elo on CCRL 40/15 and Blitz lists.</li>
+                <li>Trained and integrated a sparse 768-input NNUE model that improved playing strength by about 500 Elo, optimized inference with AVX2/AVX-512 SIMD and Lazy SMP multithreading, and validated changes through SPRT testing.</li>
+                <li>Won the Young Talents CEDR computer-chess tournament with Elixir 3.0 JA.</li>
+              </ul>
+              <p class="entry-tech">
+                <strong>Technologies:</strong> C++ 20, Python, NNUE, SIMD, AVX2, AVX-512, Make
+            </div>
+
+            <div class="entry">
+              <div class="er">
+                <div>
+                  <h3 style="font-size:1.05rem;">Birdly: Bird Species Identifier</h3>
+                  <span class="org">
+                    <a href="https://github.com/ArjunBasandrai/birdly-ml" target="_blank">GitHub (Model)</a> |
+                    <a href="https://github.com/ArjunBasandrai/birdly-backend" target="_blank">GitHub (Backend)</a>
+                  </span>
+                </div>
+                <span class="when">Nov 2022 - Jun 2023</span>
+              </div>
+              <ul>
+                <li>Built an EfficientNetV2L image-classification system covering all 1,250 bird species found in India, trained on more than one million images.</li>
+                <li>Converted the dataset to TFRecords and trained on TPU v3, reducing training time from four hours per epoch on an NVIDIA P100 GPU to 19 minutes and achieving 82.3% top-1 test accuracy.</li>
+                <li>Built a Flask inference API that returns confidence-ranked top-k species predictions to a React frontend.</li>
+              </ul>
+              <p class="entry-tech">
+                <strong>Technologies:</strong> Python, TensorFlow, Keras, Flask, React, Selenium, OpenCV, Pillow, NumPy
+            </div>
+
+          </div>
+        </div>
+
+        <div class="rsec">
+          <h2>Leadership & Writing</h2>
+          <div>
+            <div class="entry">
+              <div class="er">
+                <div>
+                  <h3 style="font-size:1.05rem;">Senior Core Committee Member</h3>
+                  <span class="org">CodeChef-VIT Student Chapter</span>
+                </div>
+                <span class="when">Mar 2023 - May 2026</span>
+              </div>
+              <ul>
+                <li>Supported DevSoc 2023 and DevSoc 2024, each with 1200+ participants, by coordinating participant communication, event logistics, judging, and promotional campaigns.</li>
+                <li>Supported contestant onboarding, event-day operations, and communication for CookOff 8.0, a competitive programming contest with 500+ participants.</li>
+                <li>Co-led a Foundations of Machine Learning session, teaching supervised and unsupervised learning, regression, classification, and decision trees through guided code-along demonstrations.</li>
+              </ul>
+            </div>
+
           </div>
         </div>
 
         <div class="rsec">
           <h2>Skills</h2>
           <div class="skill-grid">
-            <div class="sg"><span class="lab">Modeling</span><div class="vals"><span class="tag">PyTorch</span><span class="tag">JAX</span><span class="tag">Transformers</span><span class="tag">ONNX</span></div></div>
-            <div class="sg"><span class="lab">Systems</span><div class="vals"><span class="tag">Rust</span><span class="tag">Ray</span><span class="tag">Triton</span><span class="tag">Docker</span></div></div>
-            <div class="sg"><span class="lab">Full stack</span><div class="vals"><span class="tag">TypeScript</span><span class="tag">Astro</span><span class="tag">Cloudflare</span><span class="tag">D1</span></div></div>
-            <div class="sg"><span class="lab">Data</span><div class="vals"><span class="tag">DuckDB</span><span class="tag">Polars</span><span class="tag">SQL</span></div></div>
+            <div class="sg">
+              <span class="lab">Languages</span>
+              <div class="vals">
+                <span class="tag">Python</span>
+                <span class="tag">C++</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">TypeScript</span>
+                <span class="tag">R</span>
+                <span class="tag">SQL</span>
+                <span class="tag">Java</span>
+              </div>
+            </div>
+
+            <div class="sg">
+              <span class="lab">Machine learning & Data Science </span>
+              <div class="vals">
+                <span class="tag">PyTorch</span>
+                <span class="tag">TensorFlow</span>
+                <span class="tag">Keras</span>
+                <span class="tag">scikit-learn</span>
+                <span class="tag">OpenCV</span>
+                <span class="tag">Optuna</span>
+                <span class="tag">Label Studio</span>
+                <span class="tag">NumPy</span>
+                <span class="tag">Pandas</span>
+              </div>
+            </div>
+
+            <div class="sg">
+              <span class="lab">Applications</span>
+              <div class="vals">
+                <span class="tag">FastAPI</span>
+                <span class="tag">Flask</span>
+                <span class="tag">React</span>
+                <span class="tag">Streamlit</span>
+                <span class="tag">PostgreSQL</span>
+                <span class="tag">Redis</span>
+                <span class="tag">SQLAlchemy</span>
+                <span class="tag">Alembic</span>
+              </div>
+            </div>
+
+            <div class="sg">
+              <span class="lab">MLOps</span>
+              <div class="vals">
+                <span class="tag">DVC</span>
+                <span class="tag">Apache Airflow</span>
+                <span class="tag">Docker</span>
+                <span class="tag">Kubernetes</span>
+                <span class="tag">OpenShift</span>
+                <span class="tag">Prometheus</span>
+                <span class="tag">Grafana</span>
+                <span class="tag">Git</span>
+                <span class="tag">Linux</span>
+                <span class="tag">pytest</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -110,8 +356,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 <style>
   .resume-top { padding-top: clamp(40px, 7vw, 80px); display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
   .resume-top h1 { font-family: var(--font-serif); font-size: clamp(2.4rem, 5vw, 3.6rem); letter-spacing: -0.02em; }
-  .resume-top .note { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); margin-top: 12px; display: flex; align-items: center; gap: 10px; }
-  .resume-top .note .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--st-active); }
   .resume-actions { display: flex; gap: 10px; }
 
   /* the sheet */
@@ -133,19 +377,24 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   .entry h3 { font-family: var(--font-serif); font-size: 1.25rem; }
   .entry .org { color: var(--accent-ink); font-size: 14px; }
   .entry .when { font-family: var(--font-mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .er-date { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; }
+  .manuscript-note { font-size: 12px; color: var(--ink-soft); line-height: 1.4; max-width: 22ch; }
   .entry ul { margin: 10px 0 0; padding-left: 1.1em; color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; }
   .entry li { margin: 5px 0; }
+  .entry-tech { margin: 10px 0 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+  .entry-tech strong { color: var(--ink-soft); font-weight: 600; }
+  .entry-mb { margin-bottom: 18px; }
 
   .skill-grid { display: grid; gap: 12px; }
   .skill-grid .sg { display: grid; grid-template-columns: 130px 1fr; gap: 14px; align-items: baseline; }
   .skill-grid .sg .lab { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
   .skill-grid .sg .vals { display: flex; flex-wrap: wrap; gap: 6px; }
 
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; }
 
   @media (max-width: 720px) {
     .rsec { grid-template-columns: 1fr; gap: 12px; }
-    .two { grid-template-columns: 1fr; }
+    .three { grid-template-columns: 1fr; }
     .skill-grid .sg { grid-template-columns: 1fr; gap: 6px; }
   }
   @media print {
