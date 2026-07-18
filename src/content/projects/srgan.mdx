@@ -9,6 +9,7 @@ statusLabel: "Released"
 year: "2024"
 publishedDate: "2024-12-01"
 major: false
+hide: true
 role: "Solo"
 timeline: "1 month"
 stack: ["Python", "PyTorch", "Matplotlib"]
@@ -49,7 +50,7 @@ I worked with a subset of ImageNet, splitting the high-resolution images into 96
 
 The generator is the SRResNet from the paper: a modified ResNet with 16 residual blocks and 2 upscaling blocks at the end. The paper requires the generator output to fall in `[-1, 1]`, so I added a Tanh activation at the very end to clamp it into range.
 
-<Figure src="https://miro.medium.com/v2/resize:fit:2000/1*_n6qA_1MBR-XD_EBqeO_wA.png" alt="SRResNet and SRGAN architecture" caption="SRResNet generator and the SRGAN discriminator." />
+<Figure src="/images/projects/srgan/architecture.png" alt="SRResNet and SRGAN architecture" />
 
 I first trained SRResNet on its own, without the GAN framework. Kaggle's GPU quota and notebook time limit capped me at 25 epochs, roughly 46k iterations, against the 1M iterations the paper uses.
 
@@ -108,13 +109,13 @@ class AdversarialLoss(nn.Module):
 
 ## Results
 
-<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1735463423/ebfnk5hlpwndyqb5zzgn.png" alt="Super-resolution result" />
+<Figure src="/images/projects/srgan/super-resolution-result-1.png" alt="SRGAN 4x super-resolution result (1 of 4): low-resolution input, SRGAN output, and high-resolution ground truth" />
 
-<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1735463453/odcunstwtlj4blukfpa0.png" alt="Super-resolution result" />
+<Figure src="/images/projects/srgan/super-resolution-result-2.png" alt="SRGAN 4x super-resolution result (2 of 4): low-resolution input, SRGAN output, and high-resolution ground truth" />
 
-<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1735463519/q8fmrfydlsa4f2ampm5p.png" alt="Super-resolution result" />
+<Figure src="/images/projects/srgan/super-resolution-result-3.png" alt="SRGAN 4x super-resolution result (3 of 4): low-resolution input, SRGAN output, and high-resolution ground truth" />
 
-<Figure src="https://res.cloudinary.com/dy4lutrdb/image/upload/v1735463396/xatjasiournlxcwp8ad8.png" alt="Super-resolution result" />
+<Figure src="/images/projects/srgan/super-resolution-result-4.png" alt="SRGAN 4x super-resolution result (4 of 4): low-resolution input, SRGAN output, and high-resolution ground truth" />
 
 <Callout label="The honest version">
 Given how far under the paper's training budget I ran, on a third of the data and a fraction of the iterations, the results came out better than I expected. The usual SRGAN failure modes are visible: trouble with fine detail and the occasional hallucination, both of which ESRGAN was later designed to fix.

@@ -1,11 +1,11 @@
 ---
 title: "India eBird Observations: EDA"
-description: "An exploratory analysis of 30 million eBird records for India spanning 1800 to 2021, tracing the distribution and seasonal behavior of the endangered Pallas's Fish Eagle."
-summary: "An exploration of 30 million eBird records for India, following one endangered eagle through space and season, after wrestling 3GB of data down to something a laptop could hold."
+description: "Descriptive analysis of 30 million bird sightings in India, focusing on population trends of endangered species like the Pallas' Fish Eagle."
+summary: "Descriptive analysis of 30 million bird sightings in India, focusing on population trends of endangered species like the Pallas' Fish Eagle."
 category: "Data"
 tags: ["data", "birding"]
 status: "done"
-statusLabel: "Released"
+statusLabel: "Completed"
 year: "2022"
 publishedDate: "2023-11-01"
 major: false
@@ -13,31 +13,30 @@ role: "Solo"
 timeline: "2 weeks"
 stack: ["Python", "Pandas", "NumPy", "Matplotlib"]
 stats:
+  - { value: "eBird Data", label: "Dataset", note: "for India" }
   - { value: "30M", label: "records", note: "eBird India, 1800–2021" }
   - { value: "770MB", label: "in-memory footprint", note: "down from 2GB+" }
-  - { value: "1", label: "endangered species", note: "Pallas's Fish Eagle" }
 links: {}
 featured: false
 order: 9
+cover: "/images/projects/ebird-eda/cover.png"
 coverLabel: "eBird India EDA"
 ---
 
-import Callout from "../../components/project/Callout.astro";
 import Figure from "../../components/project/Figure.astro";
 
 <section>
 
 ## The dataset
 
-The data comes from GBIF: every eBird record for India from 1800 to 2021, roughly 30 million rows and about 3GB on disk. The goal was to mine it for meaningful trends about threatened species, centered on one of my favorite IUCN-listed birds, Pallas's Fish Eagle (*Haliaeetus leucoryphus*).
-
+The dataset was obtained the GBIF website and it includes all eBird records for India from 1800 to 2021. It contains roughly 30 millioin rows and takes roughly 3GB disk space.
 </section>
 
 <section>
 
-## Fitting it in memory
+## Memory Footprint Reduction
 
-Loaded with Pandas defaults, the dataframe ate over 2GB of RAM, too much to explore comfortably. The fix was simply choosing the right dtype for each column: 32-bit floats for coordinates and counts, small integers for day and month, and categoricals for the repeated string columns like state and species. That alone brought the footprint down to just over **770MB**.
+When loaded with Pandas defaults, the dataframe ate over 2GB of RAM, which is too much to explore comfortably. The fix was simply choosing the right dtype for each column: 32-bit floats for coordinates and counts, small integers for day and month, and categoricals for the repeated string columns like state and species. That alone brought the footprint down to just over **770MB**.
 
 ```python
 def set_dtypes(df):
@@ -52,48 +51,97 @@ def set_dtypes(df):
     return df
 ```
 
-<Callout label="The cheap win">
-Categoricals and right-sized numeric types cut the working set by nearly two thirds, with no loss of information. On a 30-million-row dataset, that is the difference between exploring interactively and waiting on every operation.
-</Callout>
-
 </section>
 
 <section>
 
-## Tracking the eagle
+## Trend Analysis for Threatened Species
 
-### Where it lives
+The goal of this project was to analyze data on endangered species and extract meaningful insights. For that, I focussed on one of my favorite endangered birds in the IUCN Endangered Category: Pallas’s Fish Eagle.
 
-The first cut was state-wise sightings. Assam leads by a wide margin, with Uttarakhand close behind, and everywhere else falling off sharply, the eagle is concentrated in just a couple of regions.
+### State-wise Counts
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1730263169024/0e86c236-98ad-4ac1-a60a-95d531886025.png" alt="Top states by Pallas's Fish Eagle sightings" caption="State-wise sightings: Assam and Uttarakhand dominate." />
+My first step was to analyze state-wise counts for the Eagle. I accomplished this using the following code:
 
-### When it shows up
+```python
+state_wise = df_spc.groupby('stateProvince')['individualCount'].sum()
+state_wise = state_wise.loc[state_wise != 0].sort_values(ascending=False)
+state_wise[:10].plot(kind='bar',title="Top 10 states by sightings")
+plt.ylabel("Sightings")
+plt.xticks(rotation=90)
+plt.show()
+```
 
-Grouping by month makes the eagle's seasonality obvious: sightings climb through winter and fall to nearly zero in summer, confirming it as a winter visitor to India.
+<Figure src="/images/projects/ebird-eda/plot-top-states.png" alt="Top states by Pallas's Fish Eagle sightings" />
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1730263178947/559bb0ac-cdee-4366-90f4-246a5ea980e5.png" alt="Sightings by month" caption="A clear winter-visitor signature." />
+Assam has the highest number of Pallas' Fish Eagle sightings, with Uttarakhand following closely behind. Sightings in other states drop off significantly, highlighting that Assam and Uttarakhand are the primary regions where this eagle is most commonly observed.
 
-### Zooming into Assam
+### Month-wise Counts
 
-Narrowing to Assam, one wrinkle showed up: Kaziranga, Manas, and Nameri National Parks each split across many separately named ranges in the data. Merging those with a few regex passes was necessary before the locality picture made sense, and once merged, nearly all of Assam's sightings collapse onto Kaziranga National Park.
+Now the next step was to plot the month-wise counts for **Haliaeetus leucoryphus**. I did so using the following code:
+
+```python
+month_wise = df_spc.groupby('month')['individualCount'].sum()
+month_wise = month_wise.loc[month_wise != 0]
+month_wise.plot(kind='bar',title="Sightings by month")
+plt.ylabel("Sightings")
+plt.xticks(rotation=90)
+plt.show()
+```
+
+<Figure src="/images/projects/ebird-eda/plot-sightings-by-month.png" alt="Sightings by month" />
+
+The plot clearly shows an increase in eagle sightings during the winter months, dropping to nearly zero in summer. This pattern confirms that the eagle is indeed a winter visitor to India.
+
+### Locality-wise Counts for Assam
+
+Next, I wanted to find out which place/locality in Assam had the highest sightings for the Eagle. That was done using the following code:
+```python
+top_state = df_spc.query('stateProvince == "Assam"') \
+             .groupby(df_spc['locality'])['individualCount'] \
+             .sum()
+top_state.sort_values(ascending=False)[:20].plot(kind="bar",title="Sightings for Assam")
+plt.ylabel("Sightings")
+plt.xticks(rotation=90)
+plt.show()
+```
+
+<Figure src="/images/projects/ebird-eda/plot-assam-locality-raw.png" alt="Pallas's Fish Eagle sightings by locality in Assam, before merging national park ranges" />
+
+Kaziranga, Manas and Nameri National Parks have many ranges and the records for all of them are present in the data as separate localities, so I had to merge them all.
 
 ```python
 merged_state = df_spc.query('stateProvince == "Assam"') \
-    .groupby(df_spc['locality']
-        .apply(lambda x: re.sub('.*kaziranga.*', 'Kaziranga NP', x, flags=re.IGNORECASE))
-        .apply(lambda x: re.sub('.*nameri.*', 'Nameri NP', x, flags=re.IGNORECASE))
-        .apply(lambda x: re.sub('.*manas.*', 'Manas NP', x, flags=re.IGNORECASE)))['individualCount'] \
-    .sum()
+             .groupby(df_spc['locality']\
+             .apply(lambda x: re.sub('.*kaziranga.*', 'Kaziranga NP', x, flags=re.IGNORECASE))\
+             .apply(lambda x: re.sub('.*nameri.*', 'Nameri NP', x, flags=re.IGNORECASE))\
+             .apply(lambda x: re.sub('.*manas.*', 'Manas NP', x, flags=re.IGNORECASE)))['individualCount'] \
+             .sum()
+merged_state.sort_values(ascending=False)[:15].plot(kind="bar",title="Sightings for Assam")
+plt.ylabel("Sightings")
+plt.xticks(rotation=90)
+plt.show()
 ```
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1730263378177/d6eb1f43-fa13-44d6-962f-1c3d3c8c7bdd.png" alt="Merged locality sightings for Assam" caption="After merging park ranges, Kaziranga accounts for nearly all Assam sightings." />
+<Figure src="/images/projects/ebird-eda/plot-assam-locality-merged.png" alt="Pallas's Fish Eagle sightings by locality in Assam, after merging Kaziranga, Manas, and Nameri National Park ranges" />
 
-### The trend over time
+Nearly all sightings of the eagle in Assam come from the various ranges within Kaziranga National Park, while reports from other areas in the state are significantly fewer. This suggests that the national park provides an especially favorable environment and suitable habitat for the species.
 
-Year over year, sightings climb steadily from 2002, spike sharply around 2018, then ease back while staying well above the early baseline. That likely reflects a mix of more observers and possible range or population shifts, the two are hard to separate from sightings alone.
+### Year-wise Trend
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1730263481362/72df17ec-16bb-47ad-832a-5356d9122ae9.png" alt="Year-wise sighting trend" caption="A long climb, a 2018 peak, and a higher new baseline." />
+Next, I wanted to analyze yearly trends of the Eagle’s sightings. I quickly plotted that using:
+
+```python
+yearly = df_spc.groupby('year')['individualCount'].sum()
+years = yearly.index.tolist()[-20:]
+yearly[-20:].plot(kind="line")
+plt.xticks(years,rotation=90)
+plt.show()
+```
+
+<Figure src="/images/projects/ebird-eda/plot-yearly-trend.png" alt="Year-wise sighting trend" />
+
+The graph shows a steady increase in eagle sightings across India from 2002 to around 2015, followed by a sharp rise peaking in 2018. Although sightings dip slightly in the following years, they remain significantly higher than in the earlier years, suggesting a notable increase in the eagle's reported presence across the country over time. This trend could reflect improvements in observation efforts or potential changes in the eagle's range or population.
 
 </section>
 
@@ -101,11 +149,11 @@ Year over year, sightings climb steadily from 2002, spike sharply around 2018, t
 
 ## The observer-effort confound
 
-That last caveat matters, because eBird itself exploded in India over the same window. Plotting total yearly contributions shows minimal activity before 2014 and a steep climb from 2015 on.
+Plotting total yearly contributions shows minimal eBird contributions before 2014 and a steep climb from 2015 on.
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1730264329366/95feb02f-3786-4d48-9ca4-3d74a930fd1e.png" alt="Yearly eBird contributions in India" caption="eBird participation in India surges after 2014." />
+<Figure src="/images/projects/ebird-eda/plot-yearly-ebird-contributions.png" alt="Yearly eBird contributions in India" />
 
-So a rising sighting count does not cleanly mean a rising population, more people are simply looking. Separating real population trends from observer effort is the genuinely hard part of this kind of analysis.
+So a rising sighting count does not necessarily mean a rising population, more people are simply looking. Separating real population trends from observer effort is a challenge that I want to explore in further analyses.
 
 </section>
 
@@ -113,6 +161,6 @@ So a rising sighting count does not cleanly mean a rising population, more peopl
 
 ## On detecting decline
 
-The pipeline here, filter to a species, then visualize across space, season, and time, generalizes to any bird in the dataset, which makes it a useful lens for threatened species. I also tried to automatically flag species in decline, and that turned out to be statistically thorny. Raw percentage change misfired badly on vagrants and species with too few sightings to be significant. Linear regression and the Mann-Kendall test were better but still flagged some vagrants. It is unfinished, but it pointed clearly at what a more reliable trend indicator would need to account for.
+The overall pipeline mostly generalizes to all bird in the dataset, which makes it a useful tool for threatened species. I also tried to automatically flag species in decline, and that turned out to be statistically thorny. Raw percentage change didn't work as expected on vagrants and species with too few sightings to be significant. Linear regression and the Mann-Kendall test were better but still flagged several vagrants. Despite these challenges, the process was insightful, and refining these methods could lead to more reliable indicators for tracking species trends in the future.
 
 </section>

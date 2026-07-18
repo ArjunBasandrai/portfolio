@@ -8,7 +8,7 @@ import Results from "../../components/project/Results.astro";
 import Equation from "../../components/project/Equation.astro";
 
 export async function getStaticPaths() {
-  const projects = await getCollection("projects");
+  const projects = await getCollection("projects", (p) => !p.data.hide);
   const sorted = projects.sort((a, b) => {
     const at = (a.data.publishedDate ?? new Date(`${a.data.year}-01-01`)).getTime();
     const bt = (b.data.publishedDate ?? new Date(`${b.data.year}-01-01`)).getTime();

@@ -47,7 +47,7 @@ The CUB-200-2011 dataset, also known as the Caltech-UCSD Birds-200-2011, is a po
 
 The U-Net architecture is a well-regarded model in the field of image semantic segmentation. Its encoder-decoder structure, paired with skip connections, is very effective for generating high precision segmentation masks. These skip connections bridge the encoder and decoder paths, helping retain spatial details while also capturing broader semantic features.
 
-<Figure src="https://miro.medium.com/v2/resize:fit:1400/1*VUS2cCaPB45wcHHFp_fQZQ.png" alt="U-Net architecture" caption="U-Net: an encoder-decoder with skip connections that preserve spatial detail." />
+<Figure src="/images/projects/bird-image-semantic-segmentation/unet-architecture.png" alt="U-Net architecture" />
 
 The encoder portion of U-Net uses convolutional layers along with max-pooling to progressively reduce the spatial dimensions of the image while extracting high-level features. The decoder then uses transposed convolutional layers to reconstruct the image, merging the high-level features from the encoder with the spatial information through skip connections.
 

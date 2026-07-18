@@ -49,7 +49,7 @@ For this project I used the Augmented JSRT and BSE-JSRT datasets available on [K
 
 I implemented the recent [xU-NetFullSharp](https://github.com/xKev1n/xU-NetFullSharp) architecture. As described in the official GitHub repository: “The xU-NetFullSharp is based on the most recent U-NetSharp architecture and utilizes bidirectional multi-scale skip connections like in the preceding U-Net3+. The ReLU activation is changed for more modern xUnit activation to ensure more accurate activation maps.”
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737031302009/9a262c0f-295a-4e96-abfd-80f54873b07f.jpeg" alt="xU-NetFullSharp architecture" caption="xU-NetFullSharp: bidirectional multi-scale skip connections with xUnit activations." />
+<Figure src="/images/projects/xunet/architecture.jpeg" alt="xU-NetFullSharp architecture" />
 
 Since the model code is too large, I will not display it here. However, you can find the code in my GitHub repository [here](https://github.com/ArjunBasandrai/xU-NetFullSharp-Bone-Shadow-Suppression/blob/main/notebooks/xu-netfullsharp-training.ipynb).
 
@@ -77,18 +77,18 @@ SSIM measures the structural similarity between the two images:
 
 ## Results
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035365415/cd90608e-ea0b-4dac-91ba-6f5cdf13e070.png" alt="Suppression result" />
+<Figure src="/images/projects/xunet/suppression-result-1.png" alt="Chest X-ray bone shadow suppression result (1 of 3): input, target, and predicted output" />
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035369616/3ab39048-95b0-441e-a04d-cace58c17021.png" alt="Suppression result" />
+<Figure src="/images/projects/xunet/suppression-result-2.png" alt="Chest X-ray bone shadow suppression result (2 of 3): input, target, and predicted output" />
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035376098/d60708d5-86ef-4e66-81a0-2fdbf98be074.png" alt="Suppression result" />
+<Figure src="/images/projects/xunet/suppression-result-3.png" alt="Chest X-ray bone shadow suppression result (3 of 3): input, target, and predicted output" />
 
 The trained model is able to accurately reconstruct the finer details in the lungs.
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035459779/cbb265f6-3447-4cfd-a876-362b0afe1325.png" alt="Reconstructed lung detail" />
+<Figure src="/images/projects/xunet/lung-detail-1.png" alt="Reconstructed lung detail after bone shadow suppression (1 of 3)" />
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035463817/73b5e6cc-ebbb-4fd3-8140-fe2ad88b3638.png" alt="Reconstructed lung detail" />
+<Figure src="/images/projects/xunet/lung-detail-2.png" alt="Reconstructed lung detail after bone shadow suppression (2 of 3)" />
 
-<Figure src="https://cdn.hashnode.com/res/hashnode/image/upload/v1737035468950/ebb52da4-620f-407a-8242-a0ba0f3aa7b8.png" alt="Reconstructed lung detail" />
+<Figure src="/images/projects/xunet/lung-detail-3.png" alt="Reconstructed lung detail after bone shadow suppression (3 of 3)" />
 
 </section>

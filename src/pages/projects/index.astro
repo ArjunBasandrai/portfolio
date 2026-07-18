@@ -4,7 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const pubTime = (p: { data: { publishedDate?: Date; year: string } }) =>
   (p.data.publishedDate ?? new Date(`${p.data.year}-01-01`)).getTime();
-const all = (await getCollection("projects")).sort(
+const all = (await getCollection("projects", (p) => !p.data.hide)).sort(
   (a, b) => pubTime(b) - pubTime(a) || a.data.order - b.data.order
 );
 const featured = all.find((p) => p.data.featured) ?? all[0];
@@ -47,7 +47,6 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
             ? <img class="pfeat-cover" src={featured.data.coverSquare} alt={featured.data.title} />
             : <div class="ph"><span>{featured.data.coverLabel}</span></div>}
           <div class="pfeat-body">
-            <span class={`badge ${statusClass[featured.data.status]}`}><span class="dot"></span> {featured.data.statusLabel ?? statusText[featured.data.status]} · Featured</span>
             <h2>{featured.data.title}</h2>
             <p>{featured.data.summary}</p>
             {featured.data.stats.length > 0 && (
@@ -66,7 +65,7 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
       </section>
     )}
 
-    <section class="wrap">
+    <section class="wrap" style="padding-bottom: clamp(64px, 9vw, 112px);">
       <div class="filter-bar" data-filter-bar>
         <span class="lbl">Category</span>
         <button data-tag="all" class="is-active">All</button>

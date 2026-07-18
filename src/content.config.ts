@@ -41,6 +41,7 @@ const projects = defineCollection({
     coverLabel: z.string().default("project cover"),
     featured: z.boolean().default(false),
     major: z.boolean().default(false),
+    hide: z.boolean().default(false),
     order: z.number().default(99),
   }).refine(
     (data) => !data.featured || (typeof data.coverSquare === "string" && data.coverSquare.trim().length > 0),

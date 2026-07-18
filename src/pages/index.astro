@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
-const all = await getCollection("projects");
+const all = await getCollection("projects", (p) => !p.data.hide);
 const order = ["art", "elixir-chess-engine", "birdly-bird-identifier"];
 const featured = order
   .map((id) => all.find((p) => p.id === id))
@@ -19,7 +19,6 @@ const featured = order
     <section class="hero wrap">
       <div class="hero-grid">
         <div>
-          <div class="hero-availability"><span class="pulse"></span> Open to ML &amp; AI engineering roles</div>
           <h1>What can a machine learn? I like <br><em>finding out.</em></h1>
           <p class="lead hero-sub">Hi, I'm Arjun, a software engineer who enjoys building and testing <strong><em>machine learning systems</em></strong>. When I'm not coding, you'll find me exploring the outdoors and photographing birds.</p>
           <div class="hero-actions">
@@ -55,7 +54,7 @@ const featured = order
       <div class="sect-head">
         <div>
           <span class="eyebrow">Selected work</span>
-          <h2 class="sect-title reveal" style="margin-top:16px;">Things I've built<br>and studied.</h2>
+          <h2 class="sect-title reveal" style="margin-top:16px;">Things I've built.</h2>
         </div>
         <a class="txtlink" href="/projects" style="white-space:nowrap;">All projects →</a>
       </div>
@@ -136,7 +135,7 @@ const featured = order
   .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--st-active); position: relative; }
   .pulse::after { content:""; position:absolute; inset:-4px; border-radius:50%; border:1px solid var(--st-active); animation: pulse 2.4s ease-out infinite; }
   @keyframes pulse { 0%{transform:scale(.6);opacity:.9} 100%{transform:scale(1.8);opacity:0} }
-  .hero h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.9rem, 8.2vw, 6.6rem); line-height: 0.94; letter-spacing: -0.025em; }
+  .hero h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.61rem, 7.38vw, 5.94rem); line-height: 0.94; letter-spacing: -0.025em; }
   .hero h1 em { font-style: italic; color: var(--accent-ink); }
   .hero-sub { margin-top: 26px; max-width: 50ch; }
   .hero-sub strong { color: var(--ink); font-weight: 600; }
