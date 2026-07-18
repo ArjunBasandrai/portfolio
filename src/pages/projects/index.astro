@@ -13,9 +13,6 @@ const majors = rest.filter((p) => p.data.major);
 const minors = rest.filter((p) => !p.data.major);
 const ordered = [...majors, ...minors];
 
-const statusText = { active: "Active", progress: "In progress", done: "Completed", archived: "Archived" };
-const statusClass = { active: "is-active", progress: "is-progress", done: "is-done", archived: "is-archive" };
-
 const tagLabels: Record<string, string> = {
   ml: "Machine Learning",
   cv: "Computer Vision",
@@ -36,18 +33,19 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
 >
   <main>
     <section class="page-head wrap">
-      <span class="eyebrow">Selected work</span>
-      <h1 style="margin:18px 0 14px;">Projects</h1>
+      <h1 style="margin: 18px 0 48px;">Projects</h1>
     </section>
 
     {featured && (
       <section class="wrap" style="padding-bottom:10px;">
-        <a class="pfeat reveal" href={`/projects/${featured.id}`}>
-          {featured.data.coverSquare
-            ? <img class="pfeat-cover" src={featured.data.coverSquare} alt={featured.data.title} />
-            : <div class="ph"><span>{featured.data.coverLabel}</span></div>}
+        <div class="pfeat reveal">
+          <a class="pfeat-media" href={`/projects/${featured.id}`}>
+            {featured.data.coverSquare
+              ? <img class="pfeat-cover" src={featured.data.coverSquare} alt={featured.data.title} />
+              : <div class="ph"><span>{featured.data.coverLabel}</span></div>}
+          </a>
           <div class="pfeat-body">
-            <h2>{featured.data.title}</h2>
+            <a class="pfeat-title-link" href={`/projects/${featured.id}`}><h2>{featured.data.title}</h2></a>
             <p>{featured.data.summary}</p>
             {featured.data.stats.length > 0 && (
               <div class="pfeat-stats">
@@ -57,11 +55,12 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
               </div>
             )}
             <div class="pfeat-links">
-              <span class="btn btn--solid">Read case study <span class="arr">→</span></span>
-              {featured.data.links.github && <span class="btn btn--ghost">GitHub ↗</span>}
+              <a class="btn btn--solid" href={`/projects/${featured.id}`}>Read more <span class="arr">→</span></a>
+              {featured.data.links.github && <a class="btn btn--ghost" href={featured.data.links.github} target="_blank" rel="noopener">GitHub ↗</a>}
+              {featured.data.links.demo && <a class="btn btn--ghost" href={featured.data.links.demo} target="_blank" rel="noopener">Live demo ↗</a>}
             </div>
           </div>
-        </a>
+        </div>
       </section>
     )}
 
@@ -83,7 +82,7 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
                 ? <img class="proj-cover" src={p.data.cover} alt={p.data.title} />
                 : <div class="ph"><span>{p.data.coverLabel}</span></div>}
               <div class="proj-body">
-                <div class="proj-top"><span class="cat">{p.data.category.join(" · ")}</span><span class={`badge ${statusClass[p.data.status]}`}><span class="dot"></span> {p.data.statusLabel ?? statusText[p.data.status]}</span></div>
+                <div class="proj-top"><span class="cat">{p.data.category.join(" · ")}</span></div>
                 <h3>{p.data.title}</h3>
                 <p>{p.data.summary}</p>
                 <div class="proj-stack tag-row">{p.data.stack.slice(0, 3).map((s) => <span class="tag">{s}</span>)}</div>
@@ -102,13 +101,16 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
 
   .pfeat { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .pfeat .ph { border: 0; border-right: 1px solid var(--line); min-height: 360px; }
+  .pfeat-media { display: block; }
   .pfeat-cover { width: 100%; height: 100%; object-fit: cover; border-right: 1px solid var(--line); min-height: 360px; }
   .pfeat-body { padding: clamp(28px, 4vw, 52px); display: flex; flex-direction: column; }
-  .pfeat-body h2 { font-family: var(--font-serif); font-size: clamp(1.9rem, 3.6vw, 2.9rem); letter-spacing: -0.015em; margin: 14px 0; }
+  .pfeat-title-link { color: inherit; text-decoration: none; }
+  .pfeat-title-link:hover h2 { color: var(--accent-ink); }
+  .pfeat-body h2 { font-family: var(--font-serif); font-size: clamp(1.9rem, 3.6vw, 2.9rem); letter-spacing: -0.015em; margin: 14px 0; transition: color .2s; }
   .pfeat-body p { color: var(--ink-soft); }
   .pfeat-stats { display: flex; gap: 36px; margin: 26px 0; flex-wrap: wrap; }
   .pfeat-stats .s b { font-family: var(--font-serif); font-size: 1.8rem; display: block; }
-  .pfeat-stats .s span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .pfeat-stats .s span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-ink); }
   .pfeat-links { display: flex; gap: 12px; margin-top: auto; padding-top: 20px; }
 
   .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--line); }

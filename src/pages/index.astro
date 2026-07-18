@@ -53,8 +53,7 @@ const featured = order
     <section class="section wrap">
       <div class="sect-head">
         <div>
-          <span class="eyebrow">Selected work</span>
-          <h2 class="sect-title reveal" style="margin-top:16px;">Things I've built.</h2>
+          <h2 class="sect-title reveal" style="margin-top:16px;">Things I've built</h2>
         </div>
         <a class="txtlink" href="/projects" style="white-space:nowrap;">All projects →</a>
       </div>
@@ -72,8 +71,8 @@ const featured = order
     </section>
 
     <!-- ===== TECHNICAL FOCUS ===== -->
-    <section class="section--tight wrap">
-      <span class="eyebrow">What I work on</span>
+    <section class="section--tight wrap" style="padding-top: 0;">
+      <h2 class="sect-title reveal">What I work on</h2>
       <div class="focus-grid reveal" style="margin-top:28px;">
         <div class="focus-cell">
           <span class="n">01</span>
@@ -105,7 +104,6 @@ const featured = order
           <div class="ph"><img src="/images/home/chandra-taal-cartwheel.jpg" alt="Arjun mid-cartwheel in front of Chandra Taal lake in Spiti" loading="lazy" /></div>
         </div>
         <div class="reveal">
-          <span class="eyebrow">Away from the keyboard</span>
           <h2 class="sect-title" style="margin:16px 0;">The other half of the story.</h2>
           <p class="lead">When I'm not building models, I'm usually out photographing birds. And this is where a lot of the patience and attention to detail I bring to my work comes from. I write about my birding adventures on a separate blog.</p>
           <p style="margin-top:18px;"><a class="txtlink" href="/about">More about me →</a> &nbsp;·&nbsp; <a class="txtlink" href="https://birdingwitharjun.com/" target="_blank">Birding &amp; travel blog ↗</a></p>
@@ -115,7 +113,6 @@ const featured = order
 
     <!-- ===== CTA ===== -->
     <section class="section wrap cta">
-      <span class="eyebrow" style="justify-content:center;">Let's talk</span>
       <h2 class="display">Building something that needs to <em>learn?</em></h2>
       <div class="hero-actions" style="justify-content:center;">
         <a class="btn btn--accent" href="/contact">Start a conversation <span class="arr">→</span></a>
@@ -181,7 +178,8 @@ const featured = order
   .focus-cell .skills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
 
   /* Personal / field layer */
-  .field { background: var(--paper-2); border-block: 1px solid var(--line); }
+  .field { background: var(--paper-2); border-block: 1px solid var(--line); padding-block: clamp(50px, 8vw, 100px);}
+  .field .lead { font-size: 14.5px; color: var(--muted); line-height: 1.55; max-width: none; }
   .field-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(28px,5vw,56px); align-items: center; }
   .field-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .field-photos .ph:first-child { grid-row: span 2; aspect-ratio: 3/4; }

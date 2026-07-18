@@ -11,11 +11,8 @@ const projects = defineCollection({
       .union([z.string(), z.array(z.string())])
       .transform((c) => (Array.isArray(c) ? c : [c])),
     tags: z.array(z.string()).default([]),
-    status: z.enum(["active", "progress", "done", "archived"]),
-    statusLabel: z.string().optional(),
     year: z.string(),
     publishedDate: z.coerce.date().optional(),
-    role: z.string(),
     timeline: z.string(),
     stack: z.array(z.string()).default([]),
     stats: z
