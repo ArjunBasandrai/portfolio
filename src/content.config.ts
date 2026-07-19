@@ -13,7 +13,6 @@ const projects = defineCollection({
     tags: z.array(z.string()).default([]),
     year: z.string(),
     publishedDate: z.coerce.date().optional(),
-    timeline: z.string(),
     stack: z.array(z.string()).default([]),
     stats: z
       .array(

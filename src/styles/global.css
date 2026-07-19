@@ -192,7 +192,9 @@ h1, h2, h3, h4 { font-weight: 500; line-height: 1.08; margin: 0; letter-spacing:
 .theme-toggle {
   width: 34px; height: 34px; border-radius: 50%;
   border: 1px solid var(--line-strong); background: transparent; color: var(--ink-soft);
-  display: grid; place-items: center; cursor: pointer;
+  /* display: grid;  */
+  display: none;
+  place-items: center; cursor: pointer;
   transition: border-color .2s, color .2s, transform .3s;
 }
 .theme-toggle:hover { color: var(--ink); border-color: var(--accent); transform: rotate(15deg); }
