@@ -112,8 +112,8 @@ const components = { Callout, Figure, ArchSteps, Results, Equation };
   .keystats .ks span { font-family: var(--font-mono); font-size: 12px; color: var(--muted); display: block; margin-top: 10px; line-height: 1.4; }
   .keystats .ks small { color: var(--st-active); font-family: var(--font-mono); font-size: 11px; display: block; margin-top: 6px; }
 
-  .case { display: grid; grid-template-columns: 1fr minmax(0,700px) 1fr; gap: 40px; }
-  .case-body { grid-column: 2; }
+  .case { display: grid; grid-template-columns: 1fr minmax(0,700px) 1fr; gap: 40px; min-width: 0; }
+  .case-body { grid-column: 2; min-width: 0; overflow-x: hidden; }
   .case-body.no-toc { grid-column: 2; }
 
   .case-toc { grid-column: 1; position: sticky; top: 90px; align-self: start; font-size: 13.5px; padding-right: 24px; }
@@ -137,5 +137,11 @@ const components = { Callout, Figure, ArchSteps, Results, Equation };
   }
   @media (max-width: 760px) {
     .np-inner { flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 480px) {
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions .btn { justify-content: center; }
+    .keystats { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .keystats .ks { padding: 16px; }
   }
 </style>

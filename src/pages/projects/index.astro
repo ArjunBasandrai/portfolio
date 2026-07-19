@@ -111,7 +111,7 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
   .pfeat-stats { display: flex; gap: 36px; margin: 26px 0; flex-wrap: wrap; }
   .pfeat-stats .s b { font-family: var(--font-serif); font-size: 1.8rem; display: block; }
   .pfeat-stats .s span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-ink); }
-  .pfeat-links { display: flex; gap: 12px; margin-top: auto; padding-top: 20px; }
+  .pfeat-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; padding-top: 20px; }
 
   .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--line); }
   .filter-bar .lbl { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-right: 8px; }
@@ -135,5 +135,10 @@ const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Obje
     .pfeat { grid-template-columns: 1fr; }
     .pfeat .ph, .pfeat-cover { border-right: 0; border-bottom: 1px solid var(--line); min-height: 220px; }
     .proj-grid { grid-template-columns: 1fr; }
+    .pfeat-stats { gap: 22px; }
+  }
+  @media (max-width: 420px) {
+    .pfeat-links { flex-direction: column; align-items: stretch; }
+    .pfeat-links .btn { justify-content: center; }
   }
 </style>

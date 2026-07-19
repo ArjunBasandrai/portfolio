@@ -16,9 +16,9 @@ const html = katex.renderToString(tex, { displayMode: true, throwOnError: false 
 </div>
 
 <style>
-  .eq { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin: 1.6em 0 0; padding: 18px 22px; border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: var(--radius); background: var(--paper-2); }
-  .eq-math { color: var(--ink); font-size: 1.05rem; }
-  .eq-label { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
-  .eq :global(.katex-display) { margin: 0; }
-  .eq :global(.katex) { color: var(--ink); }
+  .eq { display: block; margin: 1.6em 0 0; padding: 18px 22px; border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: var(--radius); background: var(--paper-2); max-width: 100%; overflow: hidden; }
+  .eq-math { display: block; width: 100%; max-width: 100%; color: var(--ink); font-size: 1.05rem; text-align: center; }
+  .eq-label { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; }
+  .eq :global(.katex-display) { margin: 0; max-width: 100%; overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
+  .eq :global(.katex) { color: var(--ink); white-space: normal; }
 </style>
