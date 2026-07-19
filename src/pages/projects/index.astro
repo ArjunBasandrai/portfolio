@@ -1,0 +1,144 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pubTime = (p: { data: { publishedDate?: Date; year: string } }) =>
+  (p.data.publishedDate ?? new Date(`${p.data.year}-01-01`)).getTime();
+const all = (await getCollection("projects", (p) => !p.data.hide)).sort(
+  (a, b) => pubTime(b) - pubTime(a) || a.data.order - b.data.order
+);
+const featured = all.find((p) => p.data.featured) ?? all[0];
+const rest = all;
+const majors = rest.filter((p) => p.data.major);
+const minors = rest.filter((p) => !p.data.major);
+const ordered = [...majors, ...minors];
+
+const tagLabels: Record<string, string> = {
+  ml: "Machine Learning",
+  cv: "Computer Vision",
+  research: "Research",
+  systems: "ML Systems",
+  data: "Data Science",
+  fullstack: "Full Stack",
+  birding: "Birding",
+};
+const usedTags = [...new Set(all.flatMap((p) => p.data.tags))].filter((t) => tagLabels[t]);
+const filters = usedTags.sort((a, b) => Object.keys(tagLabels).indexOf(a) - Object.keys(tagLabels).indexOf(b));
+---
+
+<BaseLayout
+  title="Projects · Arjun Basandrai"
+  description="Selected machine learning, computer vision, and systems projects by Arjun Basandrai, from research and trained models to engines and full-stack ML applications."
+  current="projects"
+>
+  <main>
+    <section class="page-head wrap">
+      <h1 style="margin: 18px 0 48px;">Projects</h1>
+    </section>
+
+    {featured && (
+      <section class="wrap" style="padding-bottom:10px;">
+        <div class="pfeat reveal">
+          <a class="pfeat-media" href={`/projects/${featured.id}`}>
+            {featured.data.coverSquare
+              ? <img class="pfeat-cover" src={featured.data.coverSquare} alt={featured.data.title} />
+              : <div class="ph"><span>{featured.data.coverLabel}</span></div>}
+          </a>
+          <div class="pfeat-body">
+            <a class="pfeat-title-link" href={`/projects/${featured.id}`}><h2>{featured.data.title}</h2></a>
+            <p>{featured.data.summary}</p>
+            {featured.data.stats.length > 0 && (
+              <div class="pfeat-stats">
+                {featured.data.stats.slice(0, 3).map((s) => (
+                  <div class="s"><b>{s.value}</b><span>{s.label}</span></div>
+                ))}
+              </div>
+            )}
+            <div class="pfeat-links">
+              <a class="btn btn--solid" href={`/projects/${featured.id}`}>Read more <span class="arr">→</span></a>
+              {featured.data.links.github && <a class="btn btn--ghost" href={featured.data.links.github} target="_blank" rel="noopener">GitHub ↗</a>}
+              {featured.data.links.demo && <a class="btn btn--ghost" href={featured.data.links.demo} target="_blank" rel="noopener">Live demo ↗</a>}
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <section class="wrap" style="padding-bottom: clamp(64px, 9vw, 112px);">
+      <div class="filter-bar" data-filter-bar>
+        <span class="lbl">Category</span>
+        <button data-tag="all" class="is-active">All</button>
+        {filters.map((t) => <button data-tag={t}>{tagLabels[t]}</button>)}
+      </div>
+
+      <div class="proj-grid">
+        {ordered.map((p, i) => (
+          <Fragment>
+            {i === majors.length && majors.length > 0 && minors.length > 0 && (
+              <div class="grid-breaker" data-breaker></div>
+            )}
+            <a class="card proj" href={`/projects/${p.id}`} data-tags={p.data.tags.join(",")}>
+              {p.data.cover
+                ? <img class="proj-cover" src={p.data.cover} alt={p.data.title} />
+                : <div class="ph"><span>{p.data.coverLabel}</span></div>}
+              <div class="proj-body">
+                <div class="proj-top"><span class="cat">{p.data.category.join(" · ")}</span></div>
+                <h3>{p.data.title}</h3>
+                <p>{p.data.summary}</p>
+                <div class="proj-stack tag-row">{p.data.stack.slice(0, 3).map((s) => <span class="tag">{s}</span>)}</div>
+              </div>
+            </a>
+          </Fragment>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .page-head { padding-top: clamp(40px, 7vw, 88px); }
+  .page-head h1 { font-family: var(--font-serif); font-size: clamp(2.6rem, 6vw, 4.4rem); letter-spacing: -0.02em; }
+
+  .pfeat { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .pfeat .ph { border: 0; border-right: 1px solid var(--line); min-height: 360px; }
+  .pfeat-media { display: block; }
+  .pfeat-cover { width: 100%; height: 100%; object-fit: cover; border-right: 1px solid var(--line); min-height: 360px; }
+  .pfeat-body { padding: clamp(28px, 4vw, 52px); display: flex; flex-direction: column; }
+  .pfeat-title-link { color: inherit; text-decoration: none; }
+  .pfeat-title-link:hover h2 { color: var(--accent-ink); }
+  .pfeat-body h2 { font-family: var(--font-serif); font-size: clamp(1.9rem, 3.6vw, 2.9rem); letter-spacing: -0.015em; margin: 14px 0; transition: color .2s; }
+  .pfeat-body p { color: var(--ink-soft); }
+  .pfeat-stats { display: flex; gap: 36px; margin: 26px 0; flex-wrap: wrap; }
+  .pfeat-stats .s b { font-family: var(--font-serif); font-size: 1.8rem; display: block; }
+  .pfeat-stats .s span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-ink); }
+  .pfeat-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; padding-top: 20px; }
+
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .filter-bar .lbl { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-right: 8px; }
+  .filter-bar button { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); background: transparent; border: 1px solid var(--line); padding: 5px 13px; border-radius: 100px; cursor: pointer; transition: all .2s; }
+  .filter-bar button:hover { color: var(--ink); border-color: var(--line-strong); }
+  .filter-bar button.is-active { color: var(--accent-ink); border-color: var(--accent-line); background: var(--accent-soft); }
+
+  .proj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 32px; }
+  .proj { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+  .proj .ph { aspect-ratio: 16/9; border: 0; border-bottom: 1px solid var(--line); }
+  .proj .proj-cover { aspect-ratio: 16/9; width: 100%; object-fit: cover; border-bottom: 1px solid var(--line); }
+  .proj-body { padding: 26px; display: flex; flex-direction: column; flex: 1; }
+  .proj-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .proj .cat { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); }
+  .proj h3 { font-family: var(--font-serif); font-size: 1.5rem; letter-spacing: -0.01em; margin-bottom: 10px; }
+  .proj p { color: var(--muted); font-size: 14.5px; flex: 1; }
+  .proj-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .grid-breaker { grid-column: 1 / -1; height: 1px; background: var(--line); margin: 8px 0; }
+
+  @media (max-width: 860px) {
+    .pfeat { grid-template-columns: 1fr; }
+    .pfeat .ph, .pfeat-cover { border-right: 0; border-bottom: 1px solid var(--line); min-height: 220px; }
+    .proj-grid { grid-template-columns: 1fr; }
+    .pfeat-stats { gap: 22px; }
+  }
+  @media (max-width: 420px) {
+    .pfeat-links { flex-direction: column; align-items: stretch; }
+    .pfeat-links .btn { justify-content: center; }
+  }
+</style>

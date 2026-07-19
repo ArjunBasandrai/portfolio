@@ -1,0 +1,201 @@
+---
+title: "Elixir Chess Engine"
+description: "A UCI chess engine written from scratch in C++ that reached a 3500 ELO rating on the CCRL Blitz list, with a custom NNUE trained on three billion positions."
+summary: "A 3500 ELO rated chess engine built from scratch in C++, with a hand-crafted evaluation, a custom-trained NNUE neural network, and a NegaMax search."
+category: "ML Systems"
+tags: ["systems", "ml"]
+year: "2024"
+publishedDate: "2024-10-01"
+major: true
+stack: ["C++", "NNUE", "SIMD"]
+stats:
+  - { value: "3500", label: "CCRL Blitz ELO" }
+  - { value: "3B", label: "positions trained on", note: "custom NNUE" }
+  - { value: "8", label: "threads", note: "Lazy SMP" }
+links:
+  github: "https://github.com/ArjunBasandrai/elixir-chess-engine"
+  demo: "https://lichess.org/@/ElixirChessEngine"
+featured: true
+order: 1
+cover: "/images/projects/elixir-chess-engine/lichess-checkmate-win.png"
+coverSquare: "/images/projects/elixir-chess-engine/lichess-checkmate-square.png"
+coverVideo: "/videos/projects/elixir-chess-engine/cover.mp4"
+coverLabel: "Elixir, search and evaluation"
+---
+
+import Callout from "../../components/project/Callout.astro";
+
+<section>
+
+## Motivation
+
+Creating the Elixir was a natural step after my experience with Shuffle, my first engine. While Shuffle reached a respectable ELO rating of 2150, its limitations soon became clear. It had a few deep-rooted bugs and structural issues that were nearly impossible to fix due to the code's complexity. 
+
+By the end of 2023, I’d learned enough about engine development and felt ready for something more ambitious. With Elixir, I set out to create a cleaner, more powerful engine. My vision was to surpass a 3000 ELO rating, which is well beyond the highest ELO rating ever achieved by any human, around 2800 by Magnus Carlsen.
+</section>
+
+<section>
+
+## Board representation
+
+The setup phase is one of the most critical steps in building a chess engine. The stronger and cleaner this foundation, the smoother and more efficient the following phases are.
+
+The biggest upgrade from Shuffle was how piece positions are stored. Shuffle used twelve bitboards, one per piece type and color, plus three occupancy boards. Elixir collapses that to six piece bitboards, one per piece type across both colors, and two occupancy boards, one per side.
+
+With this setup, fetching a specific set of pieces, say the white pawns, becomes a single on-the-fly bitwise `&` operation between the white occupancy board and the pawn board. I also track both king squares separately. That costs a little memory but pays off in speed, since king squares are read constantly inside evaluation.
+
+```cpp
+std::array<Bitboard, 2> b_occupancies{};
+std::array<Bitboard, 6> b_pieces{};
+std::array<Square, 2> kings{};
+std::array<Piece, 64> pieces{};
+StaticVector<State, 1024> undo_stack;
+Square en_passant_square;
+Color side;
+Castling castling_rights;
+I8 fifty_move_counter;
+I16 fullmove_number;
+U64 hash_key;
+U64 pawn_hash;
+std::array<U64, 2> non_pawn_hash;
+```
+
+</section>
+
+<section>
+
+## Move generation
+
+Despite all the insights I gained from my working on Shuffle, implementing move generation was far from easy. There are countless details to handle, with the biggest priority being accurate bitboard updates. Special moves like Castling, Pawn Promotions, and especially En Passant added extra layers of complexity. But, after a week of intense work, I got it done.
+
+How could I be sure, though, that my move generation was truly bug-free? That’s where Perft, or performance testing, comes in. In this process, we use approximately 130 known positions (known as Andy’s Perft Suite in the engine development community). For each position, we create a search tree up to a specific depth, and count the number of nodes. If the counts match the published values across all cases, then the move generator is ready.
+
+</section>
+
+<section>
+
+## Transposition table
+
+Any strong chess engine relies heavily on a transposition table. It is a hash map of positions already seen in the search tree. Referencing it lets the engine skip redundant work and search far deeper.
+
+Positions are hashed with Zobrist hashing. You pre-generate arrays of random 64-bit integers covering every piece-on-square combination, castling rights, en passant files, and a single side-to-move key. A position's hash starts at zero and XORs in the key for every relevant feature. Because XOR is its own inverse, the hash can be updated incrementally as moves are made instead of recomputing from scratch.
+
+Elixir's transposition table defaults to 64MB, but is adjustable via the UCI protocol options. Each entry in the table is a structure holding essential data, such as the position key, evaluation score and more. Minimizing the size of each entry is an early focus, as reducing entry size allows more data to fit in memory, lowering collision rates. However, given the vast number of possible chess positions, it’s impossible to allocate space for every potential position. Consequently, collisions are unavoidable, making efficient replacement policies crucial.
+
+Elixir’s replacement policy evaluates each entry for replacement based on specific conditions:
+
+```cpp
+bool replace = entry.key != key || entry.depth < depth + 4 || flag == TT_EXACT || improving;
+```
+
+This policy first checks for a collision. If one occurs, the entry is replaced if:
+
+- The stored entry was searched to a shallower depth than the current one.
+- The new entry has an exact score rather than an approximation.
+- The new position shows improvement over the previous one.
+
+</section>
+
+<section>
+
+## Search
+
+### NegaMax Algorithm
+
+The backbone of search in most modern chess engines, including Elixir, is the NegaMax algorithm with Alpha-Beta Pruning. NegaMax is a condensed version of the classic MiniMax algorithm. Instead of tracking separate scores for each side, it negates the score and the bounds at every level, so both players are handled symmetrically. This way, the code treats both players symmetrically, which simplifies handling moves and integrates seamlessly with alpha-beta pruning.
+
+With this setup, black aims to achieve the most favorable negative score, while white aims for the highest positive score. The result of this is a simpler and much more efficient search code.
+
+### Move Ordering
+The key to good alpha-beta pruning is move ordering. Essentially, this means that we prioritize moves that are likely to be strong in each position, so we search them before others.
+
+Now how can we do this? If we know the best move, why not just play it and skip searching? The reality is, we can’t know the best move with certainty without exploring possibilities. Instead, we use approximations and heuristics to guide the order.
+
+For instance, a pawn capturing a queen is almost always a valuable move, so it makes sense to evaluate it first. On the other hand, a queen capturing a pawn might not be as promising, so it’s evaluated later. This ordering helps cut down unnecessary searches, making Alpha-Beta Pruning far more efficient.
+
+### Iterative Deepening with Aspiration Windows
+
+Iterative Deepening is a technique where the engine searches in progressively deeper layers. It begins with a shallow search, finding the best moves it can at that level, and then moves one ply deeper each time, reusing the best move from the previous depth to order the next one.
+
+Now, you might wonder: does this mean the engine re-searches each depth repeatedly? Wouldn’t this hurt its speed?
+
+Not at all! The reason it doesn’t slow things down is due to two factors: the transposition table (TT) and the structure of the search tree. The TT retains information about positions already searched, so when the engine re-evaluates at a new depth, it can skip redundant calculations for moves it already knows.
+
+Also, in a search tree, the deepest layer (the leaf nodes) always contains far more nodes than all the shallower levels combined. So, while the engine may revisit earlier depths, the heavy lifting occurs at the deepest depth, making iterative deepening efficient and essential in guiding the engine’s search​.
+
+Aspiration Windows, narrows down the search space by setting a small “window” of expected score values around a predicted evaluation based on information from the previous iteration. This leads to more cutoffs and faster results. If the actual score falls outside the window (known as a fail-low or fail-high), the engine simply broadens the window and repeats the search.
+
+</section>
+
+<section>
+
+## Evaluation
+
+An evaluation function is crucial in chess engines, given the astronomical number of possible positions, especially in the opening and middlegame where exhaustive searching becomes impractical. This function, if hand-crafted, uses heuristics like material balance, piece activity, and king safety to score a position. Another approach is to leverage an NNUE (Efficiently Updateable Neural Network), which can recognize patterns and adapt to changes with a trained, intuitive edge. Ultimately, a solid evaluation function is what brings an engine’s unique style and strength to life.
+
+### Hand-crafted evaluation
+
+Most engines begin with a Hand-Crafted Evaluation (HCE), relying on a set of heuristics to assess positions. These heuristics evaluate aspects like King Safety, Piece Mobility, Material Balance, and Pawn Structure, each contributing to the position’s score based on predefined values. For instance, a passed pawn on the eighth file might add 10 centipawns to White's score. This structured approach helps an engine make consistent, well-rounded evaluations across a wide range of positions. 
+
+An exhaustive list of evaluation terms used in Elixir are given below:
+
+  - Material + Piece Square Table Evaluation
+  - Piece Mobility Evaluation
+  - Supported Pawn Bonus
+  - Pawn Duo Bonus
+  - Pawn Bonus attacking opponent Majors & Minors
+  - Pawn Bonus if opponent has no Majors
+  - Stacked Pawn Penalty
+  - Isolated Pawn Penalty
+  - Knight Outpost Bonus
+  - Bishop Pair Bonus
+  - Passed Pawn Bonus
+  - Rook Open & Semi-Open File Bonus
+  - King Open & Semi-Open File Penalty
+  - King Zone Attacker Bonus
+  - Pawn Shelter Bonus
+  - Pawn Storm Penalty
+  - Tempo Bonus
+
+The obvious question now is how I chose the weight for each term. The answer is "I did not". I set each new term to zero and fed it into a custom Texel tuner, which uses a modified Adam optimizer to find the values automatically. My job was to define the heuristic and the tuner did the fitting. Each new term then went through an SPRT test to confirm it actually improved performance before it was kept.
+
+<Callout label="Results">
+Elixir v2.0 crossed 3000 ELO on the CCRL Blitz list running on the hand-crafted evaluation alone, with no neural network! Hitting the original goal without NNUE was the moment the whole project felt worth it.
+</Callout>
+
+### Efficiently updatable neural network
+
+The manual effort of adding hand-crafted terms is ultimately a limiting factor. And this is where NNUE, the approach used by nearly every top engine, comes into play. Instead of heuristics, it learns from billions of positions. I trained mine on the well-known Stockfish datasets by [linrock](https://www.kaggle.com/linrock/datasets) using the [Bullet trainer](https://github.com/jw1912/bullet) by JW.
+
+The "efficiently updatable" half is the clever part. The board is encoded as a sparse 768-slot vector of ones and zeros, one slot per piece-square combination, so only 32 slots are ever active. Rather than re-running the whole network when a piece moves, the accumulator subtracts the weights for the piece's old square and adds the weights for its new one. Only the part of the position that changed gets touched.
+
+### Accumulator
+
+With the “NN” part of the NNUE handled, it was time to dive into the “UE” or efficient updates portion. This part is handled by the Accumulator. It represents the board as a sparse matrix of 1s and 0s, capturing the current position while eliminating the need for a full recalculation each time a piece moves. Each potential piece-square combination has its own slot in this input array, and if a piece occupies a square, we assign a 1 to that specific slot, with the rest staying at 0. This setup leaves us with only 32 active slots out of a 768-slot array, giving the neural network a simplified yet detailed view of the board.
+
+This "sparse" design makes the network efficiently updatable. Ordinarily, running a neural network involves large, resource-intensive matrix multiplications, but the sparsity allows us to streamline the process. Instead of running calculations on numerous zero weights, we focus only on the small subset associated with active positions marked by 1s. Even the multiplications themselves can be minimized. For each 1 in the input vector, we simply add the associated subset of weights directly into the accumulator, skipping the unnecessary zero-weight calculations. When a piece moves, rather than re-evaluating everything, we adjust the Accumulator by subtracting weights tied to the piece’s previous square and adding weights for its new location. The same logic applies to special moves like castling or pawn promotion, ensuring only the changed portion of the position is updated, not the entire board.
+
+### SIMD Optimization
+
+The next step was to use SIMD optimizations like AVX512 and AVX2 to speed up the evaluation function. Rather than calculating each weight and accumulator value one by one, SIMD lets us handle multiple values at once by processing them in parallel. This means we can load chunks of data into vectors, then clip, multiply, and sum them all at once. Making the entire process faster and more efficient. By leveraging SIMD here, the engine can quickly crunch through the accumulator values and the network weights, so evaluations happen way faster than before. This approach is a huge time-saver, especially when performing these calculations repeatedly during a game.
+
+</section>
+
+<section>
+
+## Multithreading
+
+And finally, we arrive at the part that almost made me cry: multithreading. Elixir uses the well-known Lazy SMP algorithm. Before the main thread starts searching, it launches worker threads that search alongside it, and stops them once the main search finishes.
+
+The surprising part is that every worker searches the same positions, not a unique slice. This is where the shared transposition table shines. When one thread searches a position it logs the result in the table, instantly available to every other thread. When another thread reaches that position it reuses the entry and moves on, so the engine collectively explores deeper in the same wall-clock time leading to a much higher playing performance than single-threaded search.
+
+</section>
+
+<section>
+
+## Conclusion
+
+Elixir was a six-month rollercoaster ride filled with highs and lows. I went from barely knowing C++ and its best practices to having a solid grasp of the language. I still remember seeing Elixir v2.0 hit 3000 ELO on the [CCRL Blitz list](https://www.computerchess.org.uk/ccrl/404/) on hand-crafted evaluation alone. And hitting that milestone without NNUE felt surreal. Adding NNUE later pushed it another 400-500 ELO, to around 3500.
+
+Overall, working on Elixir was a joyride, and though the final release is officially out, it’s still close to my heart, and I find myself revisiting it from time to time.
+</section>

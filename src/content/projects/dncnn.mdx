@@ -1,0 +1,123 @@
+---
+title: "DnCNN Image Gaussian Denoising"
+description: "Research Paper Implementation of the DnCNN model for Image Gaussian Denoising."
+summary: "Research Paper Implementation of the DnCNN model for Image Gaussian Denoising."
+category: ["Machine Learning", "Computer Vision"]
+tags: ["cv", "ml"]
+year: "2024"
+publishedDate: "2024-11-01"
+major: false
+stack: ["Python", "PyTorch", "Matplotlib"]
+links: {}
+featured: false
+order: 6
+cover: "/images/projects/dncnn/cover.png"
+coverLabel: "DnCNN denoiser"
+---
+
+import Figure from "../../components/project/Figure.astro";
+
+<section>
+
+## Dataset
+
+I worked with the **Berkeley Segmentation Dataset 500 (BSDS500)**, a well-known collection of 500 natural images. To prepare the data for training, I manually added Gaussian noise with random, bounded power levels. These noisy images served as the x-labels for the model. After adding the noise, I split the images into smaller patches of size `(2 d + 1) x (2 d + 1)`, where `d` corresponds to the network depth.
+
+</section>
+
+<section>
+
+## Model Architecture
+
+For this project, I implemented the **DnCNN architecture** as described in the [original paper](https://arxiv.org/pdf/1608.03981). The model consists of `d` blocks:
+
+1.  The first block has a Conv2D layer followed by a ReLU activation function.
+    
+2.  The last block is a single Conv2D layer.
+    
+3.  The remaining `(d - 2)` blocks in between consist of Conv2D layers, each followed by Batch Normalization and a ReLU activation.
+    
+
+The model is designed to predict the noise pattern present in the input image. Once the model outputs this noise, it is subtracted from the noisy input to produce the final denoised image.
+
+<Figure src="/images/projects/dncnn/architecture.jpg" alt="DnCNN architecture" />
+
+</section>
+
+<section>
+
+## Training
+
+I trained the DnCNN model for 50 epochs using the Adam optimizer with an initial learning rate of 0.0001. To make the training efficient and adaptive, I added a cosine annealing learning rate scheduler along with early stopping based on the validation loss, with a `min_delta` of 0.00001 and a `tolerance` of 5 epochs.
+
+```python
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = DnCNN(in_channels=3).to(device)
+
+early_stop = EarlyStopping(tolerance=5, min_delta=0.00001)
+
+num_epochs = 50
+learning_rate = 1e-4
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+scheduler = CosineAnnealingLR(optimizer, T_max=num_epochs)
+
+for epoch in range(num_epochs):
+    model.train()
+    train_loss = 0.0
+    
+    for x, y in tqdm(train_loader, desc=f"Epoch {epoch + 1}/{num_epochs}"):
+        x, y = x.to(device), y.to(device)
+        
+        optimizer.zero_grad()
+        outputs = model(x)
+        loss = criterion(outputs, y)
+        loss.backward()
+        optimizer.step()
+        train_loss += loss.item()
+    
+    train_loss /= len(train_loader)
+    print(f"Epoch {epoch + 1}/{num_epochs} | Train Loss: {train_loss:.4f}", end=" ")
+    
+    model.eval()
+    val_loss = 0.0
+    with torch.no_grad():
+        for x_val, y_val in val_loader:
+            x_val, y_val = x_val.to(device), y_val.to(device)
+            outputs = model(x_val)
+            loss = criterion(outputs, y_val)
+            val_loss += loss.item()
+    
+    val_loss /= len(val_loader)
+    print(f"| Val Loss: {val_loss:.4f}")
+    
+    scheduler.step()
+    early_stop(val_loss, model.state_dict(), optimizer.state_dict(), epoch)
+
+    if early_stop.early_stop:
+        print("> Stopped training")
+        print(f"> The lowest val loss was: {early_stop.min_loss:.4f} in epoch {early_stop.epoch + 1}")
+        break
+```
+
+</section>
+
+<section>
+
+## Results
+
+<Figure src="/images/projects/dncnn/denoising-result-1.png" alt="DnCNN Gaussian denoising result (1 of 3): noisy input, denoised output, and clean ground truth" />
+
+<Figure src="/images/projects/dncnn/denoising-result-2.png" alt="DnCNN Gaussian denoising result (2 of 3): noisy input, denoised output, and clean ground truth" />
+
+<Figure src="/images/projects/dncnn/denoising-result-3.png" alt="DnCNN Gaussian denoising result (3 of 3): noisy input, denoised output, and clean ground truth" />
+
+</section>
+
+<section>
+
+## Conclusion
+
+As the resulting images show, I was able to successfully recreate the results presented in the original DnCNN paper. The model effectively isolated the noise pattern and produced clean, denoised images, validating the architecture's ability to handle Gaussian noise.
+
+</section>

@@ -1,0 +1,182 @@
+---
+title: "Adaptive Resampling based Training for Imbalanced Classification"
+description: "Adaptive Resampling-based Training, a method that reshapes the training distribution from a model's own class-wise F1 scores to handle class imbalance. Improves macro F1 by 2.64 points on average and is modality agnostic."
+summary: "A modality-agnostic adaptive resampling method to handle class imbalance in supervised classification. Paper submitted to MLWA Journal."
+category: ["Machine Learning", "Research"]
+tags: ["research", "ml"]
+year: "2025"
+publishedDate: "2026-01-01"
+major: true
+cover: "/images/projects/art/art-overview-diagram.png"
+stack: ["Python", "PyTorch", "Matplotlib"]
+stats:
+  - { value: "+2.64", label: "macro F1 points", note: "avg over tabular benchmarks" }
+  - { value: "p < 0.05", label: "statistically significant", note: "t-test and Wilcoxon" }
+  - { value: "Any", label: "modality", note: "tabular, text, image" }
+links:
+  paper: "https://arxiv.org/abs/2509.00955"
+  github: "https://github.com/ArjunBasandrai/art"
+featured: false
+order: 2
+coverLabel: "ART, adaptive resampling"
+---
+
+import Figure from "../../components/project/Figure.astro";
+import Equation from "../../components/project/Equation.astro";
+
+<section>
+
+## Abstract
+
+Traditional resampling methods for addressing class imbalance in supervised classification typically use fixed sampling distributions, either uniformly undersampling the majority class or oversampling the minority class. These static strategies fail to account for changes in class-wise learning difficulty during the training process. This paper proposes an Adaptive Resampling-based Training (ART) method that periodically updates the distribution of the training data based on the model's class-wise performance. Specifically, ART uses class-wise macro F1 scores computed at fixed intervals to determine the degree of resampling to perform.
+
+In contrast to instance-level difficulty modeling, which can be noisy and overly sensitive to outliers, ART adapts at the class level using the defined performance metric. This allows the model to incrementally shift its attention towards underperforming classes in a way that better aligns with the optimization objective.
+
+Experimental results across diverse class-imbalanced benchmark datasets demonstrate that ART consistently outperforms both resampling-based and algorithm-level methods, including Synthetic Minority Oversampling Technique, nearmiss undersampling, and cost-sensitive learning on binary as well as multi-class classification tasks with varying degrees of imbalance.
+
+In most settings, these improvements are statistically significant. On tabular datasets, gains are significant under both paired t-tests and Wilcoxon signed-rank tests (p &lt; 0.05), while performance on text and image tasks remains consistently favorable. ART improves macro F1 by an average of 2.64 percentage points across all tested tabular datasets. Unlike existing methods, ART consistently delivers the highest macro F1 score, making it a reliable and broadly effective choice for imbalanced classification problems.
+
+<Figure src="/images/projects/art/overview.jpeg" alt="ART method overview" />
+
+</section>
+
+<section>
+
+## Method
+
+ART can be viewed as a dynamic reweighting method that operates on the data distribution rather than the loss. In standard empirical risk minimization (ERM) with imbalanced data, optimization minimizes a weighted sum of class-wise risks, where the weights are fixed by empirical class priors. As a result, majority classes dominate gradient updates, while minority classes remain under-optimized.
+
+Training on the original dataset minimizes:
+
+<Equation tex="R(\theta) = \sum_i \Pi_i \cdot \mathbb{E}_{(x,y)\sim D_i}\left[L(f_\theta(x), y)\right]" label="static ERM" />
+
+Here, `Πᵢ` is the empirical prior of class `i`. This objective is static, so class contributions remain fixed even if class-wise performance differs during training.
+
+ART replaces the fixed prior with a time-varying sampling distribution `pᵢᵗ` that adapts to model performance. At training step `t`, ART approximately optimizes:
+
+<Equation tex="R^{(t)}(\theta) = \sum_i p_i^{(t)} \cdot \mathbb{E}_{(x,y)\sim D_i}\left[L(f_\theta(x), y)\right]" label="dynamic ERM" />
+
+This makes ART a form of dynamic ERM. Instead of scaling losses, ART changes how often each class is sampled. Classes that perform poorly are sampled more often.
+
+ART updates `pᵢᵗ` using class-wise macro F1-scores from a validation set. Macro F1 balances precision and recall and is insensitive to class frequency. A low macro F1 indicates low recall, low precision, or both, making it a reliable signal of class difficulty.
+
+ART defines a difficulty score `sᵢ = 1 − fᵢ`, where `fᵢ` is the class-wise F1-score. Lower performance directly leads to higher sampling priority. This creates a feedback loop where validation performance guides future data exposure.
+
+### Performance-based Sampling
+
+Every `bf` epochs, ART evaluates class-wise F1-scores on a validation set. Difficulty is computed as:
+
+<Equation tex="s_i = 1 - f_i" />
+
+These scores are normalized to form a probability distribution:
+
+<Equation tex="w_i = \frac{s_i}{\sum_j s_j}" />
+
+Classes with lower performance receive higher sampling probability. As performance improves, the distribution adapts and shifts focus to other underperforming classes.
+
+<Figure src="/images/projects/art/performance-based-sampling.jpeg" alt="Performance-based sampling weights" />
+
+### Blending with Class Priors
+
+To stabilize training, ART blends adaptive weights with empirical class priors:
+
+<Equation tex="p_i = c \cdot \Pi_i + (1 - c) \cdot w_i" label="blend" />
+
+The parameter `c ∈ [0,1]` controls the trade-off. Higher `c` favors the original data distribution, while lower `c` emphasizes hard classes. This prevents classes with near-zero adaptive weight from being temporarily excluded, especially early in training.
+
+<Figure src="/images/projects/art/blending-class-priors.png" alt="Blended sampling distribution" />
+
+### Computational Overhead
+
+ART differs from the baseline only during periodic refresh steps. If training runs for `E` epochs with boost frequency `bf`, the number of refreshes is:
+
+<Equation tex="R = \left\lfloor E / \mathrm{bf} \right\rfloor" />
+
+Total runtime is:
+
+<Equation tex="T_{\mathrm{ART}} = T_{\mathrm{baseline}} + \left\lfloor E / \mathrm{bf} \right\rfloor \cdot T_{\mathrm{refresh}}" />
+
+Each refresh consists of:
+
+<Equation tex="T_{\mathrm{refresh}} = T_{\text{val\_fwd}} + T_{\mathrm{metric}} + T_{\mathrm{resample}}" />
+
+Where:
+
+- `T_val_fwd` is a forward pass over the validation set
+- `T_metric` computes per-class F1-scores and weights
+- `T_resample` rebuilds the training sampler
+
+### Space overhead
+
+ART does not change dataset size. It allocates temporary arrays during refresh, causing a small peak memory increase, but stores no state that grows with training length.
+
+</section>
+
+<section>
+
+## Experiments
+
+### Compared Methods
+
+We benchmark ART against a broad set of commonly used methods for handling class imbalance. These methods fall into four categories.
+
+**No Imbalance Handling**
+
+- **Baseline**: Standard training with no explicit mechanism to address class imbalance.
+
+**Resampling-based Methods**
+
+- **Random Oversampling (ROS)**: Duplicates minority class samples.
+- **Random Undersampling (RUS)**: Removes samples from majority classes.
+- **SMOTE**: Generates synthetic samples for minority classes.
+- **MSMOTE**: A variant of SMOTE that focuses on difficult minority samples.
+- **NearMiss Undersampling**: Selects majority samples close to minority samples.
+
+**Loss-based Methods**
+
+- **Cost-Sensitive Learning**: Assigns higher loss weights to minority classes.
+- **Focal Loss**: Downweights easy examples and focuses on hard ones.
+- **Online Hard Example Mining (OHEM)**: Prioritizes samples with high loss.
+- **LDAM + DRW**: Combines margin adjustment with deferred reweighting.
+
+**Hybrid Methods**
+
+- **Balanced Meta-Softmax (BALMS)**: Integrates class-balanced priors directly into the softmax formulation.
+
+This setup allows us to compare ART against data-level, loss-level, and hybrid imbalance handling strategies under a unified evaluation protocol.
+
+### Experimental Setup
+
+Each method is evaluated using 20 random seeds to ensure robustness. We report the following:
+
+- Mean and standard deviation of macro F1 scores on the held-out test set.
+- Paired t-test and Wilcoxon signed-rank test to assess the statistical significance of ART compared to each baseline.
+- Average rank of each method across the 20 runs
+
+</section>
+
+<section>
+
+## Results
+
+<Figure src="/images/projects/art/results-main.png" alt="Macro F1 across benchmark datasets and competing methods" />
+
+<Figure src="/images/projects/art/results-significance.png" alt="Statistical significance and average rank across 20 seeds" />
+
+</section>
+
+<section>
+
+## Ablation Studies
+
+<Figure src="/images/projects/art/ablation-1.png" alt="ART ablation study" />
+
+<Figure src="/images/projects/art/ablation-2.png" alt="ART ablation study" />
+
+<Figure src="/images/projects/art/ablation-3.png" alt="ART ablation study" />
+
+<Figure src="/images/projects/art/ablation-4.png" alt="ART ablation study" />
+
+The preprint is on [arXiv](https://arxiv.org/abs/2509.00955), with the full method, proofs, and per-dataset tables.
+
+</section>

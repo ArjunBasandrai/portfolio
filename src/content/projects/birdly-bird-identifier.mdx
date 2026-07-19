@@ -1,0 +1,111 @@
+---
+title: "Birdly Bird Identifier"
+description: "A large-scale bird classifier trained on 1M+ images of 1250 Indian bird species, using Google Cloud TPUs and a custom dataset."
+summary: "A large-scale bird classifier trained on 1M+ images of 1250 Indian bird species, using Google Cloud TPUs and a custom dataset."
+category: ["Computer Vision", "Full Stack"]
+tags: ["ml", "cv", "birding", "fullstack"]
+year: "2022"
+publishedDate: "2023-04-01"
+major: true
+cover: "/images/projects/birdly-bird-identifier/eurasian-jackdaw-result.png"
+coverVideo: "/videos/projects/birdly-bird-identifier/cover.mp4"
+stack: ["Python", "TensorFlow", "Flask", "Selenium", "React"]
+stats:
+  - { value: "82.3%", label: "top-1 test accuracy" }
+  - { value: "1,250", label: "species", note: "nearly all birds of India" }
+  - { value: "1M+", label: "training images", note: "~200GB collected" }
+links:
+  github: "https://github.com/ArjunBasandrai/birdly-ml"
+featured: false
+order: 3
+coverLabel: "Birdly, bird classifier"
+---
+
+import Callout from "../../components/project/Callout.astro";
+import Figure from "../../components/project/Figure.astro";
+
+<section>
+
+## Motivation
+
+Birds were my way into machine learning. In high school, I took the Bombay Natural History Society's Basic Course of Ornithology, where I learned how camera traps enable bird monitoring and support conservation. I was intrigued that a machine could understand the fine-grained differences between similar-looking species, and that is what led me to machine learning.
+
+I built Birdly, a bird image identification system covering nearly all 1,250 species found in India, linked against the full [eBird India list](https://ebird.org/region/IN/bird-list). It was my first major machine learning project, and working on it is what made me want to use machine learning to help study and conserve biodiversity.
+
+</section>
+
+<section>
+
+## Data Scraping
+
+This was perhaps the most time-consuming part of the project: scraping around 200GB of bird images from public data sources. Due to the slow network speed at my college, scraping all the image links alone took around three weeks. Downloading the images was a similarly lengthy process, taking about seven weeks to complete. By the time I finished this stage, I was already three months into the project and ready to face the next major challenge: working with this enormous dataset.
+
+</section>
+
+<section>
+
+## Challenges
+
+The hardest part of Birdly was handling its huge dataset. The 200GB dataset was too large to store or train on my own machine. So, I had to move it onto Kaggle, where I could keep it private and train against it remotely. However, even on a GPU, training was too slow, so I had to switch to Kaggle's TPU v3, which significantly sped up the process and made handling such a large dataset feasible.
+
+Another major hurdle was converting the images into TFRecords. Documentation on TPUs and TFRecords was limited at the time, and hence working with TPUs and TFRecords presented a steep learning curve. After countless days of trial and error, I finally got the pipeline running.
+
+</section>
+
+<section>
+
+## Training
+
+Training a CNN from scratch on a million-plus images would have been slow and almost certainly worse than transfer learning, so I started from a pretrained EfficientNet base and replaced the head. The first run, a handful of epochs on Kaggle's free GPU, took around eight hours and reached about 72% test accuracy. Which I feel was a promising start.
+
+```python
+import tensorflow as tf
+from keras import Sequential
+from keras.layers import RandomFlip, RandomContrast
+from keras.layers import GlobalAveragePooling2D, Dense, BatchNormalization, Dropout
+from keras.applications import EfficientNetV2L as base_m
+from keras.losses import SparseCategoricalCrossentropy as scc
+
+def create_model():
+    data_augmentation = Sequential([
+        RandomFlip('horizontal'),
+        RandomContrast(0.2),
+    ])
+
+    base_model = base_m(input_shape=(*image_size, 3), include_top=False, weights='imagenet')
+    base_model.trainable = False
+
+    model = Sequential([
+        data_augmentation,
+        base_model,
+        GlobalAveragePooling2D(),
+        Dense(4096, activation='swish'),
+        BatchNormalization(),
+        Dropout(0.4),
+        Dense(1024, activation='swish'),
+        BatchNormalization(),
+        Dropout(0.3),
+        Dense(1000),
+    ])
+
+    model.compile(optimizer=Adam(lr_init), loss=scc(from_logits=True), metrics=['accuracy'])
+    return model
+```
+
+### Why TPUs
+
+Even on Kaggle's fastest GPU, each epoch took about 16 minutes, and that was on just 50 out of 1,250 classes. At one or two training runs a day I burned through the GPU quota in two days and had to wait five for it to reset. So, clearly the GPU approach was not working for me.
+
+TPUs however did. The hard part was actually getting it to work. Documentation on TPUs and TFRecords was sparse at the time, and converting the dataset into TFRecords took weeks of trial and error. But once the setup worked, a full epoch over all 1,250 classes finished in under 19 minutes.
+
+With that headroom I could finally iterate on architecture and training routine. The final model used early stopping, warm-up epochs, learning-rate scheduling, and checkpointing. Kaggle's 9 to 12 hour notebook limit meant I had to train in batches. Four rounds plus a fine-tuning pass brought it to **82.3% top-1 test accuracy**.
+
+</section>
+
+<section>
+
+## Conclusion
+
+82.3% across 1,250 species is a result I am proud of, given the dataset. It is also clearly not finished. The classes are heavily imbalanced, some rare species have fewer than 100 images while common ones have the full 1,000, and image quality swings widely. After nearly seven months I paused Birdly to move on to other work, but it is one I fully intend to come back to.
+
+</section>

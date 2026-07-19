@@ -1,0 +1,147 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Callout from "../../components/project/Callout.astro";
+import Figure from "../../components/project/Figure.astro";
+import ArchSteps from "../../components/project/ArchSteps.astro";
+import Results from "../../components/project/Results.astro";
+import Equation from "../../components/project/Equation.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects", (p) => !p.data.hide);
+  const sorted = projects.sort((a, b) => {
+    const at = (a.data.publishedDate ?? new Date(`${a.data.year}-01-01`)).getTime();
+    const bt = (b.data.publishedDate ?? new Date(`${b.data.year}-01-01`)).getTime();
+    return bt - at || a.data.order - b.data.order;
+  });
+  return sorted.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: sorted[(i + 1) % sorted.length] },
+  }));
+}
+
+const { entry, next } = Astro.props;
+const { Content, headings } = await render(entry);
+const d = entry.data;
+
+const toc = headings.filter((h) => h.depth === 2);
+const components = { Callout, Figure, ArchSteps, Results, Equation };
+---
+
+<BaseLayout title={`${d.title} · Arjun Basandrai`} description={d.description} current="projects">
+  <div class="progress-rail"><span data-progress></span></div>
+  <main>
+    <section class="proj-hero wrap">
+      <div class="crumb"><a href="/projects">Projects</a> &nbsp;/&nbsp; {d.year}</div>
+      <h1>{d.title}</h1>
+      <p class="hero-stack">{d.stack.join(" · ")}</p>
+      <p class="summary">{d.summary}</p>
+      {(d.links.github || d.links.demo || d.links.paper || d.links.dataset) && (
+        <div class="hero-actions">
+          {d.links.paper && <a class="btn btn--solid" href={d.links.paper} target="_blank" rel="noopener">Read the paper ↗</a>}
+          {d.links.github && <a class={`btn ${d.links.paper ? "btn--ghost" : "btn--solid"}`} href={d.links.github} target="_blank" rel="noopener">View on GitHub ↗</a>}
+          {d.links.demo && <a class="btn btn--ghost" href={d.links.demo} target="_blank" rel="noopener">Live demo ↗</a>}
+          {d.links.dataset && <a class="btn btn--ghost" href={d.links.dataset} target="_blank" rel="noopener">Dataset ↗</a>}
+        </div>
+      )}
+      {d.coverVideo
+        ? <video class="proj-cover-img" src={d.coverVideo} poster={d.cover} autoplay loop muted playsinline aria-label={d.title}></video>
+        : d.cover
+        ? <img class="proj-cover-img" src={d.cover} alt={d.title} />
+        : <div class="ph proj-cover"><span>{d.coverLabel}</span></div>}
+    </section>
+
+    {d.stats.length > 0 && (
+      <section class="wrap" style="padding-top:20px;">
+        <div class="keystats">
+          {d.stats.map((s) => (
+            <div class="ks">
+              <b>{s.value}</b>
+              <span>{s.label}</span>
+              {s.note && <small>{s.note}</small>}
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="section--tight wrap">
+      <div class="case">
+        {toc.length > 0 && (
+          <nav class="case-toc" data-toc aria-label="Sections">
+            <h4>In this project</h4>
+            <ul>
+              {toc.map((h, i) => (
+                <li><a href={`#${h.slug}`} class={i === 0 ? "active" : ""}>{h.text}</a></li>
+              ))}
+            </ul>
+          </nav>
+        )}
+        <div class={`case-body case-prose${toc.length === 0 ? " no-toc" : ""}`}>
+          <Content components={components} />
+        </div>
+      </div>
+    </section>
+
+    <section class="next-proj">
+      <a class="wrap np-inner" href={`/projects/${next.id}`}>
+        <div><div class="k">Next project →</div><div class="t">{next.data.title}</div></div>
+        <span class="feat-go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .progress-rail { position: sticky; top: 0; height: 2px; background: transparent; z-index: 50; }
+  .progress-rail span { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; }
+
+  .proj-hero { padding-top: clamp(32px, 5vw, 64px); }
+  .crumb { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); margin-bottom: 26px; }
+  .crumb a:hover { color: var(--accent-ink); }
+  .proj-hero h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.6rem, 6.5vw, 5rem); line-height: 0.98; letter-spacing: -0.022em; margin: 14px 0; }
+  .proj-hero .summary { font-family: var(--font-serif); font-style: italic; font-size: clamp(1.2rem, 2.2vw, 1.6rem); color: var(--ink-soft); max-width: 52ch; line-height: 1.4; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .proj-cover { aspect-ratio: 21/8; margin: 40px 0; border-radius: var(--radius); }
+  .proj-cover-img { width: 100%; height: auto; display: block; margin: 40px 0; border: 1px solid var(--line); border-radius: var(--radius); }
+  .hero-stack { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.06em; color: var(--muted); }
+
+  .keystats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+  .keystats .ks { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+  .keystats .ks b { font-family: var(--font-serif); font-size: 2.2rem; display: block; line-height: 1; }
+  .keystats .ks span { font-family: var(--font-mono); font-size: 12px; color: var(--muted); display: block; margin-top: 10px; line-height: 1.4; }
+  .keystats .ks small { color: var(--st-active); font-family: var(--font-mono); font-size: 11px; display: block; margin-top: 6px; }
+
+  .case { display: grid; grid-template-columns: 1fr minmax(0,700px) 1fr; gap: 40px; min-width: 0; }
+  .case-body { grid-column: 2; min-width: 0; overflow-x: hidden; }
+  .case-body.no-toc { grid-column: 2; }
+
+  .case-toc { grid-column: 1; position: sticky; top: 90px; align-self: start; font-size: 13.5px; padding-right: 24px; }
+  .case-toc h4 { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; font-weight: 400; }
+  .case-toc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); display: grid; gap: 2px; }
+  .case-toc a { display: block; padding: 5px 0 5px 16px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted); transition: all .2s; }
+  .case-toc a:hover { color: var(--ink); }
+  .case-toc a.active { color: var(--accent-ink); border-left-color: var(--accent); }
+
+  .next-proj { border-top: 1px solid var(--line); background: var(--paper-2); margin-top: clamp(48px, 8vw, 96px); }
+  .np-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: clamp(40px,6vw,72px); }
+  .np-inner .t { font-family: var(--font-serif); font-size: clamp(1.6rem,3vw,2.4rem); letter-spacing: -0.015em; }
+  .np-inner .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .np-inner .feat-go { width: 52px; height: 52px; border: 1px solid var(--line-strong); border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+  .np-inner:hover .feat-go { border-color: var(--accent-ink); color: var(--accent-ink); }
+
+  @media (max-width: 1080px) {
+    .case { grid-template-columns: 1fr; }
+    .case-toc { display: none; }
+    .case-body { grid-column: 1; max-width: var(--maxw-read); margin-inline: auto; }
+  }
+  @media (max-width: 760px) {
+    .np-inner { flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 480px) {
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions .btn { justify-content: center; }
+    .keystats { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .keystats .ks { padding: 16px; }
+  }
+</style>

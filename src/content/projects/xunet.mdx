@@ -1,0 +1,90 @@
+---
+title: "xU-NetFullSharp Chest XRay Bone Shadow Suppression"
+description: "Research Paper Implementation of the xU-NetFullSharp model for Chest X-Ray Bone Shadow Suppression."
+summary: "Research Paper Implementation of the xU-NetFullSharp model for Chest X-Ray Bone Shadow Suppression."
+category: ["Machine Learning", "Computer Vision"]
+tags: ["cv", "ml"]
+year: "2025"
+publishedDate: "2025-02-01"
+major: false
+stack: ["Python", "PyTorch", "Matplotlib"]
+stats:
+  - { value: "0.987", label: "test SSIM" }
+  - { value: "37.39 dB", label: "test PSNR" }
+  - { value: "4,000+", label: "X-ray pairs", note: "augmented JSRT" }
+links:
+  github: "https://github.com/ArjunBasandrai/xU-NetFullSharp-Bone-Shadow-Suppression"
+featured: false
+order: 4
+cover: "/images/projects/xunet/cover.png"
+coverLabel: "Bone shadow suppression"
+---
+
+import Figure from "../../components/project/Figure.astro";
+import Equation from "../../components/project/Equation.astro";
+
+<section>
+
+## Problem
+
+On a chest X-ray, the ribs and clavicle sit directly over the lungs, and their shadows hide the critical soft-tissue details. Bone shadow suppression is the task of removing those overlapping bone structures while leaving the lung detail intact, effectively turning a standard X-ray into a soft-tissue image without a second exposure.
+
+</section>
+
+<section>
+
+## Dataset
+
+For this project I used the Augmented JSRT and BSE-JSRT datasets available on [Kaggle](https://www.kaggle.com/datasets/hmchuong/xray-bone-shadow-supression). This dataset contains more than 4000 Chest X-Ray images along with their corresponding images with shadows of major bones (Ribs and Clavicle) removed.
+
+</section>
+
+<section>
+
+## Model
+
+I implemented the recent [xU-NetFullSharp](https://github.com/xKev1n/xU-NetFullSharp) architecture. As described in the official GitHub repository: “The xU-NetFullSharp is based on the most recent U-NetSharp architecture and utilizes bidirectional multi-scale skip connections like in the preceding U-Net3+. The ReLU activation is changed for more modern xUnit activation to ensure more accurate activation maps.”
+
+<Figure src="/images/projects/xunet/architecture.jpeg" alt="xU-NetFullSharp architecture" />
+
+Since the model code is too large, I will not display it here. However, you can find the code in my GitHub repository [here](https://github.com/ArjunBasandrai/xU-NetFullSharp-Bone-Shadow-Suppression/blob/main/notebooks/xu-netfullsharp-training.ipynb).
+
+</section>
+
+<section>
+
+## Loss
+
+I trained the model on the L1-SSIM loss which is a weighted combination of the L1 (Mean Absolute Error) loss along with SSIM (Structural Similarity Index Measure) loss.
+
+<Equation tex="\mathrm{loss} = a \cdot \mathrm{L1} + b \cdot (1 - \mathrm{SSIM})" label="L1-SSIM, a + b = 1" />
+
+The L1 loss is the absolute error between the prediction and the target:
+
+<Equation tex="\mathcal{L}(y - \hat{y}) = \sum_{i=1}^{n} \left| y - \hat{y}_i \right|" label="L1 (MAE)" />
+
+SSIM measures the structural similarity between the two images:
+
+<Equation tex="\mathrm{SSIM}(\mathbf{x}, \mathbf{y}) = \frac{(2\mu_x\mu_y + C_1)(2\sigma_{xy} + C_2)}{(\mu_x^2 + \mu_y^2 + C_1)(\sigma_x^2 + \sigma_y^2 + C_2)}" label="SSIM" />
+
+</section>
+
+<section>
+
+## Results
+
+<Figure src="/images/projects/xunet/suppression-result-1.png" alt="Chest X-ray bone shadow suppression result (1 of 3): input, target, and predicted output" />
+
+<Figure src="/images/projects/xunet/suppression-result-2.png" alt="Chest X-ray bone shadow suppression result (2 of 3): input, target, and predicted output" />
+
+<Figure src="/images/projects/xunet/suppression-result-3.png" alt="Chest X-ray bone shadow suppression result (3 of 3): input, target, and predicted output" />
+
+The trained model is able to accurately reconstruct the finer details in the lungs.
+
+<Figure src="/images/projects/xunet/lung-detail-1.png" alt="Reconstructed lung detail after bone shadow suppression (1 of 3)" />
+
+<Figure src="/images/projects/xunet/lung-detail-2.png" alt="Reconstructed lung detail after bone shadow suppression (2 of 3)" />
+
+<Figure src="/images/projects/xunet/lung-detail-3.png" alt="Reconstructed lung detail after bone shadow suppression (3 of 3)" />
+
+</section>

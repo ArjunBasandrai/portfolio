@@ -1,0 +1,200 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const all = await getCollection("projects", (p) => !p.data.hide);
+const order = ["art", "elixir-chess-engine", "birdly-bird-identifier"];
+const featured = order
+  .map((id) => all.find((p) => p.id === id))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
+---
+
+<BaseLayout
+  title="Arjun Basandrai · ML & AI Engineer"
+  description="Arjun Basandrai is a software and machine learning engineer who builds and ships ML systems to production, spanning machine learning, computer vision, and MLOps."
+  current="home"
+>
+  <main>
+    <!-- ===== HERO ===== -->
+    <section class="hero wrap">
+      <div class="hero-grid">
+        <div>
+          <h1>What can a machine learn? I like <em>finding out.</em></h1>
+          <p class="lead hero-sub">Hi, I'm Arjun, a software engineer who enjoys building and testing <strong><em>machine learning systems</em></strong>. When I'm not coding, you'll find me exploring the outdoors and photographing birds.</p>
+          <div class="hero-actions">
+            <a class="btn btn--solid" href="/projects">View work <span class="arr">→</span></a>
+            <a class="btn btn--ghost" href="/contact">Get in touch</a>
+          </div>
+        </div>
+        <div>
+          <img class="hero-portrait" src="/images/home/portrait.jpg" alt="Arjun Basandrai" width="640" height="800" />
+          <dl class="hero-side">
+            <dt>Currently</dt>
+            <dd>AI Applications Engineer Intern @ Micron Technology</dd>
+            <dt>Based in</dt>
+            <dd>Ahmedabad, India</dd>
+            <dt>Find me</dt>
+            <dd><a class="txtlink" href="https://github.com/ArjunBasandrai">GitHub/ArjunBasandrai</a> · <a class="txtlink" href="https://www.linkedin.com/in/arjun-basandrai/">LinkedIn/arjun-basandrai</a></dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MARQUEE ===== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>PyTorch <b>·</b> TypeScript <b>·</b> Docker <b>·</b> NumPy <b>·</b> RabbitMQ <b>·</b> React <b>·</b> MLFlow <b>·</b> AWS <b>·</b> Pandas <b>·</b> C/C++ <b>·</b> Grafana <b>·</b> Next.js <b>·</b> Redis <b>·</b> scikit-learn <b>·</b> Git <b>·</b> SQL <b>·</b> FastAPI <b>·</b> Ecoinformatics <b>·</b> TensorFlow <b>·</b> Celery <b>·</b> Javascript <b>·</b> Prometheus <b>·</b> DVC <b>·</b> GitHub <b>·</b> Python <b>·</b> </span>
+        <span>PyTorch <b>·</b> TypeScript <b>·</b> Docker <b>·</b> NumPy <b>·</b> RabbitMQ <b>·</b> React <b>·</b> MLFlow <b>·</b> AWS <b>·</b> Pandas <b>·</b> C/C++ <b>·</b> Grafana <b>·</b> Next.js <b>·</b> Redis <b>·</b> scikit-learn <b>·</b> Git <b>·</b> SQL <b>·</b> FastAPI <b>·</b> Ecoinformatics <b>·</b> TensorFlow <b>·</b> Celery <b>·</b> Javascript <b>·</b> Prometheus <b>·</b> DVC <b>·</b> GitHub <b>·</b> Python <b>·</b> </span>
+      </div>
+    </div>
+
+    <!-- ===== FEATURED WORK ===== -->
+    <section class="section wrap">
+      <div class="sect-head">
+        <div>
+          <h2 class="sect-title reveal" style="margin-top:16px;">Things I've built</h2>
+        </div>
+        <a class="txtlink" href="/projects" style="white-space:nowrap;">All projects →</a>
+      </div>
+
+      <div class="feat-list">
+        {featured.map((p, i) => (
+          <a class="feat reveal" href={`/projects/${p.id}`}>
+            <span class="feat-no">{String(i + 1).padStart(2, "0")}</span>
+            <span class="feat-title"><span class="kind">{p.data.category.join(" · ")}</span>{p.data.title}</span>
+            <span class="feat-desc">{p.data.summary}</span>
+            <span class="feat-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- ===== TECHNICAL FOCUS ===== -->
+    <section class="section--tight wrap" style="padding-top: 0;">
+      <h2 class="sect-title reveal">What I work on</h2>
+      <div class="focus-grid reveal" style="margin-top:28px;">
+        <div class="focus-cell">
+          <span class="n">01</span>
+          <h3>Machine Learning</h3>
+          <p>A model is only as good as the data and the evaluation behind it, and that is where most of my work goes.</p>
+          <div class="skills"><span class="tag">PyTorch</span><span class="tag">Numpy</span><span class="tag">scikit-learn</span></div>
+        </div>
+        <div class="focus-cell">
+          <span class="n">02</span>
+          <h3>MLOps</h3>
+          <p>I take models out of the notebook: packaging them, serving them, and tracking experiments and metrics in production.</p>
+          <div class="skills"><span class="tag">Docker</span><span class="tag">MLflow</span><span class="tag">DVC</span></div>
+        </div>
+        <div class="focus-cell">
+          <span class="n">03</span>
+          <h3>Full-Stack Engineering</h3>
+          <p>I build the API and the interface around a model so it becomes something people can actually use.</p>
+          <div class="skills"><span class="tag">TypeScript</span><span class="tag">React</span><span class="tag">FastAPI</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PERSONAL / FIELD LAYER ===== -->
+    <section class="field section">
+      <div class="wrap field-grid">
+        <div class="field-photos reveal">
+          <div class="ph"><img src="/images/home/sutlej-riverbed-birding.webp" alt="Arjun, turned away from the camera in a wildlife hat and holding a camera, birding on the Sutlej riverbed" loading="lazy" /></div>
+          <div class="ph"><img src="/images/about/asian-green-bee-eater.jpg" alt="An Asian Green Bee-eater taking off in light rain, with water droplets scattered across the background" loading="lazy" /></div>
+          <div class="ph"><img src="/images/home/chandra-taal-cartwheel.jpg" alt="Arjun mid-cartwheel in front of Chandra Taal lake in Spiti" loading="lazy" /></div>
+        </div>
+        <div class="reveal">
+          <h2 class="sect-title" style="margin:16px 0;">The other half of the story.</h2>
+          <p class="lead">When I'm not building models, I'm usually out photographing birds. And this is where a lot of the patience and attention to detail I bring to my work comes from. I write about my birding adventures on a separate blog.</p>
+          <p style="margin-top:18px;"><a class="txtlink" href="/about">More about me →</a> &nbsp;·&nbsp; <a class="txtlink" href="https://birdingwitharjun.com/" target="_blank">Birding &amp; travel blog ↗</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="section wrap cta">
+      <h2 class="display">Building something that needs to <em>learn?</em></h2>
+      <div class="hero-actions" style="justify-content:center;">
+        <a class="btn btn--accent" href="/contact">Start a conversation <span class="arr">→</span></a>
+        <a class="btn btn--ghost" href="/resume">Download résumé</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .hero { padding-top: clamp(48px, 9vw, 92px); padding-bottom: clamp(40px, 6vw, 92px); position: relative; }
+  .hero-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .hero-availability {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--muted);
+    display: inline-flex; align-items: center; gap: 9px; margin-bottom: 26px;
+  }
+  .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--st-active); position: relative; }
+  .pulse::after { content:""; position:absolute; inset:-4px; border-radius:50%; border:1px solid var(--st-active); animation: pulse 2.4s ease-out infinite; }
+  @keyframes pulse { 0%{transform:scale(.6);opacity:.9} 100%{transform:scale(1.8);opacity:0} }
+  .hero h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.61rem, 7.38vw, 5.94rem); line-height: 0.94; letter-spacing: -0.025em; }
+  .hero h1 em { font-style: italic; color: var(--accent-ink); }
+  .hero-sub { margin-top: 26px; max-width: 50ch; }
+  .hero-sub strong { color: var(--ink); font-weight: 600; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero-side { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); line-height: 1.7; }
+  .hero-side dt { color: var(--muted); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 18px; }
+  .hero-side dt:first-child { margin-top: 0; }
+  .hero-side dd { margin: 2px 0 0; }
+  .hero-side a:hover { color: var(--accent-ink); }
+  .hero-portrait { margin-top: 14px; border-radius: var(--radius); height: auto; width: 100%; object-fit: contain; display: block; border: 1px solid var(--line); }
+
+  .marquee { border-block: 1px solid var(--line); overflow: hidden; padding-block: 16px; }
+  .marquee-track { display: flex; gap: 48px; white-space: nowrap; font-family: var(--font-mono); font-size: 13px; color: var(--muted); animation: scroll 38s linear infinite; }
+  .marquee-track span { display: inline-flex; gap: 48px; }
+  .marquee-track b { color: var(--accent-ink); font-weight: 500; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+
+  .sect-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
+
+  /* Featured work */
+  .feat-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .feat {
+    display: grid; grid-template-columns: 64px 1.5fr 1fr auto; gap: 24px; align-items: center;
+    padding: 26px 8px; border-bottom: 1px solid var(--line); position: relative; transition: padding .3s;
+  }
+  .feat::before { content:""; position:absolute; left:0; top:0; bottom:0; width:0; background: var(--accent-soft); z-index:-1; transition: width .35s ease; }
+  .feat:hover { padding-inline: 18px; }
+  .feat:hover::before { width: 100%; }
+  .feat-no { font-family: var(--font-mono); font-size: 13px; color: var(--faint); }
+  .feat-title { font-family: var(--font-serif); font-size: clamp(1.4rem, 2.6vw, 2rem); letter-spacing: -0.015em; }
+  .feat-title .kind { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-ink); display: block; margin-bottom: 6px; }
+  .feat-desc { color: var(--muted); font-size: 14.5px; line-height: 1.55; }
+  .feat-go { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line-strong); display: grid; place-items: center; color: var(--ink-soft); transition: all .25s; }
+  .feat:hover .feat-go { background: var(--ink); color: var(--paper); border-color: var(--ink); transform: rotate(-45deg); }
+
+  /* Focus */
+  .focus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .focus-cell { background: var(--surface); padding: 30px 26px; transition: background .25s; }
+  .focus-cell:hover { background: var(--paper-2); }
+  .focus-cell .n { font-family: var(--font-mono); font-size: 12px; color: var(--accent-ink); }
+  .focus-cell h3 { font-family: var(--font-serif); font-size: 1.32rem; margin: 12px 0 8px; }
+  .focus-cell p { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0; }
+  .focus-cell .skills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+
+  /* Personal / field layer */
+  .field { background: var(--paper-2); border-block: 1px solid var(--line); padding-block: clamp(50px, 8vw, 100px);}
+  .field .lead { font-size: 14.5px; color: var(--muted); line-height: 1.55; max-width: none; }
+  .field-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(28px,5vw,56px); align-items: center; }
+  .field-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field-photos .ph:first-child { grid-row: span 2; aspect-ratio: 3/4; }
+  .field-photos .ph { aspect-ratio: 4/3; border: none; background: none; }
+  .field-photos .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* CTA */
+  .cta { text-align: center; }
+  .cta .display { margin: 18px auto 28px; max-width: 16ch; }
+
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; align-items: start; }
+    .hero-side { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+    .focus-grid { grid-template-columns: 1fr; }
+    .feat { grid-template-columns: 40px 1fr auto; }
+    .feat-desc, .feat .badge { display: none; }
+    .field-grid { grid-template-columns: 1fr; }
+  }
+</style>

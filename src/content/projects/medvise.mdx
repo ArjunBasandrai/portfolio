@@ -1,0 +1,98 @@
+---
+title: "Medvise"
+description: "A medical imaging classifier covering seven major disease categories across MRI, CT, and X-ray scans, built on an EfficientNetV2L transfer-learning base with a curated composite dataset."
+summary: "A set of medical-imaging classifiers spanning seven diseases across MRI, CT, and X-ray, built with a friend to help triage scans faster."
+category: "Computer Vision"
+tags: ["cv", "ml"]
+year: "2023"
+publishedDate: "2023-08-01"
+major: false
+hide: true
+stack: ["Python", "TensorFlow"]
+stats:
+  - { value: "7", label: "disease categories", note: "more in progress" }
+  - { value: "3", label: "scan modalities", note: "MRI, CT, X-ray" }
+  - { value: "25+", label: "diseases compiled", note: "in the source dataset" }
+links:
+  dataset: "https://www.kaggle.com/datasets/arjunbasandrai/medical-scan-classification-dataset"
+featured: false
+order: 8
+coverLabel: "Medvise, medical imaging"
+---
+
+import Callout from "../../components/project/Callout.astro";
+import Figure from "../../components/project/Figure.astro";
+
+<section>
+
+## Motivation
+
+Medvise grew out of a collaboration with my friend [Shourya](https://github.com/madbonzz), at the intersection of healthcare and deep learning. The aim was a tool that could help medical professionals identify diseases from imaging data quickly, classifying scans across several modalities and disease types rather than solving one narrow problem.
+
+</section>
+
+<section>
+
+## Dataset
+
+The training data is a composite, curated from many separate Kaggle sources into a single [medical scan classification dataset](https://www.kaggle.com/datasets/arjunbasandrai/medical-scan-classification-dataset). Pulling from diverse sources let us cover a real range of diseases and imaging types while keeping quality consistent. It spans MRI, CT, and X-ray, with room to grow into other modalities later.
+
+</section>
+
+<section>
+
+## Model
+
+Each classifier uses EfficientNetV2L as a transfer-learning base rather than training from scratch, with augmentation up front and learning-rate scheduling, early stopping, and checkpointing to keep training efficient. The architecture below is the one used for the cervical cancer model, representative of the set.
+
+```python
+def create_model(base_model):
+    input = Input(shape=(image_size, image_size, 3))
+    x = RandomFlip('horizontal')(input)
+    x = RandomRotation(0.2)(x)
+    x = RandomZoom(0.2, 0.2)(x)
+    x = RandomContrast(0.2)(x)
+    b_model = base_model(x)
+    flatten = Flatten()(b_model)
+    x = Dense(1024, activation='relu')(flatten)
+    norm = BatchNormalization()(x)
+    x = Dense(512, activation='swish')(flatten)
+    norm = BatchNormalization()(x)
+    x = Dense(128, activation='relu')(norm)
+    norm = BatchNormalization()(x)
+    dropout = Dropout(0.2)(norm)
+    x = Dense(len(class_names))(dropout)
+    model = tf.keras.models.Model(inputs=input, outputs=x)
+    model.compile(optimizer=Adam(lr_init), loss=scc(from_logits=True), metrics=['accuracy'])
+    return model
+```
+
+</section>
+
+<section>
+
+## What it covers
+
+The current set spans seven disease categories, each drawn from a vetted Kaggle dataset:
+
+- Kidney cancer
+- Cervical cancer
+- Alzheimer's disease
+- Monkeypox
+- Tuberculosis
+- COVID-19 (X-ray)
+- COVID-19 (CT scan)
+
+</section>
+
+<section>
+
+## Where it stands
+
+The compiled dataset originally reached past 25 diseases, but training and fine-tuning a model per disease is slow, so we narrowed to these seven high-priority categories first.
+
+<Callout label="What's next">
+The next direction is GAN-based bone shadow suppression for chest X-rays, removing rib and clavicle shadows to make certain conditions clearer. If it works, it folds straight back into Medvise as a preprocessing step.
+</Callout>
+
+</section>
