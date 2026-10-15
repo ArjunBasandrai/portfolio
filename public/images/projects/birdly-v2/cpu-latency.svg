@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="cx" viewBox="0 0 696 390.4" width="696" height="390.4"><title>CPU batch-1 end-to-end latency</title><style>svg.cx{--paper:#faf8f5;--paper-2:#f0ebe5;--surface:#fffdfb;--ink:#3d3930;--ink-soft:#6b6459;--muted:#8b8278;--faint:#b8b1a5;--line:#e8e2d9;--line-strong:#ddd6cd;--accent:#8b9556;--accent-ink:#6d7644;--accent-soft:#f0f3e6;--st-progress:#c9a566;--st-done:#6b8fa3;--st-archive:#9a8a7a;--warn-ink:#8a5f17;--font-sans:"Hanken Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;--font-serif:"Newsreader", Georgia, "Times New Roman", serif;--font-mono:"JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace}@media (prefers-color-scheme:dark){svg.cx{--paper:#1f1a24;--paper-2:#2a2430;--surface:#2e2836;--ink:#f5f1ed;--ink-soft:#ddd5cd;--muted:#b8aea3;--faint:#7a7268;--line:#3d3847;--line-strong:#4a4451;--accent:#a8c75d;--accent-ink:#b8d76f;--accent-soft:#4a5228;--st-progress:#d4ba7a;--st-done:#7fa3bb;--st-archive:#a89a8a;--warn-ink:#e3c98c}}.cx { overflow: visible; }
+.cx text { font-family: var(--font-sans); fill: var(--ink-soft); }
+.cx text.m { font-family: var(--font-mono); }
+.cx .t-ink { fill: var(--ink); }
+.cx .t-soft { fill: var(--ink-soft); }
+.cx .t-mute { fill: var(--muted); }
+.cx .t-hero { fill: var(--accent-ink); }
+.cx .t-warn { fill: var(--warn-ink); }
+.cx text.h-title { font-family: var(--font-serif); fill: var(--ink); }
+.cx text.h-sub { font-family: var(--font-mono); fill: var(--muted); }
+.cx .grid { stroke: var(--line); stroke-width: 1; }
+.cx .axis { stroke: var(--line-strong); stroke-width: 1; }
+.cx .brk { stroke: var(--muted); stroke-width: 1.2; }
+.cx .hl { fill: color-mix(in oklch, var(--accent-soft) 65%, transparent); }
+.cx .gapfill { fill: color-mix(in oklch, var(--accent-ink) 13%, transparent); }
+.cx .c-hero { --c: var(--accent-ink); }
+.cx .c-a { --c: var(--ink-soft); }
+.cx .c-b { --c: var(--st-done); }
+.cx .c-c { --c: var(--st-archive); }
+.cx .c-d { --c: var(--muted); }
+.cx .c-warn { --c: var(--st-progress); }
+.cx .c-r1 { --c: color-mix(in oklch, var(--accent-ink) 22%, var(--faint)); }
+.cx .c-r2 { --c: color-mix(in oklch, var(--accent-ink) 45%, var(--faint)); }
+.cx .c-r3 { --c: color-mix(in oklch, var(--accent-ink) 72%, var(--faint)); }
+.cx .c-r4 { --c: var(--accent-ink); }
+.cx .ln { fill: none; stroke: var(--c); stroke-linecap: round; stroke-linejoin: round; }
+.cx .dot { fill: var(--c); stroke: var(--surface); stroke-width: 2; }
+.cx .bar { stroke: none; }
+.cx .b-a { fill: var(--faint); }
+.cx .b-hero { fill: var(--accent); }
+.cx .b-warn { fill: var(--st-progress); }
+.cx .b-int8 { stroke: var(--st-progress); stroke-width: 1.3; }
+.cx .b-track { fill: var(--line); }
+.cx .b-q0 { fill: var(--ink-soft); }
+.cx .b-q1 { fill: var(--st-done); }
+.cx .b-q2 { fill: var(--accent); }
+.cx .b-q3 { fill: var(--st-progress); }
+.cx .hatch { stroke: var(--st-progress); stroke-width: 1.4; }
+.cx .nd { fill: var(--paper); stroke: var(--line-strong); stroke-width: 1; }
+.cx .nd-hero { fill: var(--accent-soft); stroke: var(--accent-ink); stroke-width: 1.3; }
+.cx .nd-warn { fill: color-mix(in oklch, var(--st-progress) 14%, var(--paper)); stroke: var(--st-progress); stroke-width: 1.3; }
+.cx .nd-mute { fill: transparent; stroke-dasharray: 4 3; }
+.cx .nd-dash { stroke-dasharray: 4 3; }
+.cx .grp { fill: color-mix(in oklch, var(--paper-2) 55%, transparent); stroke: var(--line); stroke-width: 1; }
+.cx .cn { fill: none; stroke: var(--muted); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.cx .cn.arw-dash { stroke-dasharray: 4 3; }
+.cx .cn.arw-hero { stroke: var(--accent-ink); }
+.cx .ah { fill: var(--muted); stroke: none; }
+.cx .ah.arw-hero { fill: var(--accent-ink); }</style><text class="h-title" x="20" y="34.45" font-size="17">CPU batch-1 end-to-end latency</text><text class="h-sub" x="20" y="56.400000000000006" font-size="11">Includes image decoding and preprocessing. Lower is better.</text><svg class="cx" x="20" y="66.4" width="656" height="304" viewBox="0 0 656 304" aria-hidden="true" focusable="false"><defs><pattern id="hatch-cpu-d" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" class="hatch"/></pattern></defs><line x1="52" y1="246" x2="648" y2="246" class="axis"/><text x="44" y="250" font-size="11" text-anchor="end" class="t-mute m">0</text><line x1="52" y1="205.62" x2="648" y2="205.62" class="grid"/><text x="44" y="209.62" font-size="11" text-anchor="end" class="t-mute m">50</text><line x1="52" y1="165.23" x2="648" y2="165.23" class="grid"/><text x="44" y="169.23" font-size="11" text-anchor="end" class="t-mute m">100</text><line x1="52" y1="124.85" x2="648" y2="124.85" class="grid"/><text x="44" y="128.85" font-size="11" text-anchor="end" class="t-mute m">150</text><line x1="52" y1="84.46" x2="648" y2="84.46" class="grid"/><text x="44" y="88.46" font-size="11" text-anchor="end" class="t-mute m">200</text><line x1="52" y1="44.08" x2="648" y2="44.08" class="grid"/><text x="44" y="48.08" font-size="11" text-anchor="end" class="t-mute m">250</text><text x="52" y="16" font-size="11.5" text-anchor="start" class="t-mute">Latency (ms)</text><rect x="196" y="7" width="11" height="11" rx="2" class="bar b-a"/><text x="212" y="16.5" font-size="11.5" text-anchor="start" class="t-soft">PyTorch eager FP32</text><rect x="347.4" y="7" width="11" height="11" rx="2" class="bar b-hero"/><text x="363.4" y="16.5" font-size="11.5" text-anchor="start" class="t-soft">ONNX Runtime FP32</text><rect x="492.5" y="7" width="11" height="11" rx="2" class="bar b-int8" fill="url(#hatch-cpu-d)"/><text x="508.5" y="16.5" font-size="11.5" text-anchor="start" class="t-soft">ONNX Runtime INT8</text><text x="151.33" y="268" font-size="12" text-anchor="middle" class="t-mute m">1 thread</text><rect x="68.33" y="47.66" width="50" height="198.34" rx="2" class="bar b-a"/><text x="93.33" y="41.66" font-size="11" text-anchor="middle" class="t-soft m">245.56</text><rect x="126.33" y="75.72" width="50" height="170.28" rx="2" class="bar b-hero"/><text x="151.33" y="69.72" font-size="11" text-anchor="middle" class="t-hero m">210.82</text><rect x="184.33" y="78.89" width="50" height="167.11" rx="2" class="bar b-int8" fill="url(#hatch-cpu-d)"/><text x="209.33" y="72.89" font-size="11" text-anchor="middle" class="t-soft m">206.90</text><text x="350" y="268" font-size="12" text-anchor="middle" class="t-mute m">2 threads</text><rect x="267" y="133.76" width="50" height="112.25" rx="2" class="bar b-a"/><text x="292" y="127.76" font-size="11" text-anchor="middle" class="t-soft m">138.97</text><rect x="325" y="155.56" width="50" height="90.44" rx="2" class="bar b-hero"/><text x="350" y="149.56" font-size="11" text-anchor="middle" class="t-hero m">111.97</text><rect x="383" y="152.64" width="50" height="93.36" rx="2" class="bar b-int8" fill="url(#hatch-cpu-d)"/><text x="408" y="146.64" font-size="11" text-anchor="middle" class="t-soft m">115.59</text><rect x="448.67" y="36" width="200" height="210" rx="6" class="hl"/><text x="548.67" y="268" font-size="12" text-anchor="middle" class="t-ink m">4 threads</text><rect x="465.67" y="169.6" width="50" height="76.4" rx="2" class="bar b-a"/><text x="490.67" y="163.6" font-size="11" text-anchor="middle" font-weight="700" class="t-soft m">94.59</text><rect x="523.67" y="194.41" width="50" height="51.59" rx="2" class="bar b-hero"/><text x="548.67" y="188.41" font-size="11" text-anchor="middle" font-weight="700" class="t-hero m">63.87</text><rect x="581.67" y="188.94" width="50" height="57.06" rx="2" class="bar b-int8" fill="url(#hatch-cpu-d)"/><text x="606.67" y="182.94" font-size="11" text-anchor="middle" font-weight="700" class="t-soft m">70.65</text><text x="548.67" y="120.85" font-size="12" text-anchor="middle" font-weight="700" class="t-hero">PyTorch → ONNX FP32: −32%</text><text x="548.67" y="138.85" font-size="11" text-anchor="middle" class="t-warn">INT8: 70.65 ms vs FP32: 63.87 ms</text></svg></svg>

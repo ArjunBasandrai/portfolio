@@ -1,0 +1,682 @@
+---
+title: "Birdly v2"
+description: "A ConvNeXt-Tiny classifier for 236 bird species, with CPU and GPU runtime benchmarks and a FastAPI service on Cloud Run."
+summary: "A ConvNeXt-Tiny classifier for 236 bird species, with CPU and GPU runtime benchmarks, a FastAPI service on Cloud Run, and a Next.js frontend."
+category: "ML Systems"
+tags: ["systems", "ml", "cv", "birding", "fullstack"]
+year: "2026"
+publishedDate: "2026-10-15"
+major: true
+cover: "/images/projects/birdly-v2/cover.png"
+coverVideo: "/videos/projects/birdly-v2/cover.mp4"
+stack: ["PyTorch", "ONNX Runtime", "TensorRT", "Python", "FastAPI", "Google Cloud Run"]
+stats:
+  - { value: "86.59%", label: "top-1 accuracy", note: "236 bird species" }
+  - { value: "730.66", label: "images/s", note: "TensorRT FP16, batch 32" }
+  - { value: "~12", label: "requests/s on Cloud Run", note: "2 vCPU, one instance" }
+links:
+  github: https://github.com/ArjunBasandrai/birdly
+  demo: https://www.birdlyus.com/
+featured: false
+order: 3
+coverLabel: "Birdly classification and inference"
+---
+
+import Figure from "../../components/project/Figure.astro";
+
+<section>
+
+## Motivation
+
+Birdly is a bird species classifier and was one of my first machine learning projects which I built in late 2022 during the first semester for my undergrad. It was the project that ultimately got me into machine learning.
+Now, after almost 4 years and having learned a lot more about ML since, I decided to revisit this project and improve on it.
+
+The first version had many issues like using an unecessarily large model, an unecessarily large dataset, and test data leakage to name a few. So, I decided to rebuild the project from scratch, starting with a new dataset and a new model, and then building a full inference service with a frontend.
+
+In this version, I covered the following:
+
+- dataset construction from iNaturalist Open Data
+- ConvNeXt-Tiny training and evaluation
+- CPU and GPU inference benchmarking
+- FP16 and INT8 experiments
+- ONNX Runtime, TensorRT, and Torch JIT compilation with `torch.compile`
+- a FastAPI inference service
+- concurrency and reliability testing
+- deployment to Google Cloud Run
+- a Next.js frontend deployed on Vercel
+
+The first version of Birdly was built to classify all of the roughly 1250 bird species of India, but for this version I changed the training target.
+
+The final model covers **236 bird species** of New York State, United States and reached **86.59% top-1 accuracy**, **96.75% top-5 accuracy**, **0.8655 macro F1**, and **0.8653 MCC** on a 4,712-image test set.
+
+</section>
+
+<section>
+
+## Architecture
+
+<Figure src="/images/projects/birdly-v2/system-architecture.svg" mobileSrc="/images/projects/birdly-v2/system-architecture-mobile.svg" alt="Architecture diagram. iNaturalist Open Data flows through a Polars and DVC pipeline into a validated manifest, then PyTorch training tracked in MLflow, producing a ConvNeXt-Tiny checkpoint. The checkpoint branches into CPU benchmarks (PyTorch eager, torch.compile, ONNX Runtime FP32 selected for CPU service, ONNX Runtime INT8 tested but not selected) and GPU benchmarks (PyTorch FP32, PyTorch FP16, ONNX Runtime CUDA, and TensorRT FP16 as the best GPU benchmark but not deployed). The deployed path is browser, Next.js on Vercel, a FastAPI container on Google Cloud Run running ONNX Runtime FP32 on CPU, and the model prediction." />
+
+</section>
+
+<section>
+
+## Dataset
+
+This time I decided to use the iNaturalist Open Data dataset instead of scraping manually.
+
+These main source files are large enough that I did not want the data preparation process to depend on loading full tables into memory. So, I used Polars streaming for the main filtering and join jobs.
+
+I also used DVC to track and version control the processed data artifacts.
+
+<Figure src="/images/projects/birdly-v2/data-pipeline.svg" mobileSrc="/images/projects/birdly-v2/data-pipeline-mobile.svg" alt="Diagram of the data pipeline. observations.csv, photos.csv, and taxa.csv go through Polars streaming filters for bird taxonomy, research grade, a New York bounding box, anomaly score, and image license. Species eligibility, per-species sampling, train, validation, and test splits, and a global training supplement follow. The result is a validated manifest of 236 species, 233,796 rows, and 4,712 test images." />
+
+### Taxonomy and observation filtering
+
+Birdly currently targets species found in New York state.
+
+The geographic filter uses a bounding box covering the state:
+
+- latitude: 40.45 to 45.05
+- longitude: -79.80 to -71.80
+
+I kept only research-grade observations and restricted to active species in the bird lineage.
+
+I also filtered based on the iNaturalist anomaly score. Observations with an anomaly score below 1.0 were excluded.
+
+The allowed image licenses were restricted to CC0 and CC-BY.
+
+### Sampling
+
+The main sampling conditions I used were:
+
+- maximum 1,000 images per species
+- minimum 300 total observations per species
+- minimum 50 observations from the target region
+
+If a species did not have enough New York observations for training, global observations were added to supplement the training split. But, validation and test images were intentionally kept regional.
+
+I did this to keep the evaluation set closer to the intended use case but still allowing the training set to use more available data if required.
+
+I also sampled only one image per observation to avoid duplicates. However, if training set did not have sufficient images after global supplementation, I allowed further supplementation with multiple images per observation using observation-level round-robin sampling. Like before, I did not allow any supplementation for validation or test splits.
+
+The final processed manifest contained about **234,000 images across 236 species**.
+
+The test set contained **4,712 images**.
+
+</section>
+
+<section>
+
+## Model training
+
+The final model uses a **ConvNeXt-Tiny** backbone with a 224 × 224 input.
+
+Training experiments were tracked with MLflow. Each run recorded its parameters, metrics, and model artifacts.
+
+<Figure src="/images/projects/birdly-v2/birdly-mlflow-runs.png" alt="Screenshot of MLflow showing the main Birdly training runs, with the selected final run." />
+
+The final FP32 checkpoint produced the following results on the test set:
+
+| Metric | Result |
+| --- | ---: |
+| Top-1 accuracy | 86.59% |
+| Top-5 accuracy | 96.75% |
+| Macro F1 | 0.8656 |
+| Macro precision | 0.8713 |
+| Macro recall | 0.8658 |
+| MCC | 0.8653 |
+| NLL | 0.5699 |
+| ECE | 0.0611 |
+
+Top-1 accuracy, macro F1, macro precision, and macro recall were all similar. So, that's a good sign that the model is performing equally well across the classes.
+
+I also measured NLL and expected calibration error because prediction confidence is later used by the API.
+
+The final FP32 model had an ECE of approximately **6.1 percentage points**. So, the model's confidence is reasonably well calibrated. While there is certainly room for improvement, this is good enough for my intended use case.
+
+</section>
+
+<section>
+
+## Inference baseline
+
+Now that the model was trained, it was time to benchmark inference.
+
+The main measurements I used were:
+
+- model-only latency
+- end-to-end latency
+- throughput
+- RAM or VRAM usage
+- model load time
+- cold inference time
+
+Model-only timing measures just the forward pass.
+
+End-to-end timing also includes image decoding and preprocessing.
+
+
+### CPU baseline
+
+The first CPU backend was PyTorch eager FP32.
+
+At batch size 1:
+
+| CPU threads | Model p50 | End-to-end p50 |
+| ---: | ---: | ---: |
+| 1 | 236.74 ms | 245.56 ms |
+| 2 | 132.62 ms | 138.97 ms |
+| 4 | 89.49 ms | 94.59 ms |
+
+The four-thread result of approximately **95 ms end to end** was clearly the best and so I chose it as the main CPU reference point.
+
+### GPU baseline
+
+I ran the GPU benchmarks on an RTX 3050 Laptop GPU.
+
+Model-only FP32 results:
+| Batch | Mean (ms) | p50 (ms) | p95 (ms) | p99 (ms) | Throughput (img/s) | Peak VRAM (MiB) |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 9.21 | 8.75 | 12.56 | 12.70 | 108.57 | 130.16 |
+| 2 | 11.60 | 11.94 | 14.30 | 14.43 | 172.37 | 141.37 |
+| 4 | 18.49 | 18.36 | 19.23 | 19.81 | 216.37 | 164.63 |
+| 8 | 35.60 | 35.57 | 36.05 | 36.13 | 224.75 | 212.87 |
+| 16 | 68.48 | 68.43 | 69.15 | 69.99 | **233.64** | 310.34 |
+| 32 | 137.86 | 137.89 | 138.70 | 138.83 | 232.13 | 504.27 |
+
+End-to-end FP32 results:
+| Batch | Mean (ms) | p50 (ms) | p95 (ms) | p99 (ms) | Throughput (img/s) | Peak VRAM (MiB) |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 16.71 | 16.69 | 18.56 | 20.31 | 59.85 | 130.16 |
+| 2 | 22.67 | 22.17 | 27.65 | 28.75 | 88.21 | 141.37 |
+| 4 | 42.00 | 41.80 | 44.85 | 45.12 | 95.24 | 164.63 |
+| 8 | 79.22 | 78.28 | 85.18 | 85.97 | 100.99 | 212.87 |
+| 16 | 155.72 | 156.15 | 161.44 | 162.10 | **102.75** | 310.34 |
+| 32 | 329.51 | 328.77 | 349.52 | 354.84 | 97.11 | 504.27 |
+
+End-to-end throughput peaked at batch size 16 with a value of **102.75 images/s**.
+
+</section>
+
+<section>
+
+## torch.compile
+
+With the baseline established, I experimented with `torch.compile` to see if it could improve CPU or GPU performance.
+So, I tested torch.compile on both CPU and GPU.
+
+Compilation introduced a substantial one-time startup cost:
+
+| Device | Threads | Compile + first inference |
+|---|---:|---:|
+| RTX 3050 Laptop GPU | — | 38.52 s |
+| CPU | 1 | 88.71 s |
+| CPU | 2 | 79.66 s |
+| CPU | 4 | 78.26 s |
+
+These measurements include compilation and the first inference. Once compiled, the GPU results improved as batch size increased, but batch-1 inference (which is what I expect for the serving workload) was actually slower than eager execution.
+
+### GPU results
+
+| Batch | Eager model p50 | Compiled model p50 | Eager throughput | Compiled throughput |
+|---:|---:|---:|---:|---:|
+| 1 | 8.75 ms | 10.75 ms | 108.57 img/s | 92.98 img/s |
+| 2 | 11.94 ms | 9.73 ms | 172.37 img/s | 202.28 img/s |
+| 4 | 18.36 ms | 16.93 ms | 216.37 img/s | 235.05 img/s |
+| 8 | 35.57 ms | 31.73 ms | 224.75 img/s | 252.30 img/s |
+| 16 | 68.43 ms | 61.26 ms | 233.64 img/s | **260.73 img/s** |
+| 32 | 137.89 ms | 124.29 ms | 232.13 img/s | 257.44 img/s |
+
+At batch 16, compilation increased model throughput from 233.64 to 260.73 images/s, which is an improvement of about 11.6%. Batch 32 also showed a similar improvement. At batch 1, however, p50 latency increased from 8.75 ms to 10.75 ms.
+
+The improvement became smaller when preprocessing and the rest of the inference path were included:
+
+| Batch | Eager E2E throughput | Compiled E2E throughput |
+|---:|---:|---:|
+| 1 | 59.85 img/s | 75.25 img/s |
+| 4 | 95.24 img/s | 104.46 img/s |
+| 8 | 100.99 img/s | 106.77 img/s |
+| 16 | 102.75 img/s | **107.18 img/s** |
+| 32 | 97.11 img/s | 103.90 img/s |
+
+The compiled run reached 107.18 images/s end-to-end at batch 16, versus 260.73 images/s for model execution alone. So, accelerating the model did not directly cause the same improvement for the complete inference path.
+
+### CPU results
+
+The CPU result was less useful for the serving workload. Since the API would process individual requests rather than large offline batches, batch-1 latency was the main comparison that I cared about:
+
+| Threads | Eager E2E p50 | Compiled E2E p50 |
+|---:|---:|---:|
+| 1 | 245.56 ms | 254.21 ms |
+| 2 | 138.97 ms | 144.08 ms |
+| 4 | 94.59 ms | **93.92 ms** |
+
+Compiled model was slower with one and two threads. And at four threads, the difference was less than 1 ms. The compiled four-thread run measured 93.92 ms p50 and 10.58 images/s at batch 1.
+
+CPU batch-1 latency did not improve enough to justify the startup cost.
+
+torch.compile was therefore useful only for sustained GPU batch inference, where it gave roughly 10–12% higher model throughput at larger batches. But, it was not a good fit for the CPU serving path I was targeting since batch-1 performance was effectively unchanged and compilation was expensive. So, I kept eager PyTorch as the reference implementation and moved on to testing inference-specific runtimes.
+</section>
+
+<section>
+
+## ONNX Runtime on CPU
+
+Now, I exported the model to ONNX and benchmarked ONNX Runtime on CPU.
+
+At batch size 1:
+
+| Threads | PyTorch E2E p50 | ONNX Runtime E2E p50 |
+| ---: | ---: | ---: |
+| 1 | 245.56 ms | 210.82 ms |
+| 2 | 138.97 ms | 111.97 ms |
+| 4 | 94.59 ms | 63.87 ms |
+
+Compared with the original PyTorch FP32 baseline, ONNX Runtime reduced batch-1 end-to-end p50 latency from **94.59 ms to 63.87 ms** at four CPU threads, while increasing throughput from **10.56 to 15.60 images/s**.
+
+ONNX Runtime eventually became the CPU backend used by the API.
+
+<Figure src="/images/projects/birdly-v2/cpu-latency.svg" mobileSrc="/images/projects/birdly-v2/cpu-latency-mobile.svg" alt="Grouped bar chart of batch-1 end-to-end CPU latency in milliseconds at 1, 2, and 4 threads. At four threads PyTorch eager FP32 takes 94.59 ms, ONNX Runtime FP32 takes 63.87 ms, a reduction of about 32 percent, and ONNX Runtime INT8 takes 70.65 ms, which is slower than FP32. With one thread the values are 245.56, 210.82, and 206.90 ms, and with two threads 138.97, 111.97, and 115.59 ms." />
+
+</section>
+
+<section>
+
+## INT8 quantization
+
+For my next trick, I created a statically quantized INT8 ONNX model.
+
+The quality loss from this was thankfully very low:
+
+| Metric | FP32 | INT8 |
+| --- | ---: | ---: |
+| Top-1 | 86.59% | 85.42% |
+| Top-5 | 96.75% | 96.14% |
+| Macro F1 | 0.8656 | 0.8539 |
+| MCC | 0.8653 | 0.8536 |
+| NLL | 0.5699 | 0.6504 |
+| ECE | 0.0611 | 0.0692 |
+
+Top-1 accuracy fell by approximately **1.17 percentage points**.
+Whereas top-5 accuracy fell by just **0.62 percentage points**. Since the Birdly US service returns up to five predictions, this was a small enough loss to be acceptable.
+
+But was there a speedup in inference?
+
+| Threads | ONNX FP32 | ONNX INT8 |
+| ---: | ---: | ---: |
+| 1 | 210.82 ms | 206.90 ms |
+| 2 | 111.97 ms | 115.59 ms |
+| 4 | 63.87 ms | 70.65 ms |
+
+INT8 was slightly faster with one thread but slower with two and four threads.
+
+Reduced precision alone was not enough to reduce inference latency in my case. The quantized model was therefore not used for the main CPU deployment.
+
+</section>
+
+<section>
+
+## GPU inference
+
+I tested four main GPU inference paths:
+
+- PyTorch FP32
+- PyTorch FP16
+- ONNX Runtime FP32 CUDA
+- TensorRT FP16
+
+| Metric | PyTorch FP32 | PyTorch FP16 | ONNX Runtime CUDA | TensorRT FP16 |
+| --- | ---: | ---: | ---: | ---: |
+| B1 model p50 | 8.80 ms | 13.65 ms | 9.31 ms | **3.62 ms** |
+| B1 model throughput | 113.53 img/s | 67.39 img/s | 103.52 img/s | **246.59 img/s** |
+| B1 E2E p50 | 15.40 ms | 20.95 ms | 14.50 ms | **10.32 ms** |
+| B1 E2E throughput | 63.48 img/s | 45.96 img/s | 67.34 img/s | **97.08 img/s** |
+| ㅤ |  |  |  |  |
+| B32 model p50 | 137.31 ms | 69.67 ms | 215.59 ms | **43.24 ms** |
+| B32 model throughput | 233.06 img/s | 459.37 img/s | 148.41 img/s | **730.66 img/s** |
+| B32 E2E p50 | 319.97 ms | 306.58 ms | 395.67 ms | **267.35 ms** |
+| B32 E2E throughput | 99.97 img/s | 104.11 img/s | 80.43 img/s | **117.81 img/s** |
+
+| Metric | PyTorch FP32 | PyTorch FP16 | TensorRT FP16 | ONNX INT8 |
+| --- | ---: | ---: | ---: | ---: |
+| Top-1 accuracy | 86.59% | 86.63% (+0.04 pp) | 86.63% (+0.04 pp) | 85.42% (−1.17 pp) |
+| Top-5 accuracy | 96.75% | 96.75% (+0.00 pp) | 96.73% (−0.02 pp) | 96.14% (−0.62 pp) |
+| Macro F1 | 0.8656 | 0.8660 (+0.0004) | 0.8660 (+0.0004) | 0.8539 (−0.0116) |
+| MCC | 0.8653 | 0.8658 (+0.0004) | 0.8658 (+0.0004) | 0.8536 (−0.0117) |
+| NLL | 0.5699 | 0.5699 (−0.00005) | 0.5698 (−0.00007) | 0.6504 (+0.0805) |
+| ECE | 0.0611 | 0.0621 (+0.0009) | 0.0624 (+0.0013) | 0.0692 (+0.0080) |
+
+### PyTorch FP16
+
+FP16 largely preserves model quality.
+
+Top-1 accuracy was **86.629%**, compared with **86.587%** for FP32.
+
+The difference is too small to be treated as a meaningful accuracy change.
+
+But batch size 1 inference was significantly slower than FP32:
+
+- FP16 model p50: **13.65 ms**
+
+Even though larger batches were much better.
+
+At batch size 32:
+
+- model p50: **69.67 ms**
+- throughput: **459.37 images/s**
+- VRAM: **356.9 MiB**
+
+So, FP16 was more useful for large batch sizes than for single-image inference jobs.
+
+### ONNX Runtime CUDA
+
+ONNX Runtime CUDA did not improve over the other PyTorch GPU paths.
+
+At batch size 32:
+
+- model p50: **215.59 ms**
+- model throughput: **148.41 images/s**
+- end-to-end throughput: **80.43 images/s**
+
+So, I did not use this backend further.
+
+### TensorRT FP16
+
+TensorRT gave the best GPU measurements.
+
+
+| Batch size | Model p50 | Throughput |
+| ---: | ---: | ---: |
+| 1 | 3.62 ms | 246.59 img/s |
+| 2 | 5.25 ms | 380.44 img/s |
+| 4 | 8.31 ms | 481.52 img/s |
+| 8 | 14.43 ms | 553.30 img/s |
+| 16 | 26.22 ms | 612.39 img/s |
+| 32 | 43.24 ms | 730.66 img/s |
+
+The TensorRT engine was about **56.1 MiB**.
+
+<Figure src="/images/projects/birdly-v2/gpu-throughput.svg" mobileSrc="/images/projects/birdly-v2/gpu-throughput-mobile.svg" alt="Line chart of model-only GPU throughput in images per second against batch size. TensorRT FP16 rises from 246.59 at batch size 1 to 730.66 at batch size 32. PyTorch FP16 rises from 67.39 to 459.37, PyTorch FP32 from 108.57 to 232.13, and ONNX Runtime CUDA from 103.52 to 148.41." />
+
+The selected runtimes were therefore:
+
+| Hardware | Runtime |
+| --- | --- |
+| CPU | ONNX Runtime FP32 |
+| GPU | TensorRT FP16 |
+
+</section>
+
+<section>
+
+## API
+
+I implemented the inference API with FastAPI.
+
+It exposes:
+
+- `POST /predict`
+- `GET /health`
+- `GET /metrics`
+
+I load the model once at application startup.
+
+A prediction request passes through:
+
+1. upload validation
+2. image decoding
+3. preprocessing
+4. ONNX Runtime inference
+5. probability calculation
+6. confidence filtering
+7. response generation
+
+<Figure src="/images/projects/birdly-v2/api-path.svg" mobileSrc="/images/projects/birdly-v2/api-path-mobile.svg" alt="Flow diagram of POST /predict: request validation, image decode, preprocessing to 224 by 224, bounded inference concurrency with a thread pool, ONNX Runtime FP32 on CPU, conversion of logits to probabilities, a confidence filter, and a JSON response. Metrics and logging run on a side path." />
+
+The service also includes the following:
+
+- 10 MiB upload limit
+- maximum image dimensions of 4096 × 4096
+- JPEG, PNG, and WebP support
+- animated-image rejection
+- 30-second request/inference timeout
+- bounded inference concurrency
+- CORS restrictions
+- IP-based rate limiting
+- Prometheus-compatible metrics
+- non-root container execution
+
+The production rate limit is **15 predictions per minute per IP**.
+
+</section>
+
+<section>
+
+## Local load testing
+
+I used load tests to measure how inference concurrency affected the API.
+
+The tests used:
+
+- ONNX Runtime FP32
+- two ONNX CPU threads
+- 30-second test windows
+- virtual-user counts of 1, 2, 4, 8, and 16
+
+### Inference concurrency 1
+
+Throughput stayed close to **7–8 requests per second** even as the number of clients increased.
+
+The extra requests primarily waited for the inference slot.
+
+### Inference concurrency 8
+
+The highest measured throughput was about **16.5 requests per second**.
+
+The improvement over concurrency 4 was much smaller than the improvement from concurrency 1 to 4.
+
+<Figure src="/images/projects/birdly-v2/local-load.svg" mobileSrc="/images/projects/birdly-v2/local-load-mobile.svg" alt="Two aligned line charts against virtual users 1, 2, 4, 8, and 16 for inference concurrency 1, 2, 4, and 8. Requests per second: concurrency 1 stays near 7 to 8, concurrency 4 reaches about 15, and concurrency 8 peaks at 16.52. p50 latency at 16 virtual users is 1996.89 ms for concurrency 1, 1540.09 ms for 2, 1021.44 ms for 4, and 975.79 ms for 8." />
+
+I used these results to avoid setting inference concurrency higher than the CPU could use effectively.
+
+</section>
+
+<section>
+
+## Reliability tests
+
+The local reliability suite covered 18 cases.
+
+These included:
+
+- valid image
+- corrupted file
+- unsupported content type
+- unsupported image format
+- empty upload
+- oversized upload
+- malformed multipart request
+- concurrent valid requests
+- mixed valid and invalid requests
+- burst traffic
+- rate limiting
+- queue timeout
+- missing model
+- metrics updates
+- process restart and recovery
+
+All **18 local tests passed**.
+
+I later ran the applicable tests against the Cloud Run deployment as well.
+
+The remote tests passed as well.
+
+</section>
+
+<section>
+
+## Cloud Run deployment
+
+The deployment image only contains the FastAPI service code, ONNX Runtime CPU, FP32 ONNX model, class mapping, preprocessing metadata, and the required Python dependencies.
+
+It does not include PyTorch, CUDA, TensorRT, training code, or training data.
+
+The model bundle was about **107.45 MiB** and idle container memory was approximately **260.8 MiB**.
+
+The API runs on Google Cloud Run.
+
+The service can scale to zero because I expect Birdly to receive relatively little traffic.
+
+A warm `/health` request from my laptop took **202 ms** on average.
+
+After the service had scaled to zero, the same request took **6.48 seconds** on average.
+
+The expected scale-to-zero cold-start overhead was therefore about **6.3 seconds**.
+
+<Figure src="/images/projects/birdly-v2/cold-start.svg" mobileSrc="/images/projects/birdly-v2/cold-start-mobile.svg" alt="Comparison of a warm /health request, about 202 milliseconds, with a cold request after scale-to-zero, 6.48 seconds. The cold-start overhead is about 6.28 seconds." />
+
+I kept minimum instances at zero because avoiding idle compute cost was more important for me than removing the first-request delay.
+
+</section>
+
+<section>
+
+## Cloud Run tuning
+
+The Cloud Run service has 2 vCPUs, 2 GiB RAM, and maximum one instance.
+
+I tested various configurations by varying ONNX Runtime thread count, Birdly inference concurrency, and Cloud Run request concurrency
+
+The selected backend settings were:
+
+- ONNX CPU threads: 2
+- inference concurrency: 4
+- Cloud Run request concurrency: 16
+
+I ran a final load test with these settings.
+
+| Virtual users | Requests/sec | p50 |
+| ---: | ---: | ---: |
+| 1 | 7.67 | 126.77 ms |
+| 2 | 11.39 | 171.59 ms |
+| 4 | 11.99 | 327.05 ms |
+| 8 | 12.00 | 660.44 ms |
+| 16 | 11.51 | 1373.23 ms |
+
+<Figure src="/images/projects/birdly-v2/cloud-run-matrix.svg" mobileSrc="/images/projects/birdly-v2/cloud-run-matrix-mobile.svg" alt="Two aligned line charts against virtual users 1, 2, 4, 8, and 16 for five Cloud Run configurations of ONNX thread count and inference concurrency, plus a small chart comparing Cloud Run request concurrency 4 and 16. The selected configuration, 2 ONNX threads with inference concurrency 4, reaches 11.99 requests per second at 4 virtual users and 12.00 at 8, with p50 latency of 327.05 ms and 660.44 ms." />
+
+The instance sustained approximately **12 requests per second** in the load tests.
+
+The main results are:
+
+| Area | Result |
+| --- | --- |
+| Species | 236 |
+| Test images | 4,712 |
+| Top-1 accuracy | 86.59% |
+| Top-5 accuracy | 96.75% |
+| Macro F1 | 0.8656 |
+| CPU runtime | ONNX Runtime FP32 |
+| CPU batch-1 E2E | 63.87 ms at 4 threads locally |
+| GPU runtime | TensorRT FP16 |
+| TensorRT batch-1 model latency | 3.62 ms |
+| TensorRT batch-32 throughput | 730.66 img/s |
+| Local reliability tests | 18/18 passed |
+| Cloud Run throughput | about 12 req/s |
+| Warm health request | about 202 ms |
+| Cold health request | 6.48 s |
+
+</section>
+
+<section>
+
+## Frontend
+
+The frontend is a Next.js application deployed to Vercel.
+
+The user flow is:
+
+1. upload an image
+2. select a square crop
+3. submit the crop
+4. view the returned predictions
+
+Since cropping happens in the browser, only the selected crop is sent to the backend.
+
+<Figure src="/images/projects/birdly-v2/birdly-crop-ui.png" mobileSrc="/images/projects/birdly-v2/birdly-crop-ui-mobile.png" alt="Screenshot of the Birdly frontend showing an uploaded bird photograph with the interactive square crop." />
+
+The result list supports between zero and five predictions.
+
+<Figure src="/images/projects/birdly-v2/birdly-final-results.png" mobileSrc="/images/projects/birdly-v2/birdly-final-results-mobile.png" alt="Screenshot of the Birdly result view showing the common name, scientific name, and confidence for a bird photograph." />
+
+The deployed request path is:
+
+<Figure src="/images/projects/birdly-v2/deploy-path.svg" mobileSrc="/images/projects/birdly-v2/deploy-path-mobile.svg" alt="Diagram of the deployed request path: the browser calls the Next.js frontend on Vercel, which calls the FastAPI container on Google Cloud Run, which runs ONNX Runtime FP32 on CPU and returns a prediction." />
+
+</section>
+
+<section>
+
+## Raspberry Pi Zero W
+
+I also checked whether the INT8 ONNX model could run on a Raspberry Pi Zero W v1.1.
+
+The board only has a single-core ARMv6 CPU with 512 MB RAM
+
+But, the immediate problem was runtime support.
+
+There is no normal ONNX Runtime Python package for that ARMv6 environment.
+
+Cross-compiling ONNX Runtime or moving the model to another runtime would have required additional work for an old hardware target, so I stopped the experiment there.
+
+The Pi Zero W was not useful for running the current classifier, but it can still be used as a camera node.
+
+One possible setup is:
+
+<Figure src="/images/projects/birdly-v2/pi-camera.svg" mobileSrc="/images/projects/birdly-v2/pi-camera-mobile.svg" alt="Diagram of a possible Raspberry Pi Zero W camera setup. A fixed-region camera feeds frame-change detection, a persistence check, and cooldown and duplicate filtering, producing a candidate image that is sent to the Birdly API on Cloud Run. Confident results are stored as a SQLite observation record and a saved image, and a local web page lists observation history and species and offers CSV and ZIP exports. The Pi does not run the classifier." />
+
+The Pi would monitor a fixed region such as a tree or feeder. Low-cost local image processing could detect significant changes in that region. Only selected frames would be sent to the Birdly API.
+
+Confident detections could then be stored locally with:
+
+- timestamp
+- image
+- common name
+- scientific name
+- taxon ID
+- confidence
+
+A small local web application could list observations and provide CSV or image export.
+
+This would avoid trying to run the full classifier on the Pi and would also limit Cloud Run requests.
+
+A later version could even replace simple frame-difference logic with a small bird-versus-no-bird model running locally.
+
+</section>
+
+<section>
+
+## Observations
+
+Runtime choice changed inference performance substantially without changing the trained model.
+
+On CPU, moving from PyTorch eager to ONNX Runtime reduced batch-1 end-to-end latency from about 95 ms to 64 ms at four threads.
+
+On GPU, TensorRT reduced model-only batch-1 latency to 3.62 ms and increased batch-32 throughput to more than 730 images per second.
+
+Reduced precision did not behave the same way on every target.
+
+FP16 was useful for GPU throughput.
+
+INT8 maintained reasonable model quality but did not improve CPU latency on the tested Ryzen system.
+
+The service benchmarks also showed that single-request latency alone was not enough to choose serving settings. Inference concurrency improved throughput until CPU contention reduced the benefit.
+
+Model-only and end-to-end measurements were also materially different. Once TensorRT reduced the forward pass to a few milliseconds, preprocessing became a much larger part of total latency.
+
+<Figure src="/images/projects/birdly-v2/trt-gap.svg" mobileSrc="/images/projects/birdly-v2/trt-gap-mobile.svg" alt="Line chart comparing TensorRT FP16 model-only throughput with end-to-end throughput across batch sizes 1 to 32. Model-only throughput grows from 246.59 to 730.66 images per second, while end-to-end throughput flattens near 115 to 118 images per second from batch size 4, reaching 117.81 at batch size 32. End-to-end p50 latency rises from 10.32 ms at batch size 1 to 267.35 ms at batch size 32." />
+
+Cloud deployment also added a tradeoff. Scale-to-zero reduced idle cost but added about 6.3 seconds to the first request after the service had been inactive.
+
+</section>

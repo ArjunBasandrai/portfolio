@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="cx" viewBox="0 0 696 398.4" width="696" height="398.4"><title>Local API load test</title><style>svg.cx{--paper:#faf8f5;--paper-2:#f0ebe5;--surface:#fffdfb;--ink:#3d3930;--ink-soft:#6b6459;--muted:#8b8278;--faint:#b8b1a5;--line:#e8e2d9;--line-strong:#ddd6cd;--accent:#8b9556;--accent-ink:#6d7644;--accent-soft:#f0f3e6;--st-progress:#c9a566;--st-done:#6b8fa3;--st-archive:#9a8a7a;--warn-ink:#8a5f17;--font-sans:"Hanken Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;--font-serif:"Newsreader", Georgia, "Times New Roman", serif;--font-mono:"JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace}@media (prefers-color-scheme:dark){svg.cx{--paper:#1f1a24;--paper-2:#2a2430;--surface:#2e2836;--ink:#f5f1ed;--ink-soft:#ddd5cd;--muted:#b8aea3;--faint:#7a7268;--line:#3d3847;--line-strong:#4a4451;--accent:#a8c75d;--accent-ink:#b8d76f;--accent-soft:#4a5228;--st-progress:#d4ba7a;--st-done:#7fa3bb;--st-archive:#a89a8a;--warn-ink:#e3c98c}}.cx { overflow: visible; }
+.cx text { font-family: var(--font-sans); fill: var(--ink-soft); }
+.cx text.m { font-family: var(--font-mono); }
+.cx .t-ink { fill: var(--ink); }
+.cx .t-soft { fill: var(--ink-soft); }
+.cx .t-mute { fill: var(--muted); }
+.cx .t-hero { fill: var(--accent-ink); }
+.cx .t-warn { fill: var(--warn-ink); }
+.cx text.h-title { font-family: var(--font-serif); fill: var(--ink); }
+.cx text.h-sub { font-family: var(--font-mono); fill: var(--muted); }
+.cx .grid { stroke: var(--line); stroke-width: 1; }
+.cx .axis { stroke: var(--line-strong); stroke-width: 1; }
+.cx .brk { stroke: var(--muted); stroke-width: 1.2; }
+.cx .hl { fill: color-mix(in oklch, var(--accent-soft) 65%, transparent); }
+.cx .gapfill { fill: color-mix(in oklch, var(--accent-ink) 13%, transparent); }
+.cx .c-hero { --c: var(--accent-ink); }
+.cx .c-a { --c: var(--ink-soft); }
+.cx .c-b { --c: var(--st-done); }
+.cx .c-c { --c: var(--st-archive); }
+.cx .c-d { --c: var(--muted); }
+.cx .c-warn { --c: var(--st-progress); }
+.cx .c-r1 { --c: color-mix(in oklch, var(--accent-ink) 22%, var(--faint)); }
+.cx .c-r2 { --c: color-mix(in oklch, var(--accent-ink) 45%, var(--faint)); }
+.cx .c-r3 { --c: color-mix(in oklch, var(--accent-ink) 72%, var(--faint)); }
+.cx .c-r4 { --c: var(--accent-ink); }
+.cx .ln { fill: none; stroke: var(--c); stroke-linecap: round; stroke-linejoin: round; }
+.cx .dot { fill: var(--c); stroke: var(--surface); stroke-width: 2; }
+.cx .bar { stroke: none; }
+.cx .b-a { fill: var(--faint); }
+.cx .b-hero { fill: var(--accent); }
+.cx .b-warn { fill: var(--st-progress); }
+.cx .b-int8 { stroke: var(--st-progress); stroke-width: 1.3; }
+.cx .b-track { fill: var(--line); }
+.cx .b-q0 { fill: var(--ink-soft); }
+.cx .b-q1 { fill: var(--st-done); }
+.cx .b-q2 { fill: var(--accent); }
+.cx .b-q3 { fill: var(--st-progress); }
+.cx .hatch { stroke: var(--st-progress); stroke-width: 1.4; }
+.cx .nd { fill: var(--paper); stroke: var(--line-strong); stroke-width: 1; }
+.cx .nd-hero { fill: var(--accent-soft); stroke: var(--accent-ink); stroke-width: 1.3; }
+.cx .nd-warn { fill: color-mix(in oklch, var(--st-progress) 14%, var(--paper)); stroke: var(--st-progress); stroke-width: 1.3; }
+.cx .nd-mute { fill: transparent; stroke-dasharray: 4 3; }
+.cx .nd-dash { stroke-dasharray: 4 3; }
+.cx .grp { fill: color-mix(in oklch, var(--paper-2) 55%, transparent); stroke: var(--line); stroke-width: 1; }
+.cx .cn { fill: none; stroke: var(--muted); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.cx .cn.arw-dash { stroke-dasharray: 4 3; }
+.cx .cn.arw-hero { stroke: var(--accent-ink); }
+.cx .ah { fill: var(--muted); stroke: none; }
+.cx .ah.arw-hero { fill: var(--accent-ink); }</style><text class="h-title" x="20" y="34.45" font-size="17">Local API load test</text><text class="h-sub" x="20" y="56.400000000000006" font-size="11">ONNX Runtime FP32, 2 ONNX threads, 30 s per level.</text><text class="h-sub" x="20" y="72.4" font-size="11">Lines are labelled by inference concurrency (×1 to ×8).</text><svg class="cx" x="20" y="82.4" width="656" height="296" viewBox="0 0 656 296" aria-hidden="true" focusable="false"><line x1="40" y1="226" x2="272" y2="226" class="axis"/><text x="32" y="230.03" font-size="11.5" text-anchor="end" class="t-mute m">0</text><line x1="40" y1="173.22" x2="272" y2="173.22" class="grid"/><text x="32" y="177.25" font-size="11.5" text-anchor="end" class="t-mute m">5</text><line x1="40" y1="120.44" x2="272" y2="120.44" class="grid"/><text x="32" y="124.47" font-size="11.5" text-anchor="end" class="t-mute m">10</text><line x1="40" y1="67.67" x2="272" y2="67.67" class="grid"/><text x="32" y="71.69" font-size="11.5" text-anchor="end" class="t-mute m">15</text><text x="40" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">1</text><text x="98" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">2</text><text x="156" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">4</text><text x="214" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">8</text><text x="272" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">16</text><text x="156" y="269" font-size="11.5" text-anchor="middle" class="t-mute">Virtual users</text><text x="40" y="22" font-size="11.5" text-anchor="start" class="t-mute">Requests / second</text><path d="M40 145.25L98 141.56L156 149.05L214 149.05L272 142.51" class="ln c-r1" stroke-width="2"/><path d="M40 145.99L98 118.54L156 118.86L214 118.65L272 118.54" class="ln c-r2" stroke-width="2"/><path d="M40 145.04L98 120.23L156 69.78L214 69.46L272 68.62" class="ln c-r3" stroke-width="2.6"/><path d="M40 144.09L98 117.07L156 69.88L214 51.62L272 55.84" class="ln c-r4" stroke-width="2.6"/><text x="282" y="146.53" font-size="11.5" text-anchor="start" class="t-soft">×1</text><text x="282" y="122.57" font-size="11.5" text-anchor="start" class="t-soft">×2</text><text x="282" y="74.37" font-size="11.5" text-anchor="start" class="t-soft">×4</text><text x="282" y="59.87" font-size="11.5" text-anchor="start" font-weight="600" class="t-soft">×8</text><line x1="366" y1="226" x2="598" y2="226" class="axis"/><text x="358" y="230.03" font-size="11.5" text-anchor="end" class="t-mute m">0</text><line x1="366" y1="178.5" x2="598" y2="178.5" class="grid"/><text x="358" y="182.53" font-size="11.5" text-anchor="end" class="t-mute m">500</text><line x1="366" y1="131" x2="598" y2="131" class="grid"/><text x="358" y="135.03" font-size="11.5" text-anchor="end" class="t-mute m">1000</text><line x1="366" y1="83.5" x2="598" y2="83.5" class="grid"/><text x="358" y="87.53" font-size="11.5" text-anchor="end" class="t-mute m">1500</text><line x1="366" y1="36" x2="598" y2="36" class="grid"/><text x="358" y="40.03" font-size="11.5" text-anchor="end" class="t-mute m">2000</text><text x="366" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">1</text><text x="424" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">2</text><text x="482" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">4</text><text x="540" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">8</text><text x="598" y="246.5" font-size="11.5" text-anchor="middle" class="t-mute m">16</text><text x="482" y="269" font-size="11.5" text-anchor="middle" class="t-mute">Virtual users</text><text x="366" y="22" font-size="11.5" text-anchor="start" class="t-mute">p50 latency (ms)</text><path d="M366 214.38L424 203.12L482 174.65L540 122.78L598 36.3" class="ln c-r1" stroke-width="2"/><path d="M366 214.18L424 207.96L482 188.77L540 152.45L598 79.69" class="ln c-r2" stroke-width="2"/><path d="M366 214.22L424 207.53L482 201.06L540 176.32L598 128.96" class="ln c-r3" stroke-width="2.6"/><path d="M366 214.43L424 208.14L482 201.15L540 181.66L598 133.3" class="ln c-r4" stroke-width="2.6"/><text x="608" y="47.5" font-size="11.5" text-anchor="start" class="t-soft">×1</text><text x="608" y="83.72" font-size="11.5" text-anchor="start" class="t-soft">×2</text><text x="608" y="132.99" font-size="11.5" text-anchor="start" class="t-soft">×4</text><text x="608" y="147.49" font-size="11.5" text-anchor="start" font-weight="600" class="t-soft">×8</text><text x="214" y="42.62" font-size="11" text-anchor="middle" font-weight="700" class="t-hero m">16.52</text></svg></svg>

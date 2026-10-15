@@ -360,3 +360,27 @@ a.tag:hover, .tag.is-active { color: var(--accent-ink); border-color: var(--acce
   color: var(--muted); font-style: italic;
 }
 .case-prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.4em 0 0; }
+
+/* Tables in article prose */
+.case-prose table {
+  width: 100%; margin-top: 1.6em; border-collapse: separate; border-spacing: 0;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  font-size: 0.95rem; line-height: 1.5; font-variant-numeric: tabular-nums;
+}
+.case-prose th, .case-prose td {
+  padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top;
+  text-align: left; overflow-wrap: anywhere;
+}
+.case-prose thead th {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); font-weight: 400; background: var(--paper-2); border-bottom-color: var(--line-strong);
+}
+.case-prose thead th:first-child { border-top-left-radius: calc(var(--radius) - 1px); }
+.case-prose thead th:last-child { border-top-right-radius: calc(var(--radius) - 1px); }
+.case-prose tbody tr:last-child td { border-bottom: 0; }
+.case-prose td { color: var(--ink-soft); }
+.case-prose td:first-child { color: var(--ink); }
+@media (max-width: 520px) {
+  .case-prose table { font-size: 0.88rem; }
+  .case-prose th, .case-prose td { padding: 8px 10px; }
+}

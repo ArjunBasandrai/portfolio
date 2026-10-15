@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
 const all = await getCollection("projects", (p) => !p.data.hide);
-const order = ["art", "elixir-chess-engine", "birdly-bird-identifier"];
+const order = ["art", "elixir-chess-engine", "birdly-v2"];
 const featured = order
   .map((id) => all.find((p) => p.id === id))
   .filter((p): p is NonNullable<typeof p> => Boolean(p));
