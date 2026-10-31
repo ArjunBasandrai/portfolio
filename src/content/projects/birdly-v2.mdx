@@ -618,7 +618,7 @@ The deployed request path is:
 
 <section>
 
-## Raspberry Pi Zero W
+## Raspberry Pi deployment
 
 I also checked whether the INT8 ONNX model could run on a Raspberry Pi Zero W v1.1.
 
@@ -632,26 +632,9 @@ Cross-compiling ONNX Runtime or moving the model to another runtime would have r
 
 The Pi Zero W was not useful for running the current classifier, but it can still be used as a camera node.
 
-One possible setup is:
+I then tried deploying the classifier on a Raspberry Pi 5 with 1 GB RAM. Unlike the Zero W, the Pi 5 supports ONNX Runtime on ARM64, so I was able to run the same FP32 model through a FastAPI service. I set it up as a systemd service with one inference worker and a limit of two active prediction requests.
 
-<Figure src="/images/projects/birdly-v2/pi-camera.svg" mobileSrc="/images/projects/birdly-v2/pi-camera-mobile.svg" alt="Diagram of a possible Raspberry Pi Zero W camera setup. A fixed-region camera feeds frame-change detection, a persistence check, and cooldown and duplicate filtering, producing a candidate image that is sent to the Birdly API on Cloud Run. Confident results are stored as a SQLite observation record and a saved image, and a local web page lists observation history and species and offers CSV and ZIP exports. The Pi does not run the classifier." />
-
-The Pi would monitor a fixed region such as a tree or feeder. Low-cost local image processing could detect significant changes in that region. Only selected frames would be sent to the Birdly API.
-
-Confident detections could then be stored locally with:
-
-- timestamp
-- image
-- common name
-- scientific name
-- taxon ID
-- confidence
-
-A small local web application could list observations and provide CSV or image export.
-
-This would avoid trying to run the full classifier on the Pi and would also limit Cloud Run requests.
-
-A later version could even replace simple frame-difference logic with a small bird-versus-no-bird model running locally.
+I also ran load and reliability tests on the Pi 5. With one virtual user, it handled 3.43 requests per second with a p50 latency of 284.53 ms. With two virtual users, throughput increased to 3.65 requests per second, with a p50 of 538.70 ms. At four virtual users, most excess requests returned HTTP 503 instead of increasing successful throughput. The reliability tests passed with the two-request limit.
 
 </section>
 
